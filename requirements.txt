@@ -1,0 +1,6 @@
+streamlit
+pandas
+openpyxl
+xlsxwriter
+gspread
+oauth2client
