@@ -4,7 +4,6 @@ import io
 import html
 import urllib.parse
 
-# Konfigurasi Halaman
 st.set_page_config(
     page_title="AUTOTEAM - Autodebet Team Achievement & Monitoring",
     page_icon="⚡",
@@ -12,7 +11,6 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS Korporat Profesional, Adaptif Light/Dark Mode, Nuansa Biru ACC, Filter Interaktif & Tabel Cantik
 st.markdown("""
     <style>
     :root {
@@ -66,46 +64,20 @@ st.markdown("""
         --shadow-glow: light-dark(0 6px 20px rgba(29, 78, 216, 0.22), 0 6px 22px rgba(56, 189, 248, 0.28));
     }
 
-    @keyframes floatTrophy {
-        0%, 100% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 5px rgba(234, 179, 8, 0.4)); }
-        50% { transform: translateY(-3px) scale(1.06); filter: drop-shadow(0 0 11px rgba(234, 179, 8, 0.75)); }
-    }
-    @keyframes pulseGlow {
-        0%, 100% { box-shadow: 0 0 10px rgba(37, 99, 235, 0.28); }
-        50% { box-shadow: 0 0 18px rgba(56, 189, 248, 0.52); }
-    }
-    @keyframes gradientShift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-    @keyframes fadeSlideUp {
-        from { opacity: 0; transform: translateY(8px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
     @keyframes warnPulse {
-        0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        25% { transform: scale(1.12) rotate(-4deg); }
-        50% { transform: scale(1.16) rotate(4deg); opacity: 0.92; }
-        75% { transform: scale(1.08) rotate(-2deg); }
-    }
-    @keyframes filterAccentSweep {
-        0%, 100% { opacity: 0.75; transform: scaleX(0.96); }
-        50% { opacity: 1; transform: scaleX(1.02); }
+        0%, 100% { transform: scale(1) rotate(0deg); }
+        50% { transform: scale(1.12) rotate(3deg); }
     }
 
     footer {display: none !important; visibility: hidden !important;}
     #MainMenu {visibility: hidden !important;}
     .viewerBadge_container__1QSob {display: none !important;}
 
-    /* Sidebar Navigasi Korporat Berwarna & Beranimasi */
     section[data-testid="stSidebar"] {
         background: linear-gradient(180deg, #071330 0%, #0b1f4d 52%, #091738 100%);
         border-right: 1px solid rgba(56, 189, 248, 0.25);
     }
-    section[data-testid="stSidebar"] .stRadio > div {
-        gap: 8px;
-    }
+    section[data-testid="stSidebar"] .stRadio > div { gap: 8px; }
     section[data-testid="stSidebar"] .stRadio label {
         background: rgba(15, 35, 82, 0.72);
         border: 1px solid rgba(96, 165, 250, 0.28);
@@ -113,28 +85,17 @@ st.markdown("""
         border-radius: 10px;
         padding: 10px 14px;
         margin-bottom: 4px;
-        transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+        transition: transform 0.16s ease, background-color 0.16s ease;
         cursor: pointer;
     }
     section[data-testid="stSidebar"] .stRadio label:hover {
-        transform: translateX(5px);
+        transform: translateX(4px);
         background: linear-gradient(90deg, rgba(0, 85, 204, 0.85), rgba(14, 116, 144, 0.78));
-        border-color: #7dd3fc;
-        box-shadow: 0 4px 14px rgba(14, 165, 233, 0.32);
     }
-    section[data-testid="stSidebar"] .stRadio label:nth-child(1) { border-left-color: #38bdf8; }
-    section[data-testid="stSidebar"] .stRadio label:nth-child(2) { border-left-color: #34d399; }
-    section[data-testid="stSidebar"] .stRadio label:nth-child(3) { border-left-color: #fbbf24; }
-    section[data-testid="stSidebar"] .stRadio label:nth-child(4) { border-left-color: #f87171; }
-    section[data-testid="stSidebar"] .stRadio label:nth-child(5) { border-left-color: #a78bfa; }
-    section[data-testid="stSidebar"] .stRadio label:nth-child(6) { border-left-color: #2dd4bf; }
-
     section[data-testid="stSidebar"] .stRadio label:has(input:checked) {
         background: linear-gradient(90deg, #0044b3 0%, #0284c7 100%) !important;
         border: 1px solid #bae6fd !important;
         border-left: 5px solid #facc15 !important;
-        transform: translateX(6px);
-        animation: pulseGlow 2.8s infinite ease-in-out;
     }
     section[data-testid="stSidebar"] .stRadio label p {
         color: #f8fafc !important;
@@ -142,15 +103,11 @@ st.markdown("""
         font-size: 14px !important;
     }
 
-    /* Menu Cepat HP & Tablet (termasuk iPad portrait/landscape): tampil < 1200px, tersembunyi di desktop >= 1200px */
     @media (min-width: 1200px) {
-        .st-key-mobile_quick_nav {
-            display: none !important;
-        }
+        .st-key-mobile_quick_nav { display: none !important; }
     }
     @media (max-width: 1199.98px) {
         .st-key-mobile_quick_nav {
-            background-color: #dbeafe;
             background: var(--bg-panel);
             border: 1.5px solid var(--metric-border);
             border-left: 5px solid var(--border-accent);
@@ -164,17 +121,9 @@ st.markdown("""
             border-radius: 10px;
             font-weight: 700;
             font-size: 12.5px;
-            padding: 8px 10px;
-            margin-bottom: 4px;
-            transition: transform 0.18s ease, box-shadow 0.18s ease;
-        }
-        .st-key-mobile_quick_nav div[data-testid="stButton"] > button:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
         }
     }
 
-    /* Sub-menu Tabs di Dalam Halaman */
     div[data-testid="stTabs"] [data-baseweb="tab-list"] {
         gap: 8px;
         background: var(--bg-card-soft);
@@ -189,154 +138,77 @@ st.markdown("""
         font-weight: 700;
         font-size: 13.5px;
         color: var(--text-secondary);
-        transition: all 0.22s ease;
     }
     div[data-testid="stTabs"] [aria-selected="true"] {
         background: linear-gradient(90deg, #0044b3 0%, #0284c7 100%) !important;
         color: #ffffff !important;
-        box-shadow: var(--shadow-glow);
     }
 
-    /* Hero Banner Atas Seragam untuk Semua Halaman */
     .hero-banner {
-        background: linear-gradient(120deg, #002366, #0044b3, #0369a1, #002b7f);
-        background-size: 250% 250%;
-        animation: gradientShift 10s ease infinite, fadeSlideUp 0.45s ease-out;
+        background: linear-gradient(120deg, #002366, #0044b3, #0369a1);
         padding: 20px 24px;
         border-radius: 14px;
         border: 1px solid rgba(125, 211, 252, 0.45);
-        box-shadow: 0 8px 24px rgba(0, 35, 102, 0.28);
+        box-shadow: 0 8px 24px rgba(0, 35, 102, 0.25);
         margin-bottom: 18px;
     }
-    .hero-title {
-        color: #ffffff !important;
-        font-size: 26px;
-        font-weight: 800;
-        margin: 0;
-        letter-spacing: 0.3px;
-    }
-    .hero-sub {
-        color: #e0f2fe !important;
-        font-size: 14px;
-        margin-top: 5px;
-        margin-bottom: 10px;
-    }
+    .hero-title { color: #ffffff !important; font-size: 26px; font-weight: 800; margin: 0; }
+    .hero-sub { color: #e0f2fe !important; font-size: 14px; margin-top: 5px; margin-bottom: 10px; }
     .tagline-pill {
         display: inline-block;
-        background: linear-gradient(90deg, #003399, #0284c7, #0055cc);
-        background-size: 200% 200%;
-        animation: gradientShift 7s ease infinite;
+        background: linear-gradient(90deg, #003399, #0284c7);
         color: #ffffff;
         padding: 4px 14px;
         border-radius: 999px;
         font-size: 12px;
         font-weight: 700;
-        letter-spacing: 0.5px;
-        margin-top: 2px;
-        margin-bottom: 4px;
         border: 1px solid rgba(186, 230, 253, 0.7);
     }
 
-    /* Panel Filter Interaktif Berbingkai, Beraksen & Adaptif Light/Dark Mode */
     .st-key-panel_filter_status,
     .st-key-panel_filter_bni,
     .st-key-panel_filter_reject,
     .st-key-panel_filter_guide,
     .st-key-panel_filter_accone {
-        position: relative;
-        background-color: #eff6ff;
         background: var(--bg-panel);
         border: 1px solid var(--border-subtle);
         border-left: 5px solid var(--border-accent);
+        border-top: 3px solid var(--border-accent);
         border-radius: 14px;
         padding: 16px 20px 18px 20px;
         margin-bottom: 16px;
         box-shadow: var(--shadow-soft);
-        transition: border-color 0.28s ease, box-shadow 0.28s ease, transform 0.25s ease;
-        animation: fadeSlideUp 0.45s ease-out;
-    }
-    .st-key-panel_filter_status::before,
-    .st-key-panel_filter_bni::before,
-    .st-key-panel_filter_reject::before,
-    .st-key-panel_filter_guide::before,
-    .st-key-panel_filter_accone::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        border-radius: 14px 14px 0 0;
-        background: linear-gradient(90deg, #1d4ed8, #0284c7, #38bdf8, #1d4ed8);
-        animation: filterAccentSweep 4.5s ease-in-out infinite;
-    }
-    .st-key-panel_filter_status:hover,
-    .st-key-panel_filter_bni:hover,
-    .st-key-panel_filter_reject:hover,
-    .st-key-panel_filter_guide:hover,
-    .st-key-panel_filter_accone:hover {
-        border-color: var(--border-accent);
-        box-shadow: var(--shadow-glow);
     }
     .filter-chip-badge {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background: linear-gradient(90deg, rgba(29, 78, 216, 0.14), rgba(2, 132, 199, 0.16));
+        background: rgba(29, 78, 216, 0.14);
         color: var(--bank-title);
         border: 1px solid var(--border-subtle);
         padding: 3px 10px;
         border-radius: 999px;
         font-size: 11.5px;
         font-weight: 700;
-        transition: transform 0.2s ease, background 0.2s ease;
-    }
-    .filter-chip-badge:hover {
-        transform: translateY(-1px);
     }
 
-    /* Styling Input & Selectbox agar Berwarna Lembut & Hidup saat Disentuh/Dipilih */
     div[data-testid="stSelectbox"] label p,
     div[data-testid="stTextInput"] label p {
         color: var(--bank-title) !important;
         font-weight: 700 !important;
         font-size: 13px !important;
-        letter-spacing: 0.2px;
     }
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
-        background-color: #ffffff;
-        background: var(--bg-input) !important;
-        border: 1.5px solid var(--metric-border) !important;
-        border-radius: 10px !important;
-        transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1) !important;
-    }
-    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover {
-        background: var(--bg-input-hover) !important;
-        border-color: var(--border-accent) !important;
-        transform: translateY(-1px);
-        box-shadow: var(--shadow-glow) !important;
-    }
-    div[data-testid="stSelectbox"] div[data-baseweb="select"]:focus-within > div {
-        border-color: var(--border-accent) !important;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
-    }
-
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div,
     div[data-testid="stTextInput"] div[data-baseweb="input"] {
-        background-color: #ffffff;
         background: var(--bg-input) !important;
         border: 1.5px solid var(--metric-border) !important;
         border-radius: 10px !important;
-        transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1) !important;
+        transition: border-color 0.16s ease, box-shadow 0.16s ease !important;
     }
+    div[data-testid="stSelectbox"] div[data-baseweb="select"] > div:hover,
     div[data-testid="stTextInput"] div[data-baseweb="input"]:hover {
         background: var(--bg-input-hover) !important;
         border-color: var(--border-accent) !important;
-        transform: translateY(-1px);
-        box-shadow: var(--shadow-glow) !important;
-    }
-    div[data-testid="stTextInput"] div[data-baseweb="input"]:focus-within {
-        border-color: var(--border-accent) !important;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2) !important;
     }
 
     .section-panel-title {
@@ -350,98 +222,29 @@ st.markdown("""
         flex-wrap: wrap;
         gap: 8px;
     }
-    .section-panel-sub {
-        color: var(--text-secondary);
-        font-size: 13px;
-        margin: 0 0 12px 0;
-    }
+    .section-panel-sub { color: var(--text-secondary); font-size: 13px; margin: 0 0 12px 0; }
 
-    /* Kartu KPI & Metrik Adaptif dengan Fallback Warna Biru Jelas */
-    .metric-card {
-        background-color: #dbeafe;
+    .metric-card, .bank-card {
         background: var(--metric-grad);
-        padding: 18px 16px;
+        padding: 16px;
         border-radius: 12px;
         box-shadow: var(--shadow-soft);
         border: 1.5px solid var(--metric-border);
         border-top: 4px solid var(--border-accent);
         text-align: center;
         margin-bottom: 10px;
-        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-        animation: fadeSlideUp 0.45s ease-out;
     }
-    .metric-card:hover {
-        transform: translateY(-3px);
-        border-color: var(--border-accent);
-        box-shadow: var(--shadow-glow);
-    }
-    .metric-label {
-        color: var(--metric-label);
-        font-size: 13.5px;
-        font-weight: 700;
-    }
-    .metric-value {
-        color: var(--metric-value);
-        margin: 6px 0;
-        font-weight: 800;
-        font-size: 28px;
-        line-height: 1.15;
-    }
-    .metric-sub {
-        color: var(--metric-sub);
-        font-size: 12px;
-        font-weight: 500;
-    }
+    .metric-label, .bank-title { color: var(--metric-label); font-size: 13.5px; font-weight: 700; }
+    .metric-value, .bank-rate { color: var(--metric-value); margin: 6px 0; font-weight: 800; font-size: 26px; line-height: 1.15; }
+    .metric-sub, .bank-sub { color: var(--metric-sub); font-size: 12px; }
+    .bank-badge { color: var(--bank-badge); font-weight: 700; }
 
-    /* Kartu Per Bank / Persentase Adaptif dengan Fallback Warna Biru Jelas */
-    .bank-card {
-        background-color: #dbeafe;
-        background: var(--bank-grad);
-        padding: 15px;
-        border-radius: 12px;
-        box-shadow: var(--shadow-soft);
-        border: 1.5px solid var(--metric-border);
-        border-top: 4px solid var(--border-accent);
-        text-align: center;
-        margin-bottom: 8px;
-        transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-        animation: fadeSlideUp 0.45s ease-out;
-    }
-    .bank-card:hover {
-        transform: translateY(-3px);
-        border-color: var(--border-accent);
-        box-shadow: var(--shadow-glow);
-    }
-    .bank-title {
-        color: var(--bank-title);
-        font-size: 15.5px;
-        font-weight: 800;
-    }
-    .bank-rate {
-        margin: 6px 0;
-        color: var(--bank-rate);
-        font-weight: 800;
-        font-size: 24px;
-    }
-    .bank-sub {
-        color: var(--bank-sub);
-        font-size: 12px;
-        font-weight: 500;
-    }
-    .bank-badge {
-        color: var(--bank-badge);
-        font-weight: 700;
-    }
-
-    /* Sales Leaderboard & Tabel Adaptif */
     .lb-panel {
-        background-color: #eff6ff;
         background: var(--bg-panel);
         border: 1px solid var(--border-subtle);
         border-radius: 14px;
         padding: 16px;
         box-shadow: var(--shadow-soft);
-        animation: fadeSlideUp 0.5s ease-out;
         margin-bottom: 12px;
     }
     .lb-panel-title {
@@ -456,36 +259,18 @@ st.markdown("""
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background-color: #ffffff;
         background: var(--bg-card-elevated);
         border: 1px solid var(--border-subtle);
         border-radius: 10px;
         padding: 10px 14px;
         margin-bottom: 8px;
-        transition: transform 0.22s ease, box-shadow 0.22s ease;
-    }
-    .top-rank-card:hover {
-        transform: translateX(4px);
-        border-color: var(--border-accent);
     }
     .top-rank-1 { border-left: 4px solid #eab308; }
     .top-rank-2 { border-left: 4px solid #94a3b8; }
     .top-rank-3 { border-left: 4px solid #d97706; }
-    .trophy-anim {
-        display: inline-block;
-        font-size: 21px;
-        margin-right: 10px;
-        animation: floatTrophy 2.6s infinite ease-in-out;
-    }
-    .rank-name {
-        color: var(--text-primary);
-        font-weight: 700;
-        font-size: 14px;
-    }
-    .rank-meta {
-        color: var(--text-secondary);
-        font-size: 12px;
-    }
+    .trophy-anim { font-size: 21px; margin-right: 10px; }
+    .rank-name { color: var(--text-primary); font-weight: 700; font-size: 14px; }
+    .rank-meta { color: var(--text-secondary); font-size: 12px; }
     .rank-score-pill {
         background: linear-gradient(90deg, #003399, #0284c7);
         color: #ffffff;
@@ -493,10 +278,8 @@ st.markdown("""
         border-radius: 999px;
         font-weight: 800;
         font-size: 12.5px;
-        white-space: nowrap;
     }
 
-    /* Tabel HTML Cantik, Hidup & Adaptif Light/Dark Mode */
     .styled-table-wrap {
         width: 100%;
         overflow-x: auto;
@@ -505,92 +288,33 @@ st.markdown("""
         border-radius: 12px;
         border: 1px solid var(--border-subtle);
         box-shadow: var(--shadow-soft);
-        animation: fadeSlideUp 0.5s ease-out;
-        background-color: #ffffff;
         background: var(--bg-card-elevated);
     }
-    .lb-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 13.5px;
-        color: var(--text-primary);
-    }
+    .lb-table { width: 100%; border-collapse: collapse; font-size: 13.5px; color: var(--text-primary); }
     .lb-table thead th {
         position: sticky;
         top: 0;
         z-index: 2;
-        background-color: #1d4ed8;
         background: var(--table-head-grad);
         color: #ffffff !important;
         text-align: left;
         font-weight: 700;
         padding: 12px 14px;
-        letter-spacing: 0.25px;
         white-space: nowrap;
     }
-    .lb-table td {
-        padding: 11px 14px;
-        border-bottom: 1px solid var(--border-subtle);
-        vertical-align: top;
-        line-height: 1.45;
-    }
-    .lb-table tbody tr:nth-child(odd) {
-        background-color: var(--table-row-bg);
-    }
-    .lb-table tbody tr:nth-child(even) {
-        background-color: var(--table-row-alt);
-    }
-    .lb-table tbody tr {
-        transition: background-color 0.2s ease, transform 0.15s ease;
-    }
-    .lb-table tbody tr:hover {
-        background-color: var(--table-row-hover);
-    }
+    .lb-table td { padding: 11px 14px; border-bottom: 1px solid var(--border-subtle); vertical-align: top; }
+    .lb-table tbody tr:nth-child(odd) { background-color: var(--table-row-bg); }
+    .lb-table tbody tr:nth-child(even) { background-color: var(--table-row-alt); }
+    .lb-table tbody tr:hover { background-color: var(--table-row-hover); }
 
-    /* Pill / Badge Status & Bank di Dalam Tabel */
-    .pill-badge {
-        display: inline-block;
-        padding: 3px 10px;
-        border-radius: 999px;
-        font-weight: 700;
-        font-size: 12px;
-        white-space: nowrap;
-    }
-    .pill-blue {
-        background: rgba(29, 78, 216, 0.14);
-        color: var(--bank-title);
-        border: 1px solid rgba(29, 78, 216, 0.35);
-    }
-    .pill-green {
-        background: rgba(16, 185, 129, 0.15);
-        color: var(--solution-title);
-        border: 1px solid rgba(16, 185, 129, 0.38);
-    }
-    .pill-amber {
-        background: rgba(217, 119, 6, 0.15);
-        color: var(--bank-badge);
-        border: 1px solid rgba(217, 119, 6, 0.38);
-    }
-    .pill-slate {
-        background: rgba(100, 116, 139, 0.15);
-        color: var(--text-secondary);
-        border: 1px solid rgba(100, 116, 139, 0.35);
-    }
-    .rej-pill {
-        display: inline-block;
-        background-color: rgba(220, 38, 38, 0.14);
-        color: var(--reject-reason);
-        border: 1px solid rgba(220, 38, 38, 0.35);
-        padding: 3px 10px;
-        border-radius: 999px;
-        font-weight: 700;
-        font-size: 12px;
-        white-space: nowrap;
-    }
+    .pill-badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-weight: 700; font-size: 12px; white-space: nowrap; }
+    .pill-blue { background: rgba(29, 78, 216, 0.14); color: var(--bank-title); border: 1px solid rgba(29, 78, 216, 0.35); }
+    .pill-green { background: rgba(16, 185, 129, 0.15); color: var(--solution-title); border: 1px solid rgba(16, 185, 129, 0.38); }
+    .pill-amber { background: rgba(217, 119, 6, 0.15); color: var(--bank-badge); border: 1px solid rgba(217, 119, 6, 0.38); }
+    .pill-slate { background: rgba(100, 116, 139, 0.15); color: var(--text-secondary); border: 1px solid rgba(100, 116, 139, 0.35); }
+    .rej-pill { display: inline-block; background-color: rgba(220, 38, 38, 0.14); color: var(--reject-reason); border: 1px solid rgba(220, 38, 38, 0.35); padding: 3px 10px; border-radius: 999px; font-weight: 700; font-size: 12px; white-space: nowrap; }
 
-    /* Header Section List Reject (Belum Dihubungi / Sudah Dihubungi) */
     .reject-group-banner {
-        background-color: #eff6ff;
         background: var(--bg-panel);
         border: 1px solid var(--border-subtle);
         border-radius: 12px;
@@ -602,47 +326,27 @@ st.markdown("""
         justify-content: space-between;
         flex-wrap: wrap;
         gap: 8px;
-        animation: fadeSlideUp 0.4s ease-out;
     }
-    .reject-group-pending {
-        border-left: 5px solid #ef4444;
-    }
-    .reject-group-done {
-        border-left: 5px solid #10b981;
-    }
+    .reject-group-pending { border-left: 5px solid #ef4444; }
+    .reject-group-done { border-left: 5px solid #10b981; }
 
-    /* Kartu Reject & BNI Adaptif */
-    .reject-box {
-        background-color: #ffffff;
+    .reject-box, .bni-box, .accone-note-card {
         background: var(--bg-card-elevated);
         padding: 18px 20px;
         border-radius: 12px;
         border: 1px solid var(--border-subtle);
-        border-left: 5px solid #ef4444;
         margin-bottom: 12px;
         color: var(--text-primary);
         box-shadow: var(--shadow-soft);
-        transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
-        animation: fadeSlideUp 0.45s ease-out;
     }
-    .reject-box:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-glow);
-    }
-    .reject-box-done {
-        border-left: 5px solid #10b981;
-    }
-    .reject-box strong { color: var(--text-primary); font-size: 17px; }
-    .reject-box small { color: var(--text-secondary); font-size: 13px; }
-    .reject-reason {
-        color: var(--reject-reason);
-        font-weight: 700;
-        font-size: 14.5px;
-        margin-top: 8px;
-        display: block;
-    }
+    .reject-box { border-left: 5px solid #ef4444; }
+    .reject-box-done { border-left: 5px solid #10b981; }
+    .bni-box { border-left: 5px solid #0284c7; }
+    .accone-note-card { border-left: 5px solid var(--border-accent); }
+    .reject-box strong, .bni-box strong { color: var(--text-primary); font-size: 17px; }
+    .reject-box small, .bni-box small { color: var(--text-secondary); font-size: 13px; }
+    .reject-reason { color: var(--reject-reason); font-weight: 700; font-size: 14.5px; margin-top: 8px; display: block; }
 
-    /* Peringatan AP Payment untuk Customer Reject yang Belum Dihubungi */
     .ap-payment-alert {
         background: var(--ap-warn-bg);
         border: 1px solid rgba(239, 68, 68, 0.35);
@@ -668,61 +372,17 @@ st.markdown("""
         padding: 2px 8px;
         font-weight: 900;
         font-size: 13.5px;
-        letter-spacing: 0.5px;
-        animation: warnPulse 2.1s infinite ease-in-out;
+        animation: warnPulse 2.2s infinite ease-in-out;
         flex-shrink: 0;
     }
 
-    /* Kartu Catatan / Panduan ACC ONE */
-    .accone-note-card {
-        background-color: #ffffff;
-        background: var(--bg-card-elevated);
-        border: 1px solid var(--border-subtle);
-        border-left: 5px solid var(--border-accent);
-        border-radius: 12px;
-        padding: 16px 20px;
-        margin-bottom: 12px;
-        box-shadow: var(--shadow-soft);
-        transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-        animation: fadeSlideUp 0.45s ease-out;
-    }
-    .accone-note-card:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-glow);
-    }
-    .accone-note-head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-bottom: 8px;
-    }
-    .accone-note-title {
-        color: var(--text-primary);
-        font-size: 15.5px;
-        font-weight: 800;
-        margin: 0;
-    }
-    .accone-note-body {
-        color: var(--text-secondary);
-        font-size: 13.5px;
-        line-height: 1.55;
-        margin: 0;
-    }
-    .accone-sublist {
-        margin: 8px 0 0 0;
-        padding-left: 20px;
-        color: var(--text-primary);
-        font-size: 13.5px;
-        line-height: 1.6;
-    }
-    .accone-sublist li {
-        margin-bottom: 4px;
-    }
+    .accone-note-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+    .accone-note-title { color: var(--text-primary); font-size: 15.5px; font-weight: 800; margin: 0; }
+    .accone-note-body { color: var(--text-secondary); font-size: 13.5px; line-height: 1.55; margin: 0; }
+    .accone-sublist { margin: 8px 0 0 0; padding-left: 20px; color: var(--text-primary); font-size: 13.5px; line-height: 1.6; }
+    .accone-sublist li { margin-bottom: 4px; }
 
     .solution-box {
-        background-color: #ecfdf5;
         background: var(--solution-bg);
         padding: 13px 15px;
         border-radius: 9px;
@@ -730,31 +390,9 @@ st.markdown("""
         margin-top: 10px;
         color: var(--solution-text);
         font-size: 13.5px;
+        line-height: 1.5;
     }
-    .solution-box span {
-        color: var(--solution-title);
-        font-weight: 700;
-    }
-
-    .bni-box {
-        background-color: #ffffff;
-        background: var(--bg-card-elevated);
-        padding: 18px 20px;
-        border-radius: 12px;
-        border: 1px solid var(--border-subtle);
-        border-left: 5px solid #0284c7;
-        margin-bottom: 12px;
-        color: var(--text-primary);
-        box-shadow: var(--shadow-soft);
-        transition: transform 0.22s ease, border-color 0.22s ease;
-        animation: fadeSlideUp 0.45s ease-out;
-    }
-    .bni-box:hover {
-        transform: translateY(-2px);
-        border-color: var(--border-accent);
-    }
-    .bni-box strong { color: var(--text-primary); font-size: 17px; }
-    .bni-box small { color: var(--text-secondary); font-size: 13px; }
+    .solution-box span { color: var(--solution-title); font-weight: 700; }
 
     .ceklis-badge {
         display: inline-block;
@@ -779,7 +417,6 @@ st.markdown("""
         margin-top: 6px;
     }
     .rekap-box {
-        background-color: #eff6ff;
         background: var(--bg-panel);
         padding: 16px 18px;
         border-radius: 12px;
@@ -788,16 +425,13 @@ st.markdown("""
         margin-bottom: 14px;
         color: var(--text-primary);
         box-shadow: var(--shadow-soft);
-        animation: fadeSlideUp 0.45s ease-out;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Konfigurasi Google Sheets Utama (Akun Email Baru)
 SHEET_ID = "1_WjXj0lShrzkXDDfJQQdwCZ_2yizmigA562GdtFxXEw"
 SHEET_EDIT_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/edit"
 
-# Daftar Resmi Sales ACC Cabang Makassar
 DAFTAR_SALES_MAKASSAR = [
     "RESKYANTO PUNDA", "NURUL AZIZAH", "NUR RAHMADANI", "FITRIYANTI MUIS",
     "ANDI ALGAZALI", "MUH RAFLI MUADZ", "M. B. J MUBARAQ MUCHTAR",
@@ -812,19 +446,11 @@ DAFTAR_SALES_MAKASSAR = [
     "MUH ALFIAN TARUNA", "SITI NADIRAH", "PUTRI", "ALFI SAHAR", "NURHIDAYAH", "ASRUL AMRI"
 ]
 
-# Kamus Arti Status Resmi
 KAMUS_STATUS = {
-    "O": "Open",
-    "F": "Bukcet Finance",
-    "D": "Pengajuan ke Bank",
-    "A": "Approved",
-    "R": "Rejected",
-    "C": "Cancelled",
-    "B": "Batal",
-    "E": "Edit",
-    "P": "Pending",
+    "O": "Open", "F": "Bukcet Finance", "D": "Pengajuan ke Bank",
+    "A": "Approved", "R": "Rejected", "C": "Cancelled",
+    "B": "Batal", "E": "Edit", "P": "Pending",
 }
-
 STATUS_TIDAK_AKTIF = {"C", "B"}
 STATUS_AKTIF = {"O", "F", "D", "A", "R", "E", "P"}
 
@@ -842,7 +468,6 @@ def map_keaktifan_label(code):
         return "Aktif"
     return "Aktif" if c not in ["", "NAN", "NONE"] else "Tidak Aktif"
 
-# Panduan / Notes Apabila Pengajuan ACC ONE Customer Ditolak
 ACCONE_REJECT_NOTES = [
     {
         "no": 1,
@@ -878,56 +503,15 @@ ACCONE_REJECT_NOTES = [
     }
 ]
 
-# Katalog Lengkap Panduan & Solusi Reject
 REJECT_GUIDE_ITEMS = [
-    {
-        "No": 1,
-        "Alasan Reject": "Phone number is not correct",
-        "Keterangan": "Nomor telepon nasabah tidak sesuai atau berbeda antara data pengajuan/AOL dengan data yang terdaftar di bank / mobile banking (misalnya BRIMO).",
-        "Tindakan Korektif / Solusi Sales": "Input ulang melalui menu AOL Autodebet CSO dan pastikan nomor HP sesuai dengan yang terdaftar di Bank/BRIMO. Jika belum sinkron, arahkan nasabah walk-in ke bank untuk pembaruan nomor HP."
-    },
-    {
-        "No": 2,
-        "Alasan Reject": "Phone number not found",
-        "Keterangan": "Nomor telepon nasabah belum terdaftar atau tidak ditemukan pada sistem bank terkait saat proses pendaftaran autodebet.",
-        "Tindakan Korektif / Solusi Sales": "Arahkan nasabah melakukan registrasi atau pembaruan data nomor HP aktif di bank terkait terlebih dahulu, lalu ajukan ulang."
-    },
-    {
-        "No": 3,
-        "Alasan Reject": "Scan Kartu ATM Meragukan / No. Kartu ATM Invalid",
-        "Keterangan": "Foto atau scan kartu ATM kurang jelas/buram, atau nasabah sudah melakukan penggantian kartu ATM sehingga nomor kartu lama sudah tidak berlaku.",
-        "Tindakan Korektif / Solusi Sales": "Minta foto/scan kartu ATM terbaru yang jelas dan valid (pastikan tidak terpotong/buram), lalu lakukan pengajuan ulang."
-    },
-    {
-        "No": 4,
-        "Alasan Reject": "Tanda Tangan Tidak Menyentuh Materai / Tidak Sesuai",
-        "Keterangan": "Tanda tangan pada form kuasa/SKPR tidak menyentuh materai atau tidak cocok dengan spesimen tanda tangan pada KTP/buku tabungan.",
-        "Tindakan Korektif / Solusi Sales": "Lengkapi ulang tanda tangan di atas materai sesuai spesimen KTP/rekening bank nasabah dan pastikan tidak menyimpang dari batas ketentuan."
-    },
-    {
-        "No": 5,
-        "Alasan Reject": "Invalid format account number",
-        "Keterangan": "Format nomor rekening tidak sesuai ketentuan bank, salah digit, atau terdapat spasi/karakter yang tidak valid.",
-        "Tindakan Korektif / Solusi Sales": "Periksa kembali nomor rekening nasabah sesuai buku tabungan/rekening asli tanpa spasi atau karakter tambahan, lalu input ulang."
-    },
-    {
-        "No": 6,
-        "Alasan Reject": "Saldo tidak mencukupi",
-        "Keterangan": "Saldo rekening nasabah tidak mencukupi untuk memenuhi syarat minimum atau proses pendebetan/validasi.",
-        "Tindakan Korektif / Solusi Sales": "Informasikan nasabah untuk memastikan saldo rekening mencukupi dan aktif sebelum proses penagihan/aktivasi berikutnya."
-    },
-    {
-        "No": 7,
-        "Alasan Reject": "Rekening tidak aktif / dormant",
-        "Keterangan": "Rekening sumber autodebet dalam status dormant (tidak aktif) atau diblokir/terbatas transaksinya.",
-        "Tindakan Korektif / Solusi Sales": "Arahkan nasabah untuk mengaktifkan kembali rekening (reaktivasi dormant) di cabang bank terkait."
-    },
-    {
-        "No": 8,
-        "Alasan Reject": "Data customer tidak sesuai",
-        "Keterangan": "Terdapat ketidaksesuaian identitas nasabah (nama, NIK/KTP, atau data pendukung) antara kontrak/pengajuan dan data rekening bank.",
-        "Tindakan Korektif / Solusi Sales": "Cocokkan kembali identitas nasabah di KTP, kontrak, dan rekening bank, lalu koordinasikan perbaikan data/dokumen pendukung."
-    }
+    {"No": 1, "Alasan Reject": "Phone number is not correct", "Keterangan": "Nomor telepon nasabah tidak sesuai atau berbeda antara data pengajuan/AOL dengan data yang terdaftar di bank / mobile banking (misalnya BRIMO).", "Tindakan Korektif / Solusi Sales": "Input ulang melalui menu AOL Autodebet CSO dan pastikan nomor HP sesuai dengan yang terdaftar di Bank/BRIMO. Jika belum sinkron, arahkan nasabah walk-in ke bank untuk pembaruan nomor HP."},
+    {"No": 2, "Alasan Reject": "Phone number not found", "Keterangan": "Nomor telepon nasabah belum terdaftar atau tidak ditemukan pada sistem bank terkait saat proses pendaftaran autodebet.", "Tindakan Korektif / Solusi Sales": "Arahkan nasabah melakukan registrasi atau pembaruan data nomor HP aktif di bank terkait terlebih dahulu, lalu ajukan ulang."},
+    {"No": 3, "Alasan Reject": "Scan Kartu ATM Meragukan / No. Kartu ATM Invalid", "Keterangan": "Foto atau scan kartu ATM kurang jelas/buram, atau nasabah sudah melakukan penggantian kartu ATM sehingga nomor kartu lama sudah tidak berlaku.", "Tindakan Korektif / Solusi Sales": "Minta foto/scan kartu ATM terbaru yang jelas dan valid (pastikan tidak terpotong/buram), lalu lakukan pengajuan ulang."},
+    {"No": 4, "Alasan Reject": "Tanda Tangan Tidak Menyentuh Materai / Tidak Sesuai", "Keterangan": "Tanda tangan pada form kuasa/SKPR tidak menyentuh materai atau tidak cocok dengan spesimen tanda tangan pada KTP/buku tabungan.", "Tindakan Korektif / Solusi Sales": "Lengkapi ulang tanda tangan di atas materai sesuai spesimen KTP/rekening bank nasabah dan pastikan tidak menyimpang dari batas ketentuan."},
+    {"No": 5, "Alasan Reject": "Invalid format account number", "Keterangan": "Format nomor rekening tidak sesuai ketentuan bank, salah digit, atau terdapat spasi/karakter yang tidak valid.", "Tindakan Korektif / Solusi Sales": "Periksa kembali nomor rekening nasabah sesuai buku tabungan/rekening asli tanpa spasi atau karakter tambahan, lalu input ulang."},
+    {"No": 6, "Alasan Reject": "Saldo tidak mencukupi", "Keterangan": "Saldo rekening nasabah tidak mencukupi untuk memenuhi syarat minimum atau proses pendebetan/validasi.", "Tindakan Korektif / Solusi Sales": "Informasikan nasabah untuk memastikan saldo rekening mencukupi dan aktif sebelum proses penagihan/aktivasi berikutnya."},
+    {"No": 7, "Alasan Reject": "Rekening tidak aktif / dormant", "Keterangan": "Rekening sumber autodebet dalam status dormant (tidak aktif) atau diblokir/terbatas transaksinya.", "Tindakan Korektif / Solusi Sales": "Arahkan nasabah untuk mengaktifkan kembali rekening (reaktivasi dormant) di cabang bank terkait."},
+    {"No": 8, "Alasan Reject": "Data customer tidak sesuai", "Keterangan": "Terdapat ketidaksesuaian identitas nasabah (nama, NIK/KTP, atau data pendukung) antara kontrak/pengajuan dan data rekening bank.", "Tindakan Korektif / Solusi Sales": "Cocokkan kembali identitas nasabah di KTP, kontrak, dan rekening bank, lalu koordinasikan perbaikan data/dokumen pendukung."}
 ]
 
 def get_solusi_reject(reason):
@@ -953,7 +537,6 @@ def get_solusi_reject(reason):
     else:
         return "Koordinasikan perbaikan dokumen/data rekening nasabah sesuai catatan reject di AOL."
 
-# Normalisasi Nama Bank
 def normalize_bank(val):
     b = str(val).upper().strip()
     if "RAKYAT INDONESIA" in b or b == "BRI":
@@ -990,21 +573,17 @@ def extract_aging_tanggal(row):
     aging_raw = clean_text(row.get("AGING_", ""), "")
     tgl_ref = clean_text(row.get("2026-04-11", ""), "")
     dt_golive = clean_text(row.get("DT_GOLIVE", ""), "")
-
     bagian = []
     if aging:
         bagian.append(f"Aging {aging} hr")
     elif aging_raw:
         bagian.append(f"Aging {aging_raw}")
-
     if tgl_ref:
         bagian.append(f"Tgl {tgl_ref}")
     elif dt_golive:
         bagian.append(f"Golive {dt_golive}")
-
     return " | ".join(bagian) if bagian else "-"
 
-# Pesan WA Polos (Tanpa Emotikon) - Reject Satuan
 def build_wa_item_message(row):
     sales = clean_text(row.get("Sales", ""), "Kak")
     cust = clean_text(row.get("Customer", ""), "-")
@@ -1014,8 +593,7 @@ def build_wa_item_message(row):
     aging_tgl = extract_aging_tanggal(row)
     alasan = clean_text(row.get("Alasan Reject", ""), "Alasan belum tercantum")
     solusi = clean_text(row.get("Solusi", ""), "-")
-
-    lines = [
+    return "\n".join([
         f"Halo Kak {sales}, mohon bantuannya follow up reject autodebet customer berikut:",
         "",
         f"- Customer: {cust} ({nokon})",
@@ -1024,19 +602,13 @@ def build_wa_item_message(row):
         f"- Aging/Tanggal: {aging_tgl}",
         f"- Alasan Reject: {alasan}",
         f"- Solusi: {solusi}",
-    ]
-    return "\n".join(lines)
+    ])
 
-# Pesan WA Polos (Tanpa Emotikon) - Reject Rekap per Sales
 def build_wa_rekap_message(df_rekap, nama_sales="Sales"):
     if df_rekap.empty:
         return ""
     sapaan = f"Halo Kak {nama_sales}," if nama_sales and nama_sales != "SEMUA SALES" else "Halo Tim Sales,"
-    lines = [
-        sapaan,
-        "Berikut daftar customer reject yang perlu segera di follow up:",
-        ""
-    ]
+    lines = [sapaan, "Berikut daftar customer reject yang perlu segera di follow up:", ""]
     for idx, (_, row) in enumerate(df_rekap.iterrows(), start=1):
         cust = clean_text(row.get("Customer", ""), "-")
         nokon = clean_text(row.get("ID", ""), "-")
@@ -1046,7 +618,6 @@ def build_wa_rekap_message(df_rekap, nama_sales="Sales"):
         alasan = clean_text(row.get("Alasan Reject", ""), "Alasan belum tercantum")
         solusi = clean_text(row.get("Solusi", ""), "-")
         sales_item = clean_text(row.get("Sales", ""), "-")
-
         baris_sales = f"\n   Sales: {sales_item}" if nama_sales == "SEMUA SALES" else ""
         lines.append(
             f"{idx}. *{cust}* ({nokon}){baris_sales}\n"
@@ -1054,20 +625,17 @@ def build_wa_rekap_message(df_rekap, nama_sales="Sales"):
             f"   Bank: {bank}\n"
             f"   Aging/Tanggal: {aging_tgl}\n"
             f"   Alasan: {alasan}\n"
-            f"   Solusi: {solusi}"
+            f"   Solusi: {solusi}\n"
         )
-        lines.append("")
     return "\n".join(lines).strip()
 
-# Pesan WA Polos (Tanpa Emotikon) - BNI Status D (Pengajuan ke Bank -> Arahan ACC ONE)
 def build_wa_bni_item_message(row):
     sales = clean_text(row.get("Sales", ""), "Kak")
     cust = clean_text(row.get("Customer", ""), "-")
     nokon = clean_text(row.get("ID", ""), "-")
     cabang_area = extract_cabang_area(row)
     aging_tgl = extract_aging_tanggal(row)
-
-    lines = [
+    return "\n".join([
         f"Halo Kak {sales}, mohon arahkan nasabah BNI berikut untuk pengaktifan ACC ONE:",
         "",
         f"- Customer: {cust} ({nokon})",
@@ -1076,38 +644,30 @@ def build_wa_bni_item_message(row):
         "- Status: D (Pengajuan ke Bank)",
         f"- Aging/Tanggal: {aging_tgl}",
         "- Arahan: Wajib mengajukan dan mengaktifkan ACC ONE sesuai arahan Sales.",
-    ]
-    return "\n".join(lines)
+    ])
 
 def build_wa_bni_rekap_message(df_bni, nama_sales="Sales"):
     if df_bni.empty:
         return ""
     sapaan = f"Halo Kak {nama_sales}," if nama_sales and nama_sales != "SEMUA SALES" else "Halo Tim Sales,"
-    lines = [
-        sapaan,
-        "Berikut daftar nasabah BNI status D (Pengajuan ke Bank) yang wajib diarahkan untuk pengaktifan ACC ONE:",
-        ""
-    ]
+    lines = [sapaan, "Berikut daftar nasabah BNI status D (Pengajuan ke Bank) yang wajib diarahkan untuk pengaktifan ACC ONE:", ""]
     for idx, (_, row) in enumerate(df_bni.iterrows(), start=1):
         cust = clean_text(row.get("Customer", ""), "-")
         nokon = clean_text(row.get("ID", ""), "-")
         cabang_area = extract_cabang_area(row)
         aging_tgl = extract_aging_tanggal(row)
         sales_item = clean_text(row.get("Sales", ""), "-")
-
         baris_sales = f"\n   Sales: {sales_item}" if nama_sales == "SEMUA SALES" else ""
         lines.append(
             f"{idx}. *{cust}* ({nokon}){baris_sales}\n"
             f"   Cabang/Area: {cabang_area}\n"
             f"   Bank: BNI | Status: D (Pengajuan ke Bank)\n"
             f"   Aging/Tanggal: {aging_tgl}\n"
-            f"   Arahan: Pengaktifan ACC ONE oleh nasabah dengan arahan Sales."
+            f"   Arahan: Pengaktifan ACC ONE oleh nasabah dengan arahan Sales.\n"
         )
-        lines.append("")
     return "\n".join(lines).strip()
 
-# Fungsi Memuat Data dari Google Sheets Publik via CSV
-@st.cache_data(ttl=10)
+@st.cache_data(ttl=120)
 def load_data_sheets():
     urls = [
         f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Tracking",
@@ -1120,7 +680,6 @@ def load_data_sheets():
             df.columns = [c.strip() for c in df.columns]
             if df.empty or len(df.columns) <= 1:
                 continue
-
             if "NAMA_CUST" in df.columns:
                 df = df[df["NAMA_CUST"].str.strip() != ""].copy()
             elif "Customer" in df.columns:
@@ -1149,7 +708,6 @@ df_tracking, is_live = load_data_sheets()
 
 if "bni_contacted_keys" not in st.session_state:
     st.session_state.bni_contacted_keys = set()
-
 if "reject_contacted_keys" not in st.session_state:
     st.session_state.reject_contacted_keys = set()
 
@@ -1177,59 +735,62 @@ if "sidebar_nav" not in st.session_state:
 elif st.session_state["sidebar_nav"] != st.session_state["active_menu"]:
     st.session_state["sidebar_nav"] = st.session_state["active_menu"]
 
-# Sidebar Navigasi Korporat Berwarna & Beranimasi
-st.sidebar.markdown("""
-    <div style="padding: 6px 2px 2px 2px;">
-        <h2 style="color: #ffffff; margin: 0; font-weight: 800; letter-spacing: 0.5px;">⚡ AUTOTEAM</h2>
-        <p style="color: #93c5fd; font-size: 12.5px; margin: 2px 0 8px 0;">Autodebet Team Achievement & Monitoring</p>
-        <div class="tagline-pill">Monitor. Improve. Activate.</div>
-    </div>
-""", unsafe_allow_html=True)
+def toggle_reject_contacted(item_key, widget_key):
+    if st.session_state.get(widget_key):
+        st.session_state.reject_contacted_keys.add(item_key)
+    else:
+        st.session_state.reject_contacted_keys.discard(item_key)
+
+def toggle_bni_contacted(item_key, widget_key):
+    if st.session_state.get(widget_key):
+        st.session_state.bni_contacted_keys.add(item_key)
+    else:
+        st.session_state.bni_contacted_keys.discard(item_key)
+
+st.sidebar.markdown(
+    '<div style="padding: 6px 2px 2px 2px;">'
+    '<h2 style="color: #ffffff; margin: 0; font-weight: 800; letter-spacing: 0.5px;">⚡ AUTOTEAM</h2>'
+    '<p style="color: #93c5fd; font-size: 12.5px; margin: 2px 0 8px 0;">Autodebet Team Achievement & Monitoring</p>'
+    '<div class="tagline-pill">Monitor. Improve. Activate.</div>'
+    '</div>',
+    unsafe_allow_html=True
+)
 st.sidebar.markdown("---")
 st.sidebar.markdown("<span style='color:#bae6fd; font-weight:700; font-size:13px;'>MENU UTAMA</span>", unsafe_allow_html=True)
-
-st.sidebar.radio(
-    "Navigasi",
-    DAFTAR_MENU,
-    key="sidebar_nav",
-    on_change=on_sidebar_change,
-    label_visibility="collapsed"
-)
-
+st.sidebar.radio("Navigasi", DAFTAR_MENU, key="sidebar_nav", on_change=on_sidebar_change, label_visibility="collapsed")
 st.sidebar.markdown("---")
 st.sidebar.info("ACC Cabang Makassar — Kolaborasi & monitoring performa autodebet tim lapangan.")
 
 def render_page_banner(title, subtitle):
-    st.markdown(f"""
-        <div class="hero-banner">
-            <div class="hero-title">{html.escape(title)}</div>
-            <div class="hero-sub">{html.escape(subtitle)}</div>
-            <div class="tagline-pill">Monitor. Improve. Activate.</div>
-        </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="hero-banner">'
+        f'<div class="hero-title">{html.escape(title)}</div>'
+        f'<div class="hero-sub">{html.escape(subtitle)}</div>'
+        f'<div class="tagline-pill">Monitor. Improve. Activate.</div>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
 
 def render_metric_card(label, value, subtext):
-    st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">{html.escape(str(label))}</div>
-            <div class="metric-value">{html.escape(str(value))}</div>
-            <div class="metric-sub">{html.escape(str(subtext))}</div>
-        </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="metric-card">'
+        f'<div class="metric-label">{html.escape(str(label))}</div>'
+        f'<div class="metric-value">{html.escape(str(value))}</div>'
+        f'<div class="metric-sub">{html.escape(str(subtext))}</div>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
 
 def format_table_cell(col_name, val):
     raw = str(val).strip()
     esc = html.escape(raw if raw != "" else "-")
     col_u = col_name.upper()
-
-    if col_u in ["NO", "RANK"]:
-        return f'<span class="pill-badge pill-blue">#{esc}</span>'
-    if col_u in ["BANK", "BANK_AUTODEBET"]:
-        return f'<span class="pill-badge pill-blue">{esc}</span>'
+    if col_u in ["NO", "RANK", "BANK", "BANK_AUTODEBET", "% APPROVED", "% AUTODEBET"]:
+        prefix = "#" if col_u in ["NO", "RANK"] else ""
+        return f'<span class="pill-badge pill-blue">{prefix}{esc}</span>'
     if col_u == "KEAKTIFAN":
-        if raw.lower() == "aktif":
-            return f'<span class="pill-badge pill-green">{esc}</span>'
-        return f'<span class="pill-badge pill-slate">{esc}</span>'
+        cls = "pill-green" if raw.lower() == "aktif" else "pill-slate"
+        return f'<span class="pill-badge {cls}">{esc}</span>'
     if col_u in ["STATUS", "STATUS PENDAFTARAN"]:
         up = raw.upper()
         if up in ["A", "APPROVED"]:
@@ -1244,42 +805,30 @@ def format_table_cell(col_name, val):
         return f'<span class="rej-pill">{esc}</span>'
     if col_u == "APPROVED (A)":
         return f'<span class="pill-badge pill-green">{esc}</span>'
-    if col_u in ["% APPROVED", "% AUTODEBET"]:
-        return f'<span class="pill-badge pill-blue">{esc}</span>'
     if col_u in ["CUSTOMER", "NAMA_CUST", "SALES", "NAME_SO", "ALASAN REJECT"]:
         return f"<b>{esc}</b>"
     return esc
 
-def render_styled_html_table(df, col_labels=None, max_rows=300):
+def render_styled_html_table(df, col_labels=None, max_rows=250):
     if df.empty:
         return
     df_show = df.head(max_rows)
     cols = list(df_show.columns)
-    parts = [
-        '<div class="styled-table-wrap">',
-        '<table class="lb-table">',
-        '<thead><tr>'
-    ]
+    parts = ['<div class="styled-table-wrap"><table class="lb-table"><thead><tr>']
     for c in cols:
         hdr = col_labels.get(c, c) if col_labels else c
         parts.append(f"<th>{html.escape(str(hdr))}</th>")
     parts.append("</tr></thead><tbody>")
-
     for _, row in df_show.iterrows():
-        parts.append("<tr>")
-        for c in cols:
-            parts.append(f"<td>{format_table_cell(c, row[c])}</td>")
-        parts.append("</tr>")
-
+        parts.append("<tr>" + "".join(f"<td>{format_table_cell(c, row[c])}</td>" for c in cols) + "</tr>")
     parts.append("</tbody></table></div>")
     if len(df) > max_rows:
-        parts.append(f"<div style='font-size:12px; color:var(--text-muted); margin-top:6px;'>Menampilkan {max_rows} dari {len(df)} baris data (gunakan filter di atas untuk menyaring spesifik).</div>")
+        parts.append(f"<div style='font-size:12px; color:var(--text-muted); margin-top:6px;'>Menampilkan {max_rows} dari {len(df)} baris data.</div>")
     st.markdown("".join(parts), unsafe_allow_html=True)
 
 def build_sales_leaderboard(df):
     if df.empty:
         return pd.DataFrame(), pd.DataFrame()
-
     rows = []
     for sales_name, grp in df.groupby("Sales"):
         s_label = sales_name.strip() if str(sales_name).strip() != "" else "(Tanpa Nama Sales)"
@@ -1287,88 +836,47 @@ def build_sales_leaderboard(df):
         app = len(grp[grp["Status_Code"] == "A"])
         rej = len(grp[grp["Status_Code"] == "R"])
         pct = (app / tot * 100.0) if tot > 0 else 0.0
-        rows.append({
-            "Sales": s_label,
-            "Total Data": tot,
-            "Approved (A)": app,
-            "Rejected (R)": rej,
-            "% Autodebet": round(pct, 1),
-        })
-
+        rows.append({"Sales": s_label, "Total Data": tot, "Approved (A)": app, "Rejected (R)": rej, "% Autodebet": round(pct, 1)})
     lb_df = pd.DataFrame(rows)
     if lb_df.empty:
         return pd.DataFrame(), pd.DataFrame()
-
-    top5 = lb_df.sort_values(
-        by=["% Autodebet", "Rejected (R)", "Approved (A)", "Total Data"],
-        ascending=[False, True, False, False]
-    ).head(5).copy()
+    top5 = lb_df.sort_values(by=["% Autodebet", "Rejected (R)", "Approved (A)", "Total Data"], ascending=[False, True, False, False]).head(5).copy()
     top5.insert(0, "Rank", range(1, len(top5) + 1))
-
-    bottom5 = lb_df.sort_values(
-        by=["Rejected (R)", "% Autodebet", "Total Data"],
-        ascending=[False, True, False]
-    ).head(5).copy()
+    bottom5 = lb_df.sort_values(by=["Rejected (R)", "% Autodebet", "Total Data"], ascending=[False, True, False]).head(5).copy()
     bottom5.insert(0, "Rank", range(1, len(bottom5) + 1))
-
     return top5, bottom5
 
 def render_top5_trophy_cards(top5_df):
     trophy_icons = {1: "🏆", 2: "🥈", 3: "🥉", 4: "🏅", 5: "🎖️"}
     rank_classes = {1: "top-rank-1", 2: "top-rank-2", 3: "top-rank-3"}
-    html_parts = [
-        '<div class="lb-panel">',
-        '<div class="lb-panel-title">🏆 Top 5 Sales — Persentase Autodebet Tertinggi & Reject Paling Sedikit</div>'
-    ]
+    html_parts = ['<div class="lb-panel"><div class="lb-panel-title">🏆 Top 5 Sales — Persentase Autodebet Tertinggi & Reject Paling Sedikit</div>']
     for _, r in top5_df.iterrows():
         rk = int(r["Rank"])
         t_icon = trophy_icons.get(rk, "🏆")
         extra_cls = rank_classes.get(rk, "")
         s_name = html.escape(str(r["Sales"]))
-        tot_d = int(r["Total Data"])
-        app_d = int(r["Approved (A)"])
-        rej_d = int(r["Rejected (R)"])
-        pct_v = float(r["% Autodebet"])
         html_parts.append(
             f'<div class="top-rank-card {extra_cls}">'
-            f'  <div style="display:flex; align-items:center;">'
-            f'    <span class="trophy-anim">{t_icon}</span>'
-            f'    <div>'
-            f'      <div class="rank-name">#{rk} &nbsp;{s_name}</div>'
-            f'      <div class="rank-meta">Approved: <b>{app_d}</b> / {tot_d} Data &nbsp;|&nbsp; Rejected: <b>{rej_d}</b></div>'
-            f'    </div>'
-            f'  </div>'
-            f'  <div class="rank-score-pill">{pct_v:.1f}%</div>'
-            f'</div>'
+            f'<div style="display:flex; align-items:center;">'
+            f'<span class="trophy-anim">{t_icon}</span>'
+            f'<div><div class="rank-name">#{rk} &nbsp;{s_name}</div>'
+            f'<div class="rank-meta">Approved: <b>{int(r["Approved (A)"])}</b> / {int(r["Total Data"])} Data &nbsp;|&nbsp; Rejected: <b>{int(r["Rejected (R)"])}</b></div></div>'
+            f'</div><div class="rank-score-pill">{float(r["% Autodebet"]):.1f}%</div></div>'
         )
     html_parts.append('</div>')
     return "".join(html_parts)
 
 def render_bottom5_styled_table(bottom5_df):
     html_parts = [
-        '<div class="lb-panel">',
-        '<div class="lb-panel-title">⚠️ Bottom 5 Sales — Rejected (R) Terbanyak</div>',
-        '<div class="styled-table-wrap" style="max-height:none;">',
-        '<table class="lb-table">',
-        '<thead><tr><th>Rank</th><th>Nama Sales</th><th>Total</th><th>Approved</th><th>Rejected (R)</th><th>% Autodebet</th></tr></thead>',
-        '<tbody>'
+        '<div class="lb-panel"><div class="lb-panel-title">⚠️ Bottom 5 Sales — Rejected (R) Terbanyak</div>',
+        '<div class="styled-table-wrap" style="max-height:none;"><table class="lb-table">',
+        '<thead><tr><th>Rank</th><th>Nama Sales</th><th>Total</th><th>Approved</th><th>Rejected (R)</th><th>% Autodebet</th></tr></thead><tbody>'
     ]
     for _, r in bottom5_df.iterrows():
-        rk = int(r["Rank"])
-        s_name = html.escape(str(r["Sales"]))
-        tot_d = int(r["Total Data"])
-        app_d = int(r["Approved (A)"])
-        rej_d = int(r["Rejected (R)"])
-        pct_v = float(r["% Autodebet"])
         html_parts.append(
-            f'<tr>'
-            f'  <td><b>#{rk}</b></td>'
-            f'  <td><b>{s_name}</b></td>'
-            f'  <td>{tot_d}</td>'
-            f'  <td>{app_d}</td>'
-            f'  <td><span class="rej-pill">{rej_d} Reject</span></td>'
-            f'  <td><b>{pct_v:.1f}%</b></td>'
-            f'</tr>'
+            f'<tr><td><b>#{int(r["Rank"])}</b></td><td><b>{html.escape(str(r["Sales"]))}</b></td>'
+            f'<td>{int(r["Total Data"])}</td><td>{int(r["Approved (A)"])}</td>'
+            f'<td><span class="rej-pill">{int(r["Rejected (R)"])} Reject</span></td><td><b>{float(r["% Autodebet"]):.1f}%</b></td></tr>'
         )
     html_parts.append('</tbody></table></div></div>')
     return "".join(html_parts)
@@ -1376,17 +884,20 @@ def render_bottom5_styled_table(bottom5_df):
 def render_reject_card_item(idx, row, df_view, is_contacted):
     sales_nama = clean_text(row.get("Sales", ""), "-")
     alasan = clean_text(row.get("Alasan Reject", ""), "Alasan belum tercantum di sheet")
+    solusi_teks = clean_text(row.get("Solusi", ""), "-")
     cabang_area = extract_cabang_area(row)
     aging_tgl = extract_aging_tanggal(row)
-    item_key = f"{clean_text(row.get('ID', ''))}_{clean_text(row.get('Customer', ''))}_{idx}"
+    cust_teks = clean_text(row.get("Customer", ""))
+    bank_teks = clean_text(row.get("Bank", ""))
+    id_teks = clean_text(row.get("ID", ""))
+    status_teks = clean_text(row.get("Status", "Rejected"))
+    code_teks = clean_text(row.get("Status_Code", "R"))
+    item_key = f"{id_teks}_{cust_teks}_{idx}"
 
-    wa_item_msg = build_wa_item_message(row)
-    wa_item_url = f"https://wa.me/?text={urllib.parse.quote(wa_item_msg)}"
-
+    wa_item_url = f"https://wa.me/?text={urllib.parse.quote(build_wa_item_message(row))}"
     df_sales_ini = df_view[df_view["Sales"] == row.get("Sales", "")]
     jml_sales_ini = len(df_sales_ini)
-    wa_sales_group_msg = build_wa_rekap_message(df_sales_ini, sales_nama)
-    wa_sales_group_url = f"https://wa.me/?text={urllib.parse.quote(wa_sales_group_msg)}"
+    wa_sales_group_url = f"https://wa.me/?text={urllib.parse.quote(build_wa_rekap_message(df_sales_ini, sales_nama))}"
 
     box_extra_cls = " reject-box-done" if is_contacted else ""
     warn_html = ""
@@ -1398,36 +909,31 @@ def render_reject_card_item(idx, row, df_view, is_contacted):
             '</div>'
         )
 
+    card_html = (
+        f'<div class="reject-box{box_extra_cls}">'
+        f'<strong>{html.escape(cust_teks)}</strong> ({html.escape(bank_teks)} - No. Kontrak: {html.escape(id_teks)})<br>'
+        f'<small>Sales: <b>{html.escape(sales_nama)}</b> &nbsp;|&nbsp; Status: <b>{html.escape(status_teks)} ({html.escape(code_teks)})</b> &nbsp;|&nbsp; Total Reject Sales ini: <b>{jml_sales_ini} Nasabah</b></small><br>'
+        f'<small>Cabang/Area: <b>{html.escape(cabang_area)}</b> &nbsp;|&nbsp; Aging/Tanggal: <b>{html.escape(aging_tgl)}</b></small><br>'
+        f'<span class="reject-reason">Alasan Reject: {html.escape(alasan)}</span>'
+        f'{warn_html}'
+        f'<div class="solution-box"><span>Solusi Perbaikan:</span><br>{html.escape(solusi_teks)}</div>'
+        f'</div>'
+    )
+
     with st.container():
         card_col, chk_col = st.columns([5.2, 1.3])
         with card_col:
-            st.markdown(f"""
-                <div class="reject-box{box_extra_cls}">
-                    <strong>{html.escape(clean_text(row.get('Customer', '')))}</strong> ({html.escape(clean_text(row.get('Bank', '')))} - No. Kontrak: {html.escape(clean_text(row.get('ID', '')))})<br>
-                    <small>Sales: <b>{html.escape(sales_nama)}</b> &nbsp;|&nbsp; Status: <b>{html.escape(clean_text(row.get('Status', 'Rejected')))} ({html.escape(clean_text(row.get('Status_Code', 'R')))})</b> &nbsp;|&nbsp; Total Reject Sales ini: <b>{jml_sales_ini} Nasabah</b></small><br>
-                    <small>Cabang/Area: <b>{html.escape(cabang_area)}</b> &nbsp;|&nbsp; Aging/Tanggal: <b>{html.escape(aging_tgl)}</b></small><br>
-                    <span class="reject-reason">Alasan Reject: {html.escape(alasan)}</span>
-                    {warn_html}
-                    <div class="solution-box">
-                        <span>Solusi Perbaikan:</span><br>
-                        {html.escape(clean_text(row.get('Solusi', '')))}
-                    </div>
-                </div>
-            """, unsafe_allow_html=True)
+            st.markdown(card_html, unsafe_allow_html=True)
         with chk_col:
-            checked_val = st.checkbox(
+            w_key = f"chk_rej_{item_key}"
+            st.checkbox(
                 "Sudah dihubungi",
                 value=is_contacted,
-                key=f"chk_rej_{item_key}"
+                key=w_key,
+                on_change=toggle_reject_contacted,
+                args=(item_key, w_key)
             )
-            if checked_val != is_contacted:
-                if checked_val:
-                    st.session_state.reject_contacted_keys.add(item_key)
-                else:
-                    st.session_state.reject_contacted_keys.discard(item_key)
-                st.rerun()
-
-            if checked_val:
+            if is_contacted:
                 st.markdown('<div class="ceklis-badge">✓ Sudah Dihubungi</div>', unsafe_allow_html=True)
             else:
                 st.markdown('<div class="belum-ceklis-badge">Belum Dihubungi</div>', unsafe_allow_html=True)
@@ -1452,26 +958,22 @@ def render_reject_card_item(idx, row, df_view, is_contacted):
         st.markdown("---")
 
 def main():
-    # Menu Cepat khusus HP & Tablet (termasuk iPad portrait/landscape): tampil < 1200px, tersembunyi di desktop >= 1200px
     with st.container(key="mobile_quick_nav"):
         st.markdown("<span style='font-weight:800; font-size:12.5px; color:var(--bank-title);'>AKSES CEPAT MENU (HP / TABLET)</span>", unsafe_allow_html=True)
         for row_start in range(0, len(DAFTAR_MENU), 3):
             cols = st.columns(3)
             for idx_col, nama_menu in enumerate(DAFTAR_MENU[row_start:row_start + 3]):
                 with cols[idx_col]:
-                    is_active = (st.session_state["active_menu"] == nama_menu)
-                    btn_type = "primary" if is_active else "secondary"
                     st.button(
                         nama_menu,
                         key=f"btn_nav_{row_start}_{idx_col}",
-                        type=btn_type,
+                        type="primary" if st.session_state["active_menu"] == nama_menu else "secondary",
                         use_container_width=True,
                         on_click=select_menu_callback,
                         args=(nama_menu,)
                     )
 
     halaman_aktif = st.session_state["active_menu"]
-
     total_data = len(df_tracking)
     df_aktif = df_tracking[df_tracking["Keaktifan"] == "Aktif"] if not df_tracking.empty else pd.DataFrame()
     total_aktif = len(df_aktif)
@@ -1480,11 +982,7 @@ def main():
     success_rate_cabang = (total_approved / total_data * 100) if total_data > 0 else 0.0
 
     if halaman_aktif == "🎯 Home Dashboard":
-        render_page_banner(
-            "⚡ AUTOTEAM — Home Dashboard",
-            "Autodebet Team Achievement & Monitoring — ACC Cabang Makassar"
-        )
-
+        render_page_banner("⚡ AUTOTEAM — Home Dashboard", "Autodebet Team Achievement & Monitoring — ACC Cabang Makassar")
         col1, col2, col3, col4 = st.columns(4)
         with col1:
             render_metric_card("Total Data Tracking", total_data, f"Aktif: {total_aktif} | Non-Aktif (C/B): {total_data - total_aktif}")
@@ -1497,7 +995,6 @@ def main():
 
         st.markdown("---")
         st.subheader("Statistik Volume & Performa per Bank (Data Cabang Makassar)")
-
         bank_configs = ["BRI", "MANDIRI", "BCA", "BNI", "PERMATA"]
         bank_cols = st.columns(5)
         for idx, bank_name in enumerate(bank_configs):
@@ -1508,12 +1005,10 @@ def main():
             badge_label = "Top Rate" if rate_b >= 70 else ("Dominan" if vol_b >= 100 else ("Proses" if vol_b > 0 else "N/A"))
             with bank_cols[idx]:
                 st.markdown(
-                    f'<div class="bank-card">'
-                    f'<div class="bank-title">{html.escape(bank_name)}</div>'
+                    f'<div class="bank-card"><div class="bank-title">{html.escape(bank_name)}</div>'
                     f'<div class="bank-rate">{rate_b:.1f}%</div>'
                     f'<div class="bank-sub">Total: <b>{vol_b}</b> Nasabah ({app_b} Approved)</div>'
-                    f'<small class="bank-badge">{html.escape(badge_label)}</small>'
-                    f'</div>',
+                    f'<small class="bank-badge">{html.escape(badge_label)}</small></div>',
                     unsafe_allow_html=True
                 )
 
@@ -1524,41 +1019,25 @@ def main():
         with lb_col1:
             if not top5_df.empty:
                 st.markdown(render_top5_trophy_cards(top5_df), unsafe_allow_html=True)
-            else:
-                st.info("Belum ada data Sales.")
         with lb_col2:
             if not bottom5_df.empty:
                 st.markdown(render_bottom5_styled_table(bottom5_df), unsafe_allow_html=True)
-            else:
-                st.info("Belum ada data Sales.")
 
         st.markdown("---")
         st.subheader("Master Data Nasabah & Status Tracking (Live from Google Sheets)")
         kolom_tampil = [c for c in ["NOKON", "NAMA_CUST", "CABANG", "NAME_SO", "BANK_AUTODEBET", "STATUS PENDAFTARAN", "Status", "Keaktifan", "REASON REJECT"] if c in df_tracking.columns]
         render_styled_html_table(
             df_tracking[kolom_tampil] if kolom_tampil else df_tracking,
-            col_labels={
-                "NOKON": "No. Kontrak",
-                "NAMA_CUST": "Nama Customer",
-                "CABANG": "Cabang",
-                "NAME_SO": "Sales",
-                "BANK_AUTODEBET": "Bank",
-                "STATUS PENDAFTARAN": "Kode",
-                "REASON REJECT": "Alasan Reject"
-            },
-            max_rows=250
+            col_labels={"NOKON": "No. Kontrak", "NAMA_CUST": "Nama Customer", "CABANG": "Cabang", "NAME_SO": "Sales", "BANK_AUTODEBET": "Bank", "STATUS PENDAFTARAN": "Kode", "REASON REJECT": "Alasan Reject"},
+            max_rows=200
         )
 
     elif halaman_aktif == "📊 Status Customer":
-        render_page_banner(
-            "⚡ AUTOTEAM — Status Customer",
-            "Pemantauan menyeluruh progress pengajuan seluruh nasabah dan kontribusi performa setiap Sales."
-        )
-
+        render_page_banner("⚡ AUTOTEAM — Status Customer", "Pemantauan menyeluruh progress pengajuan seluruh nasabah dan kontribusi performa setiap Sales.")
         with st.container(key="panel_filter_status"):
             st.markdown(
                 "<div class='section-panel-title'><span>🎛️ Filter & Pencarian Data Nasabah</span><span class='filter-chip-badge'>⚡ Live Filter Aktif</span></div>"
-                "<div class='section-panel-sub'>Sentuh atau ubah filter di bawah untuk menyaring data berdasarkan Sales, status pendaftaran, keaktifan, bank, atau nama/NOKON.</div>",
+                "<div class='section-panel-sub'>Saring data berdasarkan Sales, status pendaftaran, keaktifan, bank, atau nama/NOKON.</div>",
                 unsafe_allow_html=True
             )
             c_f1, c_f2, c_f3, c_f4, c_f5 = st.columns([1.8, 1.3, 1.1, 1.1, 1.5])
@@ -1567,18 +1046,7 @@ def main():
                 opsi_sales = ["SEMUA SALES"] + list(dict.fromkeys(DAFTAR_SALES_MAKASSAR + sales_di_data))
                 pilih_sales_all = st.selectbox("Filter Sales:", opsi_sales, key="sales_all_select")
             with c_f2:
-                opsi_status = [
-                    "SEMUA STATUS",
-                    "Open (O)",
-                    "Bukcet Finance (F)",
-                    "Pengajuan ke Bank (D)",
-                    "Approved (A)",
-                    "Rejected (R)",
-                    "Cancelled (C)",
-                    "Batal (B)",
-                    "Edit (E)",
-                    "Pending (P)",
-                ]
+                opsi_status = ["SEMUA STATUS", "Open (O)", "Bukcet Finance (F)", "Pengajuan ke Bank (D)", "Approved (A)", "Rejected (R)", "Cancelled (C)", "Batal (B)", "Edit (E)", "Pending (P)"]
                 pilih_status = st.selectbox("Filter Status:", opsi_status, key="status_all_select")
             with c_f3:
                 pilih_keaktifan = st.selectbox("Keaktifan:", ["SEMUA", "Aktif", "Tidak Aktif"], key="aktif_all_select")
@@ -1595,42 +1063,21 @@ def main():
             df_all_view = df_all_view[df_all_view["Keaktifan"] == pilih_keaktifan]
         if pilih_bank != "SEMUA BANK":
             df_all_view = df_all_view[df_all_view["Bank"].str.upper() == pilih_bank.upper()]
-
-        status_code_map = {
-            "Open (O)": "O",
-            "Bukcet Finance (F)": "F",
-            "Pengajuan ke Bank (D)": "D",
-            "Approved (A)": "A",
-            "Rejected (R)": "R",
-            "Cancelled (C)": "C",
-            "Batal (B)": "B",
-            "Edit (E)": "E",
-            "Pending (P)": "P",
-        }
+        status_code_map = {"Open (O)": "O", "Bukcet Finance (F)": "F", "Pengajuan ke Bank (D)": "D", "Approved (A)": "A", "Rejected (R)": "R", "Cancelled (C)": "C", "Batal (B)": "B", "Edit (E)": "E", "Pending (P)": "P"}
         if pilih_status in status_code_map:
             df_all_view = df_all_view[df_all_view["Status_Code"] == status_code_map[pilih_status]]
-
         if cari_cust_all:
-            m_n = df_all_view["Customer"].astype(str).str.contains(cari_cust_all, case=False, na=False)
-            m_i = df_all_view["ID"].astype(str).str.contains(cari_cust_all, case=False, na=False)
-            df_all_view = df_all_view[m_n | m_i]
-
-        cnt_app = len(df_all_view[df_all_view["Status_Code"] == "A"])
-        cnt_aktif = len(df_all_view[df_all_view["Keaktifan"] == "Aktif"])
-        cnt_nonaktif = len(df_all_view[df_all_view["Keaktifan"] == "Tidak Aktif"])
-        cnt_rej = len(df_all_view[df_all_view["Status_Code"] == "R"])
+            df_all_view = df_all_view[
+                df_all_view["Customer"].astype(str).str.contains(cari_cust_all, case=False, na=False) |
+                df_all_view["ID"].astype(str).str.contains(cari_cust_all, case=False, na=False)
+            ]
 
         k1, k2, k3, k4, k5 = st.columns(5)
-        with k1:
-            render_metric_card("Total Data", len(df_all_view), "Hasil filter aktif")
-        with k2:
-            render_metric_card("Approved (A)", cnt_app, "Autodebet disetujui")
-        with k3:
-            render_metric_card("Status Aktif", cnt_aktif, "Dalam proses / aktif")
-        with k4:
-            render_metric_card("Tidak Aktif (C/B)", cnt_nonaktif, "Cancelled / Batal")
-        with k5:
-            render_metric_card("Rejected (R)", cnt_rej, "Perlu follow up")
+        with k1: render_metric_card("Total Data", len(df_all_view), "Hasil filter aktif")
+        with k2: render_metric_card("Approved (A)", len(df_all_view[df_all_view["Status_Code"] == "A"]), "Autodebet disetujui")
+        with k3: render_metric_card("Status Aktif", len(df_all_view[df_all_view["Keaktifan"] == "Aktif"]), "Dalam proses / aktif")
+        with k4: render_metric_card("Tidak Aktif (C/B)", len(df_all_view[df_all_view["Keaktifan"] == "Tidak Aktif"]), "Cancelled / Batal")
+        with k5: render_metric_card("Rejected (R)", len(df_all_view[df_all_view["Status_Code"] == "R"]), "Perlu follow up")
 
         st.markdown("---")
         st.subheader("Rekap Progress per Sales")
@@ -1640,23 +1087,16 @@ def main():
                 s_label = sales_name if sales_name.strip() != "" else "(Tanpa Nama Sales)"
                 tot_s = len(grp)
                 app_s = len(grp[grp["Status_Code"] == "A"])
-                akt_s = len(grp[grp["Keaktifan"] == "Aktif"])
-                nonakt_s = len(grp[grp["Keaktifan"] == "Tidak Aktif"])
-                rej_s = len(grp[grp["Status_Code"] == "R"])
-                pct_app = (app_s / tot_s * 100) if tot_s > 0 else 0.0
                 rekap_rows.append({
                     "Sales": s_label,
                     "Total Data": tot_s,
                     "Approved (A)": app_s,
-                    "Aktif": akt_s,
-                    "Tidak Aktif (C/B)": nonakt_s,
-                    "Rejected (R)": rej_s,
-                    "% Approved": f"{pct_app:.1f}%"
+                    "Aktif": len(grp[grp["Keaktifan"] == "Aktif"]),
+                    "Tidak Aktif (C/B)": len(grp[grp["Keaktifan"] == "Tidak Aktif"]),
+                    "Rejected (R)": len(grp[grp["Status_Code"] == "R"]),
+                    "% Approved": f"{(app_s / tot_s * 100) if tot_s > 0 else 0.0:.1f}%"
                 })
-            df_rekap_sales = pd.DataFrame(rekap_rows).sort_values(by=["Total Data", "Approved (A)"], ascending=False)
-            render_styled_html_table(df_rekap_sales, max_rows=200)
-        else:
-            st.info("Belum ada data rekap Sales untuk filter saat ini.")
+            render_styled_html_table(pd.DataFrame(rekap_rows).sort_values(by=["Total Data", "Approved (A)"], ascending=False), max_rows=200)
 
         st.markdown("---")
         st.subheader(f"Detail Progress Seluruh Nasabah ({len(df_all_view)} Data)")
@@ -1664,36 +1104,15 @@ def main():
             df_detail = df_all_view.copy()
             df_detail["Cabang / Area"] = df_detail.apply(extract_cabang_area, axis=1)
             df_detail["Aging / Tanggal"] = df_detail.apply(extract_aging_tanggal, axis=1)
-            kol_detail = [
-                c for c in [
-                    "ID", "Customer", "Sales", "Bank", "Cabang / Area",
-                    "Aging / Tanggal", "Status_Code", "Status", "Keaktifan", "Alasan Reject"
-                ] if c in df_detail.columns
-            ]
-            render_styled_html_table(
-                df_detail[kol_detail],
-                col_labels={"ID": "No. Kontrak", "Status_Code": "Kode"},
-                max_rows=350
-            )
-        else:
-            st.warning("Tidak ada data nasabah yang cocok dengan filter yang dipilih.")
+            kol_detail = [c for c in ["ID", "Customer", "Sales", "Bank", "Cabang / Area", "Aging / Tanggal", "Status_Code", "Status", "Keaktifan", "Alasan Reject"] if c in df_detail.columns]
+            render_styled_html_table(df_detail[kol_detail], col_labels={"ID": "No. Kontrak", "Status_Code": "Kode"}, max_rows=250)
 
     elif halaman_aktif == "🏛️ BNI Autodebet Tracking":
-        render_page_banner(
-            "⚡ AUTOTEAM — BNI Autodebet Tracking",
-            "Pemantauan nasabah BNI berstatus D (Pengajuan ke Bank) & panduan penanganan jika pengajuan ACC ONE ditolak."
-        )
-
-        tab_mon_bni, tab_guide_accone = st.tabs([
-            "📋 Monitoring BNI Status D",
-            "📌 Panduan Reject ACC ONE"
-        ])
+        render_page_banner("⚡ AUTOTEAM — BNI Autodebet Tracking", "Pemantauan nasabah BNI berstatus D (Pengajuan ke Bank) & panduan penanganan jika pengajuan ACC ONE ditolak.")
+        tab_mon_bni, tab_guide_accone = st.tabs(["📋 Monitoring BNI Status D", "📌 Panduan Reject ACC ONE"])
 
         with tab_mon_bni:
-            df_bni_d = df_tracking[
-                (df_tracking["Bank"] == "BNI") & (df_tracking["Status_Code"] == "D")
-            ].copy()
-
+            df_bni_d = df_tracking[(df_tracking["Bank"] == "BNI") & (df_tracking["Status_Code"] == "D")].copy()
             with st.container(key="panel_filter_bni"):
                 st.markdown(
                     "<div class='section-panel-title'><span>🎛️ Filter Nasabah BNI Status D</span><span class='filter-chip-badge'>🏛️ BNI ACC ONE Filter</span></div>"
@@ -1711,21 +1130,19 @@ def main():
             if pilih_sales_bni != "SEMUA SALES":
                 df_bni_d = df_bni_d[df_bni_d["Sales"].str.upper() == pilih_sales_bni.upper()]
             if cari_bni:
-                m_n = df_bni_d["Customer"].astype(str).str.contains(cari_bni, case=False, na=False)
-                m_i = df_bni_d["ID"].astype(str).str.contains(cari_bni, case=False, na=False)
-                df_bni_d = df_bni_d[m_n | m_i]
+                df_bni_d = df_bni_d[
+                    df_bni_d["Customer"].astype(str).str.contains(cari_bni, case=False, na=False) |
+                    df_bni_d["ID"].astype(str).str.contains(cari_bni, case=False, na=False)
+                ]
 
             sudah_hubungi = sum(
                 1 for idx, r in df_bni_d.iterrows()
                 if f"{clean_text(r.get('ID', ''))}_{clean_text(r.get('Customer', ''))}_{idx}" in st.session_state.bni_contacted_keys
             )
             b_k1, b_k2, b_k3 = st.columns(3)
-            with b_k1:
-                render_metric_card("Nasabah BNI Status D", len(df_bni_d), "Pengajuan ke Bank")
-            with b_k2:
-                render_metric_card("Jumlah Sales Terkait", df_bni_d["Sales"].nunique() if not df_bni_d.empty else 0, "Tim lapangan aktif")
-            with b_k3:
-                render_metric_card("Sudah Dihubungi (ACC ONE)", sudah_hubungi, "Tercatat pada sesi ini")
+            with b_k1: render_metric_card("Nasabah BNI Status D", len(df_bni_d), "Pengajuan ke Bank")
+            with b_k2: render_metric_card("Jumlah Sales Terkait", df_bni_d["Sales"].nunique() if not df_bni_d.empty else 0, "Tim lapangan aktif")
+            with b_k3: render_metric_card("Sudah Dihubungi (ACC ONE)", sudah_hubungi, "Tercatat pada sesi ini")
 
             st.markdown("---")
             if df_bni_d.empty:
@@ -1734,22 +1151,17 @@ def main():
                 if pilih_sales_bni != "SEMUA SALES" and len(df_bni_d) > 1:
                     pesan_bni_rekap = build_wa_bni_rekap_message(df_bni_d, pilih_sales_bni)
                     url_bni_rekap = f"https://wa.me/?text={urllib.parse.quote(pesan_bni_rekap)}"
-                    with st.container():
-                        st.markdown(f"""
-                            <div class="rekap-box">
-                                <strong style="font-size:16px;">Rekap Sekaligus Arahan ACC ONE untuk {html.escape(pilih_sales_bni)} ({len(df_bni_d)} Nasabah)</strong><br>
-                                <small>Menggabungkan seluruh nasabah BNI status D milik {html.escape(pilih_sales_bni)} ke dalam satu pesan WA polos untuk arahan pengaktifan ACC ONE.</small>
-                            </div>
-                        """, unsafe_allow_html=True)
-                        col_br1, col_br2 = st.columns([1.4, 2.6])
-                        with col_br1:
-                            st.markdown(
-                                f'<a href="{url_bni_rekap}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:10px 18px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim Rekap WA ({len(df_bni_d)} Nasabah)</button></a>',
-                                unsafe_allow_html=True
-                            )
-                        with col_br2:
-                            with st.expander("Lihat / Salin Teks Pesan Rekap ACC ONE"):
-                                st.text_area("Teks Rekap BNI ACC ONE", value=pesan_bni_rekap, height=200, label_visibility="collapsed")
+                    st.markdown(
+                        f'<div class="rekap-box"><strong style="font-size:16px;">Rekap Sekaligus Arahan ACC ONE untuk {html.escape(pilih_sales_bni)} ({len(df_bni_d)} Nasabah)</strong><br>'
+                        f'<small>Menggabungkan seluruh nasabah BNI status D milik {html.escape(pilih_sales_bni)} ke dalam satu pesan WA polos.</small></div>',
+                        unsafe_allow_html=True
+                    )
+                    col_br1, col_br2 = st.columns([1.4, 2.6])
+                    with col_br1:
+                        st.markdown(f'<a href="{url_bni_rekap}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:10px 18px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim Rekap WA ({len(df_bni_d)} Nasabah)</button></a>', unsafe_allow_html=True)
+                    with col_br2:
+                        with st.expander("Lihat / Salin Teks Pesan Rekap ACC ONE"):
+                            st.text_area("Teks Rekap BNI ACC ONE", value=pesan_bni_rekap, height=200, label_visibility="collapsed")
                     st.markdown("---")
 
                 for idx, row in df_bni_d.iterrows():
@@ -1758,56 +1170,36 @@ def main():
                     aging_tgl = extract_aging_tanggal(row)
                     item_key = f"{clean_text(row.get('ID', ''))}_{clean_text(row.get('Customer', ''))}_{idx}"
                     is_checked = item_key in st.session_state.bni_contacted_keys
-
                     df_sales_bni = df_bni_d[df_bni_d["Sales"] == row.get("Sales", "")]
                     jml_sales_bni = len(df_sales_bni)
-
-                    wa_bni_one = build_wa_bni_item_message(row)
-                    url_bni_one = f"https://wa.me/?text={urllib.parse.quote(wa_bni_one)}"
-
-                    wa_bni_grp = build_wa_bni_rekap_message(df_sales_bni, sales_nama)
-                    url_bni_grp = f"https://wa.me/?text={urllib.parse.quote(wa_bni_grp)}"
+                    url_bni_one = f"https://wa.me/?text={urllib.parse.quote(build_wa_bni_item_message(row))}"
+                    url_bni_grp = f"https://wa.me/?text={urllib.parse.quote(build_wa_bni_rekap_message(df_sales_bni, sales_nama))}"
 
                     with st.container():
                         card_c, status_c = st.columns([5.2, 1.3])
                         with card_c:
-                            st.markdown(f"""
-                                <div class="bni-box">
-                                    <strong>{html.escape(clean_text(row.get('Customer', '')))}</strong> (No. Kontrak: {html.escape(clean_text(row.get('ID', '')))})<br>
-                                    <small>Sales: <b>{html.escape(sales_nama)}</b> &nbsp;|&nbsp; Bank: <b>BNI</b> &nbsp;|&nbsp; Status: <b>D — Pengajuan ke Bank</b> &nbsp;|&nbsp; Total BNI (D) Sales ini: <b>{jml_sales_bni} Nasabah</b></small><br>
-                                    <small>Cabang/Area: <b>{html.escape(cabang_area)}</b> &nbsp;|&nbsp; Aging/Tanggal: <b>{html.escape(aging_tgl)}</b></small>
-                                </div>
-                            """, unsafe_allow_html=True)
-                        with status_c:
-                            checked_val = st.checkbox(
-                                "Sudah dihubungi (ACC ONE)",
-                                value=is_checked,
-                                key=f"chk_bni_{item_key}"
+                            st.markdown(
+                                f'<div class="bni-box"><strong>{html.escape(clean_text(row.get("Customer", "")))}</strong> (No. Kontrak: {html.escape(clean_text(row.get("ID", "")))})<br>'
+                                f'<small>Sales: <b>{html.escape(sales_nama)}</b> &nbsp;|&nbsp; Bank: <b>BNI</b> &nbsp;|&nbsp; Status: <b>D — Pengajuan ke Bank</b> &nbsp;|&nbsp; Total BNI (D) Sales ini: <b>{jml_sales_bni} Nasabah</b></small><br>'
+                                f'<small>Cabang/Area: <b>{html.escape(cabang_area)}</b> &nbsp;|&nbsp; Aging/Tanggal: <b>{html.escape(aging_tgl)}</b></small></div>',
+                                unsafe_allow_html=True
                             )
-                            if checked_val:
-                                st.session_state.bni_contacted_keys.add(item_key)
+                        with status_c:
+                            w_b_key = f"chk_bni_{item_key}"
+                            st.checkbox("Sudah dihubungi (ACC ONE)", value=is_checked, key=w_b_key, on_change=toggle_bni_contacted, args=(item_key, w_b_key))
+                            if is_checked:
                                 st.markdown('<div class="ceklis-badge">✓ Sudah Dihubungi</div>', unsafe_allow_html=True)
                             else:
-                                st.session_state.bni_contacted_keys.discard(item_key)
                                 st.markdown('<div class="belum-ceklis-badge">Belum Dihubungi</div>', unsafe_allow_html=True)
 
                         if jml_sales_bni > 1:
                             bc1, bc2 = st.columns([1.2, 2.8])
                             with bc1:
-                                st.markdown(
-                                    f'<a href="{url_bni_one}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:8px 14px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim 1 Nasabah Saja</button></a>',
-                                    unsafe_allow_html=True
-                                )
+                                st.markdown(f'<a href="{url_bni_one}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:8px 14px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim 1 Nasabah Saja</button></a>', unsafe_allow_html=True)
                             with bc2:
-                                st.markdown(
-                                    f'<a href="{url_bni_grp}" target="_blank"><button style="background-color:#0044b3; color:white; border:none; padding:8px 14px; border-radius:8px; font-weight:700; cursor:pointer;">Rekap Semua ({jml_sales_bni} Nasabah {html.escape(sales_nama)})</button></a>',
-                                    unsafe_allow_html=True
-                                )
+                                st.markdown(f'<a href="{url_bni_grp}" target="_blank"><button style="background-color:#0044b3; color:white; border:none; padding:8px 14px; border-radius:8px; font-weight:700; cursor:pointer;">Rekap Semua ({jml_sales_bni} Nasabah {html.escape(sales_nama)})</button></a>', unsafe_allow_html=True)
                         else:
-                            st.markdown(
-                                f'<a href="{url_bni_one}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim WA Arahan ACC ONE</button></a>',
-                                unsafe_allow_html=True
-                            )
+                            st.markdown(f'<a href="{url_bni_one}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim WA Arahan ACC ONE</button></a>', unsafe_allow_html=True)
                         st.markdown("---")
 
         with tab_guide_accone:
@@ -1817,50 +1209,27 @@ def main():
                     "<div class='section-panel-sub'>Acuan cepat langkah tindak lanjut apabila pendaftaran di ACC ONE ditolak, status D, atau kendala OTP/nomor HP BNI.</div>",
                     unsafe_allow_html=True
                 )
-                cari_accone = st.text_input(
-                    "Cari Kata Kunci Catatan ACC ONE:",
-                    placeholder="Contoh: ditolak, cso, fab, pulsa, otp, bni, status d...",
-                    key="accone_note_search"
-                )
+                cari_accone = st.text_input("Cari Kata Kunci Catatan ACC ONE:", placeholder="Contoh: ditolak, cso, fab, pulsa, otp, bni, status d...", key="accone_note_search")
 
             filtered_notes = ACCONE_REJECT_NOTES
             if cari_accone:
                 kw = cari_accone.lower().strip()
-                filtered_notes = [
-                    n for n in ACCONE_REJECT_NOTES
-                    if kw in n["title"].lower()
-                    or kw in n["summary"].lower()
-                    or any(kw in stp.lower() for stp in n["steps"])
-                ]
+                filtered_notes = [n for n in ACCONE_REJECT_NOTES if kw in n["title"].lower() or kw in n["summary"].lower() or any(kw in stp.lower() for stp in n["steps"])]
 
-            if not filtered_notes:
-                st.info("Tidak ada catatan ACC ONE yang cocok dengan kata kunci tersebut.")
-            else:
-                for note in filtered_notes:
-                    steps_html = ""
-                    if note["steps"]:
-                        items_li = "".join(
-                            f"<li>{html.escape(stp)}</li>" for stp in note["steps"]
-                        )
-                        steps_html = f'<ul class="accone-sublist">{items_li}</ul>'
-
-                    st.markdown(f"""
-                        <div class="accone-note-card">
-                            <div class="accone-note-head">
-                                <div class="accone-note-title">{html.escape(note["title"])}</div>
-                                <span class="pill-badge pill-blue">{html.escape(note["badge"])}</span>
-                            </div>
-                            <p class="accone-note-body">{html.escape(note["summary"])}</p>
-                            {steps_html}
-                        </div>
-                    """, unsafe_allow_html=True)
+            for note in filtered_notes:
+                steps_html = ""
+                if note["steps"]:
+                    steps_html = '<ul class="accone-sublist">' + "".join(f"<li>{html.escape(stp)}</li>" for stp in note["steps"]) + "</ul>"
+                st.markdown(
+                    f'<div class="accone-note-card"><div class="accone-note-head">'
+                    f'<div class="accone-note-title">{html.escape(note["title"])}</div>'
+                    f'<span class="pill-badge pill-blue">{html.escape(note["badge"])}</span></div>'
+                    f'<p class="accone-note-body">{html.escape(note["summary"])}</p>{steps_html}</div>',
+                    unsafe_allow_html=True
+                )
 
     elif halaman_aktif == "⚠️ Reject Tracking":
-        render_page_banner(
-            "⚡ AUTOTEAM — Reject Tracking",
-            "Pusat pemantauan dan pengelolaan penolakan (Rejected / R) penagihan autodebet nasabah."
-        )
-
+        render_page_banner("⚡ AUTOTEAM — Reject Tracking", "Pusat pemantauan dan pengelolaan penolakan (Rejected / R) penagihan autodebet nasabah.")
         with st.container(key="panel_filter_reject"):
             st.markdown(
                 "<div class='section-panel-title'><span>🎛️ Filter & Pencarian Tanggungan Reject</span><span class='filter-chip-badge'>⚠️ Follow Up & AP Payment</span></div>"
@@ -1879,12 +1248,12 @@ def main():
         if pilih_sales != "SEMUA SALES":
             df_view = df_view[df_view["Sales"].str.upper() == pilih_sales.upper()]
         if search_box:
-            mask_nama = df_view["Customer"].astype(str).str.contains(search_box, case=False, na=False)
-            mask_id = df_view["ID"].astype(str).str.contains(search_box, case=False, na=False)
-            df_view = df_view[mask_nama | mask_id]
+            df_view = df_view[
+                df_view["Customer"].astype(str).str.contains(search_box, case=False, na=False) |
+                df_view["ID"].astype(str).str.contains(search_box, case=False, na=False)
+            ]
 
-        belum_dihubungi_items = []
-        sudah_dihubungi_items = []
+        belum_dihubungi_items, sudah_dihubungi_items = [], []
         for idx, row in df_view.iterrows():
             item_key = f"{clean_text(row.get('ID', ''))}_{clean_text(row.get('Customer', ''))}_{idx}"
             if item_key in st.session_state.reject_contacted_keys:
@@ -1893,50 +1262,37 @@ def main():
                 belum_dihubungi_items.append((idx, row))
 
         r_c1, r_c2, r_c3, r_c4 = st.columns(4)
-        with r_c1:
-            render_metric_card("Total Reject Ditampilkan", len(df_view), "Status Rejected (R)")
-        with r_c2:
-            render_metric_card("Belum Dihubungi", len(belum_dihubungi_items), "Wajib follow up & AP Payment")
-        with r_c3:
-            render_metric_card("Sudah Dihubungi", len(sudah_dihubungi_items), "Tercatat sudah difollow up")
-        with r_c4:
-            render_metric_card("Bank Dominan Reject", df_view["Bank"].mode().iloc[0] if not df_view.empty else "-", "Berdasarkan filter aktif")
+        with r_c1: render_metric_card("Total Reject Ditampilkan", len(df_view), "Status Rejected (R)")
+        with r_c2: render_metric_card("Belum Dihubungi", len(belum_dihubungi_items), "Wajib follow up & AP Payment")
+        with r_c3: render_metric_card("Sudah Dihubungi", len(sudah_dihubungi_items), "Tercatat sudah difollow up")
+        with r_c4: render_metric_card("Bank Dominan Reject", df_view["Bank"].mode().iloc[0] if not df_view.empty else "-", "Berdasarkan filter aktif")
 
         st.markdown("---")
         st.info("Akses Database Pusat: Untuk mengelola, menambah, atau menghapus data secara langsung, silakan buka Google Sheets utama.")
         st.markdown(f'<a href="{SHEET_EDIT_URL}" target="_blank"><button style="background-color:#10b981; color:white; border:none; padding:10px 20px; border-radius:8px; font-weight:700; cursor:pointer;">Buka Google Sheets Database Utama</button></a>', unsafe_allow_html=True)
 
-        if len(df_view) == 0:
-            st.warning("Tidak ada data rejected yang ditemukan untuk filter tersebut.")
-        else:
+        if len(df_view) > 0:
             if pilih_sales != "SEMUA SALES" and len(df_view) > 1:
                 pesan_rekap_sales = build_wa_rekap_message(df_view, pilih_sales)
                 url_rekap_sales = f"https://wa.me/?text={urllib.parse.quote(pesan_rekap_sales)}"
-                with st.container():
-                    st.markdown(f"""
-                        <div class="rekap-box">
-                            <strong style="font-size:16px;">Opsi Rekap Sekaligus untuk {html.escape(pilih_sales)} ({len(df_view)} Nasabah)</strong><br>
-                            <small>Menggabungkan seluruh {len(df_view)} nasabah reject milik {html.escape(pilih_sales)} ke dalam 1 pesan WA polos bernomor (lengkap Cabang/Area, Aging/Tanggal, Alasan & Solusi).</small>
-                        </div>
-                    """, unsafe_allow_html=True)
-                    col_r1, col_r2 = st.columns([1.4, 2.6])
-                    with col_r1:
-                        st.markdown(
-                            f'<a href="{url_rekap_sales}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:10px 18px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim Rekap Sekaligus ({len(df_view)} Nasabah)</button></a>',
-                            unsafe_allow_html=True
-                        )
-                    with col_r2:
-                        with st.expander("Lihat / Salin Teks Rekap WA Sales"):
-                            st.text_area("Teks Rekap WA Sales", value=pesan_rekap_sales, height=220, label_visibility="collapsed")
+                st.markdown(
+                    f'<div class="rekap-box"><strong style="font-size:16px;">Opsi Rekap Sekaligus untuk {html.escape(pilih_sales)} ({len(df_view)} Nasabah)</strong><br>'
+                    f'<small>Menggabungkan seluruh {len(df_view)} nasabah reject milik {html.escape(pilih_sales)} ke dalam 1 pesan WA polos bernomor.</small></div>',
+                    unsafe_allow_html=True
+                )
+                col_r1, col_r2 = st.columns([1.4, 2.6])
+                with col_r1:
+                    st.markdown(f'<a href="{url_rekap_sales}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:10px 18px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim Rekap Sekaligus ({len(df_view)} Nasabah)</button></a>', unsafe_allow_html=True)
+                with col_r2:
+                    with st.expander("Lihat / Salin Teks Rekap WA Sales"):
+                        st.text_area("Teks Rekap WA Sales", value=pesan_rekap_sales, height=220, label_visibility="collapsed")
                 st.markdown("---")
 
-            # Bagian 1: Customer Reject yang Belum Dihubungi
             st.markdown(
-                f'<div class="reject-group-banner reject-group-pending">'
-                f'  <div><strong style="font-size:16px; color:var(--text-primary);">⏳ List Customer Reject — Belum Dihubungi ({len(belum_dihubungi_items)} Data)</strong><br>'
-                f'  <small style="color:var(--text-secondary);">Memuat peringatan kelengkapan berkas & penyerahan kembali ke AP Payment.</small></div>'
-                f'  <span class="rej-pill">{len(belum_dihubungi_items)} Belum Dihubungi</span>'
-                f'</div>',
+                f'<div class="reject-group-banner reject-group-pending"><div>'
+                f'<strong style="font-size:16px; color:var(--text-primary);">⏳ List Customer Reject — Belum Dihubungi ({len(belum_dihubungi_items)} Data)</strong><br>'
+                f'<small style="color:var(--text-secondary);">Memuat peringatan kelengkapan berkas & penyerahan kembali ke AP Payment.</small></div>'
+                f'<span class="rej-pill">{len(belum_dihubungi_items)} Belum Dihubungi</span></div>',
                 unsafe_allow_html=True
             )
             if not belum_dihubungi_items:
@@ -1945,13 +1301,11 @@ def main():
                 for idx, row in belum_dihubungi_items:
                     render_reject_card_item(idx, row, df_view, is_contacted=False)
 
-            # Bagian 2: Customer Reject yang Sudah Dihubungi
             st.markdown(
-                f'<div class="reject-group-banner reject-group-done">'
-                f'  <div><strong style="font-size:16px; color:var(--text-primary);">✓ List Customer Reject — Sudah Dihubungi ({len(sudah_dihubungi_items)} Data)</strong><br>'
-                f'  <small style="color:var(--text-secondary);">Customer yang sudah dicentang sudah dihubungi (dapat dikembalikan ke daftar belum dihubungi bila perlu).</small></div>'
-                f'  <span class="pill-badge pill-green">{len(sudah_dihubungi_items)} Sudah Dihubungi</span>'
-                f'</div>',
+                f'<div class="reject-group-banner reject-group-done"><div>'
+                f'<strong style="font-size:16px; color:var(--text-primary);">✓ List Customer Reject — Sudah Dihubungi ({len(sudah_dihubungi_items)} Data)</strong><br>'
+                f'<small style="color:var(--text-secondary);">Customer yang sudah dicentang sudah dihubungi.</small></div>'
+                f'<span class="pill-badge pill-green">{len(sudah_dihubungi_items)} Sudah Dihubungi</span></div>',
                 unsafe_allow_html=True
             )
             if not sudah_dihubungi_items:
@@ -1961,67 +1315,51 @@ def main():
                     render_reject_card_item(idx, row, df_view, is_contacted=True)
 
     elif halaman_aktif == "📘 Reject Guide":
-        render_page_banner(
-            "⚡ AUTOTEAM — Panduan Penanganan Reject & Solusi Sales",
-            "Acuan standar operasional lengkap untuk penanganan penolakan autodebet dan tindakan korektif Sales di ACC Cabang Makassar."
-        )
-
+        render_page_banner("⚡ AUTOTEAM — Panduan Penanganan Reject & Solusi Sales", "Acuan standar operasional lengkap untuk penanganan penolakan autodebet dan tindakan korektif Sales.")
         with st.container(key="panel_filter_guide"):
             st.markdown(
                 "<div class='section-panel-title'><span>🔎 Pencarian Cepat SOP Reject</span><span class='filter-chip-badge'>📘 Panduan & Solusi</span></div>"
-                "<div class='section-panel-sub'>Ketik kata kunci kendala untuk langsung menyorot solusi korektif yang sesuai.</div>",
+                "<div class='section-panel-sub'>Ketik kata kunci kendala untuk menyaring solusi korektif yang sesuai.</div>",
                 unsafe_allow_html=True
             )
             search_guide = st.text_input("Cari Kata Kunci Panduan / Solusi:", placeholder="Contoh: tanda tangan, rekening, telepon, brimo, saldo, dormant...", key="guide_search_input")
 
         df_g = pd.DataFrame(REJECT_GUIDE_ITEMS)
         if search_guide:
-            mask_g = (
+            df_g = df_g[
                 df_g["Alasan Reject"].str.contains(search_guide, case=False, na=False) |
                 df_g["Keterangan"].str.contains(search_guide, case=False, na=False) |
                 df_g["Tindakan Korektif / Solusi Sales"].str.contains(search_guide, case=False, na=False)
-            )
-            df_g = df_g[mask_g]
-
+            ]
         render_metric_card("Jumlah Panduan Tersedia", len(df_g), "SOP Penanganan Reject & Solusi Sales")
-        if df_g.empty:
-            st.info("Tidak ada panduan yang cocok dengan kata kunci tersebut.")
-        else:
+        if not df_g.empty:
             render_styled_html_table(df_g, max_rows=100)
 
     elif halaman_aktif == "🔧 Settings":
-        render_page_banner(
-            "⚡ AUTOTEAM — Pengaturan Sistem & Database",
-            "Informasi koneksi Google Sheets utama, akses pengelolaan data, dan backup rekap Excel."
-        )
-
+        render_page_banner("⚡ AUTOTEAM — Pengaturan Sistem & Database", "Informasi koneksi Google Sheets utama, akses pengelolaan data, dan backup rekap Excel.")
         s_c1, s_c2 = st.columns(2)
-        with s_c1:
-            render_metric_card("Versi Aplikasi", "AUTOTEAM v8.4", "Adaptif Light / Dark Mode")
-        with s_c2:
-            render_metric_card("Total Data Tersinkron", total_data, "Live via Google Sheets")
+        with s_c1: render_metric_card("Versi Aplikasi", "AUTOTEAM v8.5", "Adaptif Light / Dark Mode")
+        with s_c2: render_metric_card("Total Data Tersinkron", total_data, "Live via Google Sheets")
 
-        st.write("Versi Web: **AUTOTEAM** (Autodebet Team Achievement & Monitoring) v8.4")
+        if st.button("🔄 Refresh Data dari Google Sheets Sekarang"):
+            st.cache_data.clear()
+            st.rerun()
+
         if is_live:
             st.success(f"Status: Terhubung Sempurna ke Google Sheets Database Utama — {total_data} Data")
         else:
-            st.warning("Status: Menggunakan mode cadangan sementara. Pastikan akses berbagi Google Sheets diset 'Siapa saja yang memiliki link dapat melihat'.")
+            st.warning("Status: Menggunakan mode cadangan sementara.")
 
         st.markdown("---")
-        st.subheader("Akses Langsung Google Sheets")
-        st.markdown("Anda dapat langsung mengelola, menambah, atau menghapus data Sales melalui tautan berikut:")
         st.markdown(f'<a href="{SHEET_EDIT_URL}" target="_blank"><button style="background-color:#0044b3; color:white; border:none; padding:10px 20px; border-radius:8px; font-weight:700; cursor:pointer;">Buka Google Sheets Utama</button></a>', unsafe_allow_html=True)
 
         st.markdown("---")
-        st.subheader("Download Backup Data (Excel)")
         output = io.BytesIO()
         with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
             df_tracking.to_excel(writer, sheet_name='Tracking_Backup', index=False)
-        excel_data = output.getvalue()
-
         st.download_button(
             label="Download Rekap Data Tracking (.xlsx)",
-            data=excel_data,
+            data=output.getvalue(),
             file_name="Backup_AUTOTEAM_Makassar.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
