@@ -1364,7 +1364,7 @@ def main():
                     st.markdown(f"""
                         <div class="reject-box">
                             <strong>{html.escape(clean_text(row.get('Customer', '')))}</strong> ({html.escape(clean_text(row.get('Bank', '')))} - No. Kontrak: {html.escape(clean_text(row.get('ID', '')))})<br>
-                            <small>Sales: <b>{html.escape(sales_nama)}</b> &nbsp;|&nbsp; Status: <b>{html.escape(clean_text(row.get('Status', 'Rejected')))} ({html.escape(clean_text(row.get('Status_Code', 'R'))))})</b> &nbsp;|&nbsp; Total Reject Sales ini: <b>{jml_sales_ini} Nasabah</b></small><br>
+                            <small>Sales: <b>{html.escape(sales_nama)}</b> &nbsp;|&nbsp; Status: <b>{html.escape(clean_text(row.get('Status', 'Rejected')))} ({html.escape(clean_text(row.get('Status_Code', 'R')))})</b> &nbsp;|&nbsp; Total Reject Sales ini: <b>{jml_sales_ini} Nasabah</b></small><br>
                             <small>Cabang/Area: <b>{html.escape(cabang_area)}</b> &nbsp;|&nbsp; Aging/Tanggal: <b>{html.escape(aging_tgl)}</b></small><br>
                             <span class="reject-reason">Alasan Reject: {html.escape(alasan)}</span>
                             <div class="solution-box">
