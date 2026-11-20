@@ -941,8 +941,20 @@ DAFTAR_MENU = [
     "🔧 Settings",
 ]
 
+if "active_menu" not in st.session_state:
+    st.session_state["active_menu"] = DAFTAR_MENU[0]
+
+def select_menu_callback(nama_menu):
+    st.session_state["active_menu"] = nama_menu
+    st.session_state["sidebar_nav"] = nama_menu
+
+def on_sidebar_change():
+    st.session_state["active_menu"] = st.session_state["sidebar_nav"]
+
 if "sidebar_nav" not in st.session_state:
-    st.session_state["sidebar_nav"] = DAFTAR_MENU[0]
+    st.session_state["sidebar_nav"] = st.session_state["active_menu"]
+elif st.session_state["sidebar_nav"] != st.session_state["active_menu"]:
+    st.session_state["sidebar_nav"] = st.session_state["active_menu"]
 
 # Sidebar Navigasi Korporat Berwarna & Beranimasi
 st.sidebar.markdown("""
@@ -955,10 +967,11 @@ st.sidebar.markdown("""
 st.sidebar.markdown("---")
 st.sidebar.markdown("<span style='color:#bae6fd; font-weight:700; font-size:13px;'>MENU UTAMA</span>", unsafe_allow_html=True)
 
-menu_pilihan = st.sidebar.radio(
+st.sidebar.radio(
     "Navigasi",
     DAFTAR_MENU,
     key="sidebar_nav",
+    on_change=on_sidebar_change,
     label_visibility="collapsed"
 )
 
@@ -1147,13 +1160,18 @@ def main():
             cols = st.columns(3)
             for idx_col, nama_menu in enumerate(DAFTAR_MENU[row_start:row_start + 3]):
                 with cols[idx_col]:
-                    is_active = (st.session_state["sidebar_nav"] == nama_menu)
+                    is_active = (st.session_state["active_menu"] == nama_menu)
                     btn_type = "primary" if is_active else "secondary"
-                    if st.button(nama_menu, key=f"btn_nav_{row_start}_{idx_col}", type=btn_type, use_container_width=True):
-                        st.session_state["sidebar_nav"] = nama_menu
-                        st.rerun()
+                    st.button(
+                        nama_menu,
+                        key=f"btn_nav_{row_start}_{idx_col}",
+                        type=btn_type,
+                        use_container_width=True,
+                        on_click=select_menu_callback,
+                        args=(nama_menu,)
+                    )
 
-    halaman_aktif = st.session_state["sidebar_nav"]
+    halaman_aktif = st.session_state["active_menu"]
 
     total_data = len(df_tracking)
     df_aktif = df_tracking[df_tracking["Keaktifan"] == "Aktif"] if not df_tracking.empty else pd.DataFrame()
@@ -1621,11 +1639,11 @@ def main():
 
         s_c1, s_c2 = st.columns(2)
         with s_c1:
-            render_metric_card("Versi Aplikasi", "AUTOTEAM v8.1", "Adaptif Light / Dark Mode")
+            render_metric_card("Versi Aplikasi", "AUTOTEAM v8.2", "Adaptif Light / Dark Mode")
         with s_c2:
             render_metric_card("Total Data Tersinkron", total_data, "Live via Google Sheets")
 
-        st.write("Versi Web: **AUTOTEAM** (Autodebet Team Achievement & Monitoring) v8.1")
+        st.write("Versi Web: **AUTOTEAM** (Autodebet Team Achievement & Monitoring) v8.2")
         if is_live:
             st.success(f"Status: Terhubung Sempurna ke Google Sheets Database Utama — {total_data} Data")
         else:
