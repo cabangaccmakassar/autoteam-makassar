@@ -38,7 +38,6 @@ st.markdown("""
     }
     footer {display: none !important; visibility: hidden !important;}
     #MainMenu {visibility: hidden !important;}
-    header {visibility: hidden !important;}
     .viewerBadge_container__1QSob {display: none !important;}
 
     /* Sidebar Lebih Berwarna, Elegan & Beranimasi */
@@ -86,25 +85,19 @@ st.markdown("""
     }
 
     /* Menu Cepat HP / Tablet: tampil di layar < 992px, tersembunyi di desktop >= 992px */
-    .mobile-quick-nav-anchor {
-        display: none;
+    @media (min-width: 992px) {
+        .st-key-mobile_quick_nav {
+            display: none !important;
+        }
     }
     @media (max-width: 991.98px) {
-        .mobile-quick-nav-anchor {
-            display: block;
-        }
-        .mobile-quick-nav-anchor + div[data-testid="stVerticalBlock"] div[data-testid="stButton"] > button {
+        .st-key-mobile_quick_nav div[data-testid="stButton"] > button {
             min-height: 46px;
             border-radius: 10px;
             font-weight: 700;
             font-size: 13px;
             padding: 8px 10px;
             margin-bottom: 4px;
-        }
-    }
-    @media (min-width: 992px) {
-        .mobile-quick-nav-anchor + div[data-testid="stVerticalBlock"] {
-            display: none !important;
         }
     }
 
@@ -728,6 +721,18 @@ df_tracking, is_live = load_data_sheets()
 if "bni_contacted_keys" not in st.session_state:
     st.session_state.bni_contacted_keys = set()
 
+DAFTAR_MENU = [
+    "🎯 Home Dashboard",
+    "📊 Status Customer",
+    "🏛️ BNI Autodebet Tracking",
+    "⚠️ Reject Tracking",
+    "📘 Reject Guide",
+    "🔧 Settings",
+]
+
+if "sidebar_nav" not in st.session_state:
+    st.session_state["sidebar_nav"] = DAFTAR_MENU[0]
+
 # Sidebar Navigasi Korporat Berwarna & Beranimasi
 st.sidebar.markdown("""
     <div style="padding: 6px 2px 2px 2px;">
@@ -741,14 +746,8 @@ st.sidebar.markdown("<span style='color:#bae6fd; font-weight:700; font-size:13px
 
 menu_pilihan = st.sidebar.radio(
     "Navigasi",
-    [
-        "🎯 Home Dashboard",
-        "📊 Status Customer",
-        "🏛️ BNI Autodebet Tracking",
-        "⚠️ Reject Tracking",
-        "📘 Reject Guide",
-        "🔧 Settings"
-    ],
+    DAFTAR_MENU,
+    key="sidebar_nav",
     label_visibility="collapsed"
 )
 
@@ -852,38 +851,20 @@ def render_bottom5_styled_table(bottom5_df):
     return "".join(html_parts)
 
 def main():
-    daftar_menu = [
-        "🎯 Home Dashboard",
-        "📊 Status Customer",
-        "🏛️ BNI Autodebet Tracking",
-        "⚠️ Reject Tracking",
-        "📘 Reject Guide",
-        "🔧 Settings",
-    ]
-
-    if "halaman_aktif" not in st.session_state:
-        st.session_state.halaman_aktif = menu_pilihan
-    if "last_sidebar_menu" not in st.session_state:
-        st.session_state.last_sidebar_menu = menu_pilihan
-
-    if menu_pilihan != st.session_state.last_sidebar_menu:
-        st.session_state.halaman_aktif = menu_pilihan
-        st.session_state.last_sidebar_menu = menu_pilihan
-
-    st.markdown('<div class="mobile-quick-nav-anchor"></div>', unsafe_allow_html=True)
-    with st.container():
+    # Menu Cepat khusus HP / Tablet (otomatis tersembunyi di desktop >= 992px & sinkron dua arah dengan sidebar)
+    with st.container(key="mobile_quick_nav"):
         st.markdown("<span style='color:#bae6fd; font-weight:700; font-size:13px;'>AKSES CEPAT MENU (HP / TABLET)</span>", unsafe_allow_html=True)
-        for row_start in range(0, len(daftar_menu), 3):
+        for row_start in range(0, len(DAFTAR_MENU), 3):
             cols = st.columns(3)
-            for idx_col, nama_menu in enumerate(daftar_menu[row_start:row_start + 3]):
+            for idx_col, nama_menu in enumerate(DAFTAR_MENU[row_start:row_start + 3]):
                 with cols[idx_col]:
-                    is_active = (st.session_state.halaman_aktif == nama_menu)
+                    is_active = (st.session_state["sidebar_nav"] == nama_menu)
                     btn_type = "primary" if is_active else "secondary"
                     if st.button(nama_menu, key=f"btn_nav_{row_start}_{idx_col}", type=btn_type, use_container_width=True):
-                        st.session_state.halaman_aktif = nama_menu
+                        st.session_state["sidebar_nav"] = nama_menu
                         st.rerun()
 
-    halaman_aktif = st.session_state.halaman_aktif
+    halaman_aktif = st.session_state["sidebar_nav"]
 
     total_data = len(df_tracking)
     df_aktif = df_tracking[df_tracking["Keaktifan"] == "Aktif"] if not df_tracking.empty else pd.DataFrame()
@@ -1319,7 +1300,7 @@ def main():
 
     elif halaman_aktif == "🔧 Settings":
         st.subheader("🔧 Pengaturan Sistem & Database Google Sheets")
-        st.write("Versi Web: **AUTOTEAM** (Autodebet Team Achievement & Monitoring) v7.7")
+        st.write("Versi Web: **AUTOTEAM** (Autodebet Team Achievement & Monitoring) v7.8")
         if is_live:
             st.success(f"Status: Terhubung Sempurna ke Google Sheets Database Utama — {total_data} Data")
         else:
