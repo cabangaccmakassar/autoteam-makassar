@@ -12,16 +12,56 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS Korporat Profesional, Nuansa Biru ACC, Navigasi Berwarna & Animasi Halus
+# Custom CSS Korporat Profesional, Adaptif Light/Dark Mode, Nuansa Biru ACC & Animasi Halus
 st.markdown("""
     <style>
+    :root {
+        color-scheme: light dark;
+        --bg-panel: light-dark(rgba(241, 245, 249, 0.92), rgba(15, 23, 42, 0.85));
+        --bg-card-soft: light-dark(#f8fafc, #111c33);
+        --bg-card-elevated: light-dark(#ffffff, #16233d);
+        --border-subtle: light-dark(rgba(30, 64, 175, 0.18), rgba(125, 211, 252, 0.24));
+        --border-accent: light-dark(#2563eb, #38bdf8);
+        --text-primary: light-dark(#0f172a, #f8fafc);
+        --text-secondary: light-dark(#475569, #cbd5e1);
+        --text-muted: light-dark(#64748b, #94a3b8);
+        --metric-grad: light-dark(
+            linear-gradient(145deg, #eff6ff 0%, #dbeafe 100%),
+            linear-gradient(145deg, #0b2454 0%, #0f367a 100%)
+        );
+        --metric-border: light-dark(#93c5fd, #2563eb);
+        --metric-label: light-dark(#1e40af, #bfdbfe);
+        --metric-value: light-dark(#0f172a, #ffffff);
+        --metric-sub: light-dark(#334155, #bae6fd);
+        --bank-grad: light-dark(
+            linear-gradient(160deg, #f8fafc 0%, #eff6ff 100%),
+            linear-gradient(160deg, #0c224d 0%, #113270 100%)
+        );
+        --bank-title: light-dark(#1d4ed8, #93c5fd);
+        --bank-rate: light-dark(#0f172a, #ffffff);
+        --bank-sub: light-dark(#334155, #e0f2fe);
+        --bank-badge: light-dark(#b45309, #fde047);
+        --table-head-grad: light-dark(
+            linear-gradient(90deg, #1d4ed8 0%, #0284c7 100%),
+            linear-gradient(90deg, #003399 0%, #0369a1 100%)
+        );
+        --table-row-bg: light-dark(#ffffff, rgba(15, 35, 82, 0.68));
+        --table-row-hover: light-dark(#eff6ff, rgba(29, 78, 216, 0.45));
+        --solution-bg: light-dark(#ecfdf5, #064e3b);
+        --solution-border: light-dark(#059669, #10b981);
+        --solution-text: light-dark(#064e3b, #ecfdf5);
+        --solution-title: light-dark(#047857, #34d399);
+        --reject-reason: light-dark(#dc2626, #f87171);
+        --shadow-soft: light-dark(0 4px 14px rgba(15, 23, 42, 0.06), 0 6px 18px rgba(2, 6, 23, 0.38));
+    }
+
     @keyframes floatTrophy {
-        0%, 100% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.55)); }
-        50% { transform: translateY(-4px) scale(1.08); filter: drop-shadow(0 0 14px rgba(250, 204, 21, 0.9)); }
+        0%, 100% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 5px rgba(234, 179, 8, 0.4)); }
+        50% { transform: translateY(-3px) scale(1.06); filter: drop-shadow(0 0 11px rgba(234, 179, 8, 0.75)); }
     }
     @keyframes pulseGlow {
-        0%, 100% { box-shadow: 0 0 12px rgba(37, 99, 235, 0.35); }
-        50% { box-shadow: 0 0 22px rgba(56, 189, 248, 0.65); }
+        0%, 100% { box-shadow: 0 0 10px rgba(37, 99, 235, 0.28); }
+        50% { box-shadow: 0 0 18px rgba(56, 189, 248, 0.52); }
     }
     @keyframes gradientShift {
         0% { background-position: 0% 50%; }
@@ -33,14 +73,11 @@ st.markdown("""
         to { opacity: 1; transform: translateY(0); }
     }
 
-    .main {
-        background-color: #0b1120;
-    }
     footer {display: none !important; visibility: hidden !important;}
     #MainMenu {visibility: hidden !important;}
     .viewerBadge_container__1QSob {display: none !important;}
 
-    /* Sidebar Lebih Berwarna, Elegan & Beranimasi */
+    /* Sidebar Navigasi Korporat Berwarna & Beranimasi */
     section[data-testid="stSidebar"] {
         background: linear-gradient(180deg, #071330 0%, #0b1f4d 52%, #091738 100%);
         border-right: 1px solid rgba(56, 189, 248, 0.25);
@@ -91,6 +128,14 @@ st.markdown("""
         }
     }
     @media (max-width: 991.98px) {
+        .st-key-mobile_quick_nav {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-soft);
+        }
         .st-key-mobile_quick_nav div[data-testid="stButton"] > button {
             min-height: 46px;
             border-radius: 10px;
@@ -101,135 +146,160 @@ st.markdown("""
         }
     }
 
-    /* Hero Banner Atas Agar Ramai & Hidup */
+    /* Hero Banner Atas Seragam untuk Semua Halaman */
     .hero-banner {
         background: linear-gradient(120deg, #002366, #0044b3, #0369a1, #002b7f);
         background-size: 250% 250%;
-        animation: gradientShift 9s ease infinite, fadeSlideUp 0.5s ease-out;
+        animation: gradientShift 10s ease infinite, fadeSlideUp 0.45s ease-out;
         padding: 20px 24px;
         border-radius: 14px;
         border: 1px solid rgba(125, 211, 252, 0.45);
-        box-shadow: 0 8px 24px rgba(0, 35, 102, 0.45);
+        box-shadow: 0 8px 24px rgba(0, 35, 102, 0.28);
         margin-bottom: 18px;
     }
     .hero-title {
         color: #ffffff !important;
-        font-size: 28px;
+        font-size: 26px;
         font-weight: 800;
         margin: 0;
-        letter-spacing: 0.4px;
+        letter-spacing: 0.3px;
     }
     .hero-sub {
         color: #e0f2fe !important;
-        font-size: 14.5px;
-        margin-top: 4px;
+        font-size: 14px;
+        margin-top: 5px;
         margin-bottom: 10px;
     }
-
     .tagline-pill {
         display: inline-block;
         background: linear-gradient(90deg, #003399, #0284c7, #0055cc);
         background-size: 200% 200%;
-        animation: gradientShift 6s ease infinite;
+        animation: gradientShift 7s ease infinite;
         color: #ffffff;
         padding: 4px 14px;
         border-radius: 999px;
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 700;
-        letter-spacing: 0.6px;
+        letter-spacing: 0.5px;
         margin-top: 2px;
-        margin-bottom: 6px;
-        border: 1px solid #7dd3fc;
+        margin-bottom: 4px;
+        border: 1px solid rgba(186, 230, 253, 0.7);
     }
 
-    /* Kartu KPI & Bank Biru ACC */
+    /* Panel Section & Filter Adaptif */
+    .section-panel {
+        background: var(--bg-panel);
+        border: 1px solid var(--border-subtle);
+        border-radius: 14px;
+        padding: 16px 18px;
+        margin-bottom: 16px;
+        box-shadow: var(--shadow-soft);
+        animation: fadeSlideUp 0.45s ease-out;
+    }
+    .section-panel-title {
+        color: var(--text-primary);
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0 0 6px 0;
+    }
+    .section-panel-sub {
+        color: var(--text-muted);
+        font-size: 13px;
+        margin: 0 0 12px 0;
+    }
+
+    /* Kartu KPI & Metrik Adaptif */
     .metric-card {
-        background: linear-gradient(145deg, #002b7f 0%, #0044b3 100%);
-        padding: 20px;
+        background: var(--metric-grad);
+        padding: 18px 16px;
         border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 35, 102, 0.45);
-        border: 1px solid #3b82f6;
+        box-shadow: var(--shadow-soft);
+        border: 1px solid var(--metric-border);
         text-align: center;
         margin-bottom: 10px;
-        color: #ffffff !important;
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
         animation: fadeSlideUp 0.45s ease-out;
     }
     .metric-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.55);
+        transform: translateY(-3px);
+        border-color: var(--border-accent);
     }
     .metric-label {
-        color: #dbeafe !important;
-        font-size: 14px;
-        font-weight: 600;
+        color: var(--metric-label);
+        font-size: 13.5px;
+        font-weight: 700;
     }
     .metric-value {
-        color: #ffffff !important;
+        color: var(--metric-value);
         margin: 6px 0;
         font-weight: 800;
+        font-size: 28px;
+        line-height: 1.15;
     }
     .metric-sub {
-        color: #bae6fd !important;
-        font-size: 12.5px;
+        color: var(--metric-sub);
+        font-size: 12px;
     }
+
+    /* Kartu Per Bank Adaptif */
     .bank-card {
-        background: linear-gradient(160deg, #00266e 0%, #003d9e 100%);
+        background: var(--bank-grad);
         padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 3px 10px rgba(0, 25, 80, 0.35);
-        border: 1px solid #2563eb;
+        border-radius: 12px;
+        box-shadow: var(--shadow-soft);
+        border: 1px solid var(--border-subtle);
         text-align: center;
-        color: #ffffff !important;
         margin-bottom: 8px;
         transition: transform 0.25s ease, border-color 0.25s ease;
+        animation: fadeSlideUp 0.45s ease-out;
     }
     .bank-card:hover {
         transform: translateY(-3px);
-        border-color: #7dd3fc;
+        border-color: var(--border-accent);
     }
     .bank-title {
-        color: #93c5fd !important;
-        font-size: 16px;
+        color: var(--bank-title);
+        font-size: 15.5px;
         font-weight: 700;
     }
     .bank-rate {
         margin: 6px 0;
-        color: #ffffff !important;
+        color: var(--bank-rate);
         font-weight: 800;
+        font-size: 24px;
     }
     .bank-sub {
-        color: #e0f2fe !important;
+        color: var(--bank-sub);
         font-size: 12px;
     }
     .bank-badge {
-        color: #fef08a !important;
-        font-weight: 600;
+        color: var(--bank-badge);
+        font-weight: 700;
     }
 
-    /* Sales Leaderboard Styling (Top 5 Trophy Cards + Bottom 5 Seragam) */
+    /* Sales Leaderboard & Tabel Adaptif */
     .lb-panel {
-        background: linear-gradient(165deg, #0b1d45 0%, #102a63 100%);
-        border: 1px solid #2563eb;
+        background: var(--bg-panel);
+        border: 1px solid var(--border-subtle);
         border-radius: 12px;
         padding: 16px;
-        box-shadow: 0 6px 18px rgba(0, 28, 85, 0.4);
-        animation: fadeSlideUp 0.55s ease-out;
+        box-shadow: var(--shadow-soft);
+        animation: fadeSlideUp 0.5s ease-out;
     }
     .lb-panel-title {
-        color: #ffffff !important;
-        font-size: 16px;
+        color: var(--text-primary);
+        font-size: 15.5px;
         font-weight: 700;
         margin-bottom: 12px;
         padding-bottom: 8px;
-        border-bottom: 1px solid rgba(147, 197, 253, 0.25);
+        border-bottom: 1px solid var(--border-subtle);
     }
     .top-rank-card {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: linear-gradient(90deg, rgba(0, 51, 153, 0.85), rgba(3, 105, 161, 0.65));
-        border: 1px solid rgba(125, 211, 252, 0.38);
+        background: var(--bg-card-elevated);
+        border: 1px solid var(--border-subtle);
         border-radius: 10px;
         padding: 10px 14px;
         margin-bottom: 8px;
@@ -237,165 +307,187 @@ st.markdown("""
     }
     .top-rank-card:hover {
         transform: translateX(4px);
-        box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
+        border-color: var(--border-accent);
     }
     .top-rank-1 {
-        background: linear-gradient(90deg, rgba(161, 98, 7, 0.55), rgba(0, 68, 179, 0.9));
-        border: 1px solid #facc15;
+        border-left: 4px solid #eab308;
     }
     .top-rank-2 {
-        background: linear-gradient(90deg, rgba(71, 85, 105, 0.6), rgba(0, 68, 179, 0.88));
-        border: 1px solid #e2e8f0;
+        border-left: 4px solid #94a3b8;
     }
     .top-rank-3 {
-        background: linear-gradient(90deg, rgba(146, 64, 14, 0.55), rgba(0, 68, 179, 0.88));
-        border: 1px solid #f59e0b;
+        border-left: 4px solid #d97706;
     }
     .trophy-anim {
         display: inline-block;
-        font-size: 22px;
+        font-size: 21px;
         margin-right: 10px;
-        animation: floatTrophy 2.2s infinite ease-in-out;
+        animation: floatTrophy 2.6s infinite ease-in-out;
     }
     .rank-name {
-        color: #ffffff !important;
+        color: var(--text-primary);
         font-weight: 700;
-        font-size: 14.5px;
+        font-size: 14px;
     }
     .rank-meta {
-        color: #bae6fd !important;
+        color: var(--text-secondary);
         font-size: 12px;
     }
     .rank-score-pill {
-        background-color: #002366;
-        color: #fef08a !important;
-        border: 1px solid #facc15;
+        background: linear-gradient(90deg, #003399, #0284c7);
+        color: #ffffff;
         padding: 4px 10px;
         border-radius: 999px;
         font-weight: 800;
-        font-size: 13px;
+        font-size: 12.5px;
         white-space: nowrap;
     }
 
-    /* Tabel Bottom 5 Seragam dengan Tema Top 5 */
     .lb-table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 13.5px;
-        color: #f8fafc;
-        border-radius: 8px;
+        font-size: 13px;
+        color: var(--text-primary);
+        border-radius: 10px;
         overflow: hidden;
     }
     .lb-table thead tr {
-        background: linear-gradient(90deg, #003399, #0369a1);
+        background: var(--table-head-grad);
         color: #ffffff;
         text-align: left;
     }
     .lb-table th, .lb-table td {
         padding: 10px 12px;
-        border-bottom: 1px solid rgba(147, 197, 253, 0.2);
+        border-bottom: 1px solid var(--border-subtle);
     }
     .lb-table tbody tr {
-        background-color: rgba(15, 35, 82, 0.68);
+        background-color: var(--table-row-bg);
         transition: background-color 0.2s ease;
     }
     .lb-table tbody tr:hover {
-        background-color: rgba(29, 78, 216, 0.55);
+        background-color: var(--table-row-hover);
     }
     .rej-pill {
-        background-color: rgba(185, 28, 28, 0.85);
-        color: #fecaca;
-        border: 1px solid #f87171;
+        background-color: rgba(220, 38, 38, 0.14);
+        color: var(--reject-reason);
+        border: 1px solid rgba(220, 38, 38, 0.35);
         padding: 2px 9px;
         border-radius: 999px;
         font-weight: 700;
         font-size: 12px;
     }
 
-    /* Kartu Reject & BNI */
+    /* Tabel dataframe Streamlit lebih seragam */
+    div[data-testid="stDataFrame"] {
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow-soft);
+        animation: fadeSlideUp 0.5s ease-out;
+    }
+
+    /* Kartu Reject & BNI Adaptif */
     .reject-box {
-        background-color: #1f2937;
-        padding: 20px;
-        border-radius: 10px;
+        background: var(--bg-card-elevated);
+        padding: 18px 20px;
+        border-radius: 12px;
+        border: 1px solid var(--border-subtle);
         border-left: 5px solid #ef4444;
-        border: 1px solid #374151;
-        margin-bottom: 14px;
-        color: #f3f4f6 !important;
+        margin-bottom: 12px;
+        color: var(--text-primary);
+        box-shadow: var(--shadow-soft);
+        transition: transform 0.22s ease, border-color 0.22s ease;
+        animation: fadeSlideUp 0.45s ease-out;
+    }
+    .reject-box:hover {
+        transform: translateY(-2px);
     }
     .reject-box strong {
-        color: #ffffff !important;
-        font-size: 18px;
+        color: var(--text-primary);
+        font-size: 17px;
     }
     .reject-box small {
-        color: #9ca3af !important;
-        font-size: 13.5px;
+        color: var(--text-secondary);
+        font-size: 13px;
     }
     .reject-reason {
-        color: #f87171 !important;
-        font-weight: bold;
-        font-size: 15px;
+        color: var(--reject-reason);
+        font-weight: 700;
+        font-size: 14.5px;
         margin-top: 8px;
         display: block;
     }
     .solution-box {
-        background-color: #064e3b;
-        padding: 15px;
-        border-radius: 8px;
-        border-left: 4px solid #10b981;
+        background: var(--solution-bg);
+        padding: 13px 15px;
+        border-radius: 9px;
+        border-left: 4px solid var(--solution-border);
         margin-top: 12px;
-        color: #ecfdf5 !important;
-    }
-    .solution-box span {
-        color: #34d399 !important;
-        font-weight: bold;
-    }
-    .bni-box {
-        background-color: #1f2937;
-        padding: 20px;
-        border-radius: 10px;
-        border-left: 5px solid #0055cc;
-        border: 1px solid #374151;
-        margin-bottom: 14px;
-        color: #f3f4f6 !important;
-    }
-    .bni-box strong {
-        color: #ffffff !important;
-        font-size: 18px;
-    }
-    .bni-box small {
-        color: #cbd5e1 !important;
+        color: var(--solution-text);
         font-size: 13.5px;
     }
+    .solution-box span {
+        color: var(--solution-title);
+        font-weight: 700;
+    }
+
+    .bni-box {
+        background: var(--bg-card-elevated);
+        padding: 18px 20px;
+        border-radius: 12px;
+        border: 1px solid var(--border-subtle);
+        border-left: 5px solid #0284c7;
+        margin-bottom: 12px;
+        color: var(--text-primary);
+        box-shadow: var(--shadow-soft);
+        transition: transform 0.22s ease, border-color 0.22s ease;
+        animation: fadeSlideUp 0.45s ease-out;
+    }
+    .bni-box:hover {
+        transform: translateY(-2px);
+        border-color: var(--border-accent);
+    }
+    .bni-box strong {
+        color: var(--text-primary);
+        font-size: 17px;
+    }
+    .bni-box small {
+        color: var(--text-secondary);
+        font-size: 13px;
+    }
+
     .ceklis-badge {
         display: inline-block;
-        background-color: #065f46;
-        color: #6ee7b7;
-        border: 1px solid #10b981;
+        background-color: rgba(16, 185, 129, 0.15);
+        color: var(--solution-title);
+        border: 1px solid rgba(16, 185, 129, 0.4);
         padding: 4px 12px;
         border-radius: 999px;
         font-weight: 700;
-        font-size: 13px;
+        font-size: 12.5px;
         margin-top: 6px;
     }
     .belum-ceklis-badge {
         display: inline-block;
-        background-color: #1e293b;
-        color: #93c5fd;
-        border: 1px solid #3b82f6;
+        background: var(--bg-card-soft);
+        color: var(--bank-title);
+        border: 1px solid var(--border-subtle);
         padding: 4px 12px;
         border-radius: 999px;
         font-weight: 600;
-        font-size: 13px;
+        font-size: 12.5px;
         margin-top: 6px;
     }
     .rekap-box {
-        background-color: #0f172a;
-        padding: 18px;
-        border-radius: 10px;
-        border: 1px solid #2563eb;
-        border-left: 5px solid #25d366;
-        margin-bottom: 18px;
-        color: #e5e7eb !important;
+        background: var(--bg-panel);
+        padding: 16px 18px;
+        border-radius: 12px;
+        border: 1px solid var(--border-subtle);
+        border-left: 5px solid #16a34a;
+        margin-bottom: 14px;
+        color: var(--text-primary);
+        box-shadow: var(--shadow-soft);
+        animation: fadeSlideUp 0.45s ease-out;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -754,6 +846,24 @@ menu_pilihan = st.sidebar.radio(
 st.sidebar.markdown("---")
 st.sidebar.info("ACC Cabang Makassar — Kolaborasi & monitoring performa autodebet tim lapangan.")
 
+def render_page_banner(title, subtitle):
+    st.markdown(f"""
+        <div class="hero-banner">
+            <div class="hero-title">{html.escape(title)}</div>
+            <div class="hero-sub">{html.escape(subtitle)}</div>
+            <div class="tagline-pill">Monitor. Improve. Activate.</div>
+        </div>
+    """, unsafe_allow_html=True)
+
+def render_metric_card(label, value, subtext):
+    st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-label">{html.escape(str(label))}</div>
+            <div class="metric-value">{html.escape(str(value))}</div>
+            <div class="metric-sub">{html.escape(str(subtext))}</div>
+        </div>
+    """, unsafe_allow_html=True)
+
 def build_sales_leaderboard(df):
     if df.empty:
         return pd.DataFrame(), pd.DataFrame()
@@ -853,7 +963,7 @@ def render_bottom5_styled_table(bottom5_df):
 def main():
     # Menu Cepat khusus HP / Tablet (otomatis tersembunyi di desktop >= 992px & sinkron dua arah dengan sidebar)
     with st.container(key="mobile_quick_nav"):
-        st.markdown("<span style='color:#bae6fd; font-weight:700; font-size:13px;'>AKSES CEPAT MENU (HP / TABLET)</span>", unsafe_allow_html=True)
+        st.markdown("<span class='section-panel-label' style='font-weight:700; font-size:12.5px; color:var(--bank-title);'>AKSES CEPAT MENU (HP / TABLET)</span>", unsafe_allow_html=True)
         for row_start in range(0, len(DAFTAR_MENU), 3):
             cols = st.columns(3)
             for idx_col, nama_menu in enumerate(DAFTAR_MENU[row_start:row_start + 3]):
@@ -874,51 +984,24 @@ def main():
     success_rate_cabang = (total_approved / total_data * 100) if total_data > 0 else 0.0
 
     if halaman_aktif == "🎯 Home Dashboard":
-        st.markdown("""
-            <div class="hero-banner">
-                <div class="hero-title">⚡ AUTOTEAM — Home Dashboard</div>
-                <div class="hero-sub">Autodebet Team Achievement & Monitoring — ACC Cabang Makassar</div>
-                <div class="tagline-pill">Monitor. Improve. Activate.</div>
-            </div>
-        """, unsafe_allow_html=True)
-        
+        render_page_banner(
+            "⚡ AUTOTEAM — Home Dashboard",
+            "Autodebet Team Achievement & Monitoring — ACC Cabang Makassar"
+        )
+
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            st.markdown(f"""
-                <div class="metric-card">
-                    <div class="metric-label">Total Data Tracking</div>
-                    <h2 class="metric-value">{total_data}</h2>
-                    <div class="metric-sub">Aktif: {total_aktif} | Non-Aktif (C/B): {total_data - total_aktif}</div>
-                </div>
-            """, unsafe_allow_html=True)
+            render_metric_card("Total Data Tracking", total_data, f"Aktif: {total_aktif} | Non-Aktif (C/B): {total_data - total_aktif}")
         with col2:
-            st.markdown(f"""
-                <div class="metric-card">
-                    <div class="metric-label">Total Rejected (R)</div>
-                    <h2 class="metric-value">{total_rejected}</h2>
-                    <div class="metric-sub">Status Aktif Perlu Tindak Lanjut</div>
-                </div>
-            """, unsafe_allow_html=True)
+            render_metric_card("Total Rejected (R)", total_rejected, "Status Aktif Perlu Tindak Lanjut")
         with col3:
-            st.markdown(f"""
-                <div class="metric-card">
-                    <div class="metric-label">Success Rate (Approved / A)</div>
-                    <h2 class="metric-value">{success_rate_cabang:.1f}%</h2>
-                    <div class="metric-sub">{total_approved} Approved dari {total_data} Data</div>
-                </div>
-            """, unsafe_allow_html=True)
+            render_metric_card("Success Rate (Approved / A)", f"{success_rate_cabang:.1f}%", f"{total_approved} Approved dari {total_data} Data")
         with col4:
-            st.markdown("""
-                <div class="metric-card">
-                    <div class="metric-label">Server Status</div>
-                    <h2 class="metric-value">Online</h2>
-                    <div class="metric-sub">AUTOTEAM Active</div>
-                </div>
-            """, unsafe_allow_html=True)
-            
+            render_metric_card("Server Status", "Online", "AUTOTEAM Active")
+
         st.markdown("---")
         st.subheader("Statistik Volume & Performa per Bank (Data Cabang Makassar)")
-        
+
         bank_configs = ["BRI", "MANDIRI", "BCA", "BNI", "PERMATA"]
         bank_cols = st.columns(5)
         for idx, bank_name in enumerate(bank_configs):
@@ -930,10 +1013,10 @@ def main():
             with bank_cols[idx]:
                 st.markdown(
                     f'<div class="bank-card">'
-                    f'<div class="bank-title">{bank_name}</div>'
-                    f'<h3 class="bank-rate">{rate_b:.1f}%</h3>'
+                    f'<div class="bank-title">{html.escape(bank_name)}</div>'
+                    f'<div class="bank-rate">{rate_b:.1f}%</div>'
                     f'<div class="bank-sub">Total: <b>{vol_b}</b> Nasabah ({app_b} Approved)</div>'
-                    f'<small class="bank-badge">{badge_label}</small>'
+                    f'<small class="bank-badge">{html.escape(badge_label)}</small>'
                     f'</div>',
                     unsafe_allow_html=True
                 )
@@ -959,35 +1042,39 @@ def main():
         st.dataframe(df_tracking[kolom_tampil] if kolom_tampil else df_tracking, use_container_width=True, hide_index=True)
 
     elif halaman_aktif == "📊 Status Customer":
-        st.title("⚡ AUTOTEAM — Status Customer")
-        st.markdown("Pemantauan menyeluruh progress pengajuan seluruh nasabah dan kontribusi performa setiap Sales.")
+        render_page_banner(
+            "⚡ AUTOTEAM — Status Customer",
+            "Pemantauan menyeluruh progress pengajuan seluruh nasabah dan kontribusi performa setiap Sales."
+        )
 
-        c_f1, c_f2, c_f3, c_f4, c_f5 = st.columns([1.8, 1.3, 1.1, 1.1, 1.5])
-        with c_f1:
-            sales_di_data = sorted([s for s in df_tracking["Sales"].unique() if s not in ["", "-"]])
-            opsi_sales = ["SEMUA SALES"] + list(dict.fromkeys(DAFTAR_SALES_MAKASSAR + sales_di_data))
-            pilih_sales_all = st.selectbox("Filter Sales:", opsi_sales, key="sales_all_select")
-        with c_f2:
-            opsi_status = [
-                "SEMUA STATUS",
-                "Open (O)",
-                "Bukcet Finance (F)",
-                "Pengajuan ke Bank (D)",
-                "Approved (A)",
-                "Rejected (R)",
-                "Cancelled (C)",
-                "Batal (B)",
-                "Edit (E)",
-                "Pending (P)",
-            ]
-            pilih_status = st.selectbox("Filter Status:", opsi_status, key="status_all_select")
-        with c_f3:
-            pilih_keaktifan = st.selectbox("Keaktifan:", ["SEMUA", "Aktif", "Tidak Aktif"], key="aktif_all_select")
-        with c_f4:
-            opsi_bank = ["SEMUA BANK", "BRI", "MANDIRI", "BCA", "BNI", "PERMATA", "LAINNYA"]
-            pilih_bank = st.selectbox("Filter Bank:", opsi_bank, key="bank_all_select")
-        with c_f5:
-            cari_cust_all = st.text_input("Cari Customer / NOKON:", placeholder="Ketik nama atau no. kontrak...", key="search_all_input")
+        with st.container(key="panel_filter_status"):
+            st.markdown("<div class='section-panel-title'>Filter & Pencarian Data Nasabah</div><div class='section-panel-sub'>Saring data berdasarkan Sales, status pendaftaran, keaktifan, bank, atau nama/NOKON.</div>", unsafe_allow_html=True)
+            c_f1, c_f2, c_f3, c_f4, c_f5 = st.columns([1.8, 1.3, 1.1, 1.1, 1.5])
+            with c_f1:
+                sales_di_data = sorted([s for s in df_tracking["Sales"].unique() if s not in ["", "-"]])
+                opsi_sales = ["SEMUA SALES"] + list(dict.fromkeys(DAFTAR_SALES_MAKASSAR + sales_di_data))
+                pilih_sales_all = st.selectbox("Filter Sales:", opsi_sales, key="sales_all_select")
+            with c_f2:
+                opsi_status = [
+                    "SEMUA STATUS",
+                    "Open (O)",
+                    "Bukcet Finance (F)",
+                    "Pengajuan ke Bank (D)",
+                    "Approved (A)",
+                    "Rejected (R)",
+                    "Cancelled (C)",
+                    "Batal (B)",
+                    "Edit (E)",
+                    "Pending (P)",
+                ]
+                pilih_status = st.selectbox("Filter Status:", opsi_status, key="status_all_select")
+            with c_f3:
+                pilih_keaktifan = st.selectbox("Keaktifan:", ["SEMUA", "Aktif", "Tidak Aktif"], key="aktif_all_select")
+            with c_f4:
+                opsi_bank = ["SEMUA BANK", "BRI", "MANDIRI", "BCA", "BNI", "PERMATA", "LAINNYA"]
+                pilih_bank = st.selectbox("Filter Bank:", opsi_bank, key="bank_all_select")
+            with c_f5:
+                cari_cust_all = st.text_input("Cari Customer / NOKON:", placeholder="Ketik nama atau no. kontrak...", key="search_all_input")
 
         df_all_view = df_tracking.copy()
         if pilih_sales_all != "SEMUA SALES":
@@ -1022,11 +1109,16 @@ def main():
         cnt_rej = len(df_all_view[df_all_view["Status_Code"] == "R"])
 
         k1, k2, k3, k4, k5 = st.columns(5)
-        k1.metric("Total Data", len(df_all_view))
-        k2.metric("Approved (A)", cnt_app)
-        k3.metric("Status Aktif", cnt_aktif)
-        k4.metric("Tidak Aktif (C/B)", cnt_nonaktif)
-        k5.metric("Rejected (R)", cnt_rej)
+        with k1:
+            render_metric_card("Total Data", len(df_all_view), "Hasil filter aktif")
+        with k2:
+            render_metric_card("Approved (A)", cnt_app, "Autodebet disetujui")
+        with k3:
+            render_metric_card("Status Aktif", cnt_aktif, "Dalam proses / aktif")
+        with k4:
+            render_metric_card("Tidak Aktif (C/B)", cnt_nonaktif, "Cancelled / Batal")
+        with k5:
+            render_metric_card("Rejected (R)", cnt_rej, "Perlu follow up")
 
         st.markdown("---")
         st.subheader("Rekap Progress per Sales")
@@ -1071,20 +1163,24 @@ def main():
             st.warning("Tidak ada data nasabah yang cocok dengan filter yang dipilih.")
 
     elif halaman_aktif == "🏛️ BNI Autodebet Tracking":
-        st.title("⚡ AUTOTEAM — BNI Autodebet Tracking")
-        st.markdown("Pemantauan nasabah **BNI** berstatus **D (Pengajuan ke Bank)** yang diarahkan untuk pengaktifan **ACC ONE**.")
+        render_page_banner(
+            "⚡ AUTOTEAM — BNI Autodebet Tracking",
+            "Pemantauan nasabah BNI berstatus D (Pengajuan ke Bank) yang diarahkan untuk pengaktifan ACC ONE."
+        )
 
         df_bni_d = df_tracking[
             (df_tracking["Bank"] == "BNI") & (df_tracking["Status_Code"] == "D")
         ].copy()
 
-        f_b1, f_b2 = st.columns([2, 1.5])
-        with f_b1:
-            sales_bni_list = sorted([s for s in df_bni_d["Sales"].unique() if s not in ["", "-"]])
-            opsi_sales_bni = ["SEMUA SALES"] + list(dict.fromkeys([s for s in DAFTAR_SALES_MAKASSAR if s in sales_bni_list] + sales_bni_list))
-            pilih_sales_bni = st.selectbox("Pilih Nama Sales (BNI Status D):", opsi_sales_bni, key="bni_sales_select")
-        with f_b2:
-            cari_bni = st.text_input("Cari Customer / NOKON:", placeholder="Ketik nama atau no. kontrak...", key="bni_search_input")
+        with st.container(key="panel_filter_bni"):
+            st.markdown("<div class='section-panel-title'>Filter Nasabah BNI Status D</div><div class='section-panel-sub'>Pilih nama Sales atau cari nama nasabah / NOKON untuk memantau arahan ACC ONE.</div>", unsafe_allow_html=True)
+            f_b1, f_b2 = st.columns([2, 1.5])
+            with f_b1:
+                sales_bni_list = sorted([s for s in df_bni_d["Sales"].unique() if s not in ["", "-"]])
+                opsi_sales_bni = ["SEMUA SALES"] + list(dict.fromkeys([s for s in DAFTAR_SALES_MAKASSAR if s in sales_bni_list] + sales_bni_list))
+                pilih_sales_bni = st.selectbox("Pilih Nama Sales (BNI Status D):", opsi_sales_bni, key="bni_sales_select")
+            with f_b2:
+                cari_bni = st.text_input("Cari Customer / NOKON:", placeholder="Ketik nama atau no. kontrak...", key="bni_search_input")
 
         if pilih_sales_bni != "SEMUA SALES":
             df_bni_d = df_bni_d[df_bni_d["Sales"].str.upper() == pilih_sales_bni.upper()]
@@ -1093,13 +1189,17 @@ def main():
             m_i = df_bni_d["ID"].astype(str).str.contains(cari_bni, case=False, na=False)
             df_bni_d = df_bni_d[m_n | m_i]
 
-        b_k1, b_k2, b_k3 = st.columns(3)
-        b_k1.metric("Nasabah BNI Status D", len(df_bni_d))
-        b_k2.metric("Jumlah Sales Terkait", df_bni_d["Sales"].nunique() if not df_bni_d.empty else 0)
-        b_k3.metric("Sudah Dihubungi (ACC ONE)", sum(
+        sudah_hubungi = sum(
             1 for idx, r in df_bni_d.iterrows()
             if f"{clean_text(r.get('ID', ''))}_{clean_text(r.get('Customer', ''))}_{idx}" in st.session_state.bni_contacted_keys
-        ))
+        )
+        b_k1, b_k2, b_k3 = st.columns(3)
+        with b_k1:
+            render_metric_card("Nasabah BNI Status D", len(df_bni_d), "Pengajuan ke Bank")
+        with b_k2:
+            render_metric_card("Jumlah Sales Terkait", df_bni_d["Sales"].nunique() if not df_bni_d.empty else 0, "Tim lapangan aktif")
+        with b_k3:
+            render_metric_card("Sudah Dihubungi (ACC ONE)", sudah_hubungi, "Tercatat pada sesi ini")
 
         st.markdown("---")
         if df_bni_d.empty:
@@ -1111,14 +1211,14 @@ def main():
                 with st.container():
                     st.markdown(f"""
                         <div class="rekap-box">
-                            <strong style="color:#ffffff; font-size:16px;">Rekap Sekaligus Arahan ACC ONE untuk {pilih_sales_bni} ({len(df_bni_d)} Nasabah)</strong><br>
-                            <small style="color:#9ca3af;">Menggabungkan seluruh nasabah BNI status D milik {pilih_sales_bni} ke dalam satu pesan WA polos untuk arahan pengaktifan ACC ONE.</small>
+                            <strong style="font-size:16px;">Rekap Sekaligus Arahan ACC ONE untuk {html.escape(pilih_sales_bni)} ({len(df_bni_d)} Nasabah)</strong><br>
+                            <small>Menggabungkan seluruh nasabah BNI status D milik {html.escape(pilih_sales_bni)} ke dalam satu pesan WA polos untuk arahan pengaktifan ACC ONE.</small>
                         </div>
                     """, unsafe_allow_html=True)
                     col_br1, col_br2 = st.columns([1.4, 2.6])
                     with col_br1:
                         st.markdown(
-                            f'<a href="{url_bni_rekap}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:10px 18px; border-radius:6px; font-weight:bold; cursor:pointer;">Kirim Rekap WA ({len(df_bni_d)} Nasabah)</button></a>',
+                            f'<a href="{url_bni_rekap}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:10px 18px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim Rekap WA ({len(df_bni_d)} Nasabah)</button></a>',
                             unsafe_allow_html=True
                         )
                     with col_br2:
@@ -1147,9 +1247,9 @@ def main():
                     with card_c:
                         st.markdown(f"""
                             <div class="bni-box">
-                                <strong>{clean_text(row.get('Customer', ''))}</strong> (No. Kontrak: {clean_text(row.get('ID', ''))})<br>
-                                <small>Sales: <b>{sales_nama}</b> &nbsp;|&nbsp; Bank: <b>BNI</b> &nbsp;|&nbsp; Status: <b>D — Pengajuan ke Bank</b> &nbsp;|&nbsp; Total BNI (D) Sales ini: <b>{jml_sales_bni} Nasabah</b></small><br>
-                                <small>Cabang/Area: <b>{cabang_area}</b> &nbsp;|&nbsp; Aging/Tanggal: <b>{aging_tgl}</b></small>
+                                <strong>{html.escape(clean_text(row.get('Customer', '')))}</strong> (No. Kontrak: {html.escape(clean_text(row.get('ID', '')))})<br>
+                                <small>Sales: <b>{html.escape(sales_nama)}</b> &nbsp;|&nbsp; Bank: <b>BNI</b> &nbsp;|&nbsp; Status: <b>D — Pengajuan ke Bank</b> &nbsp;|&nbsp; Total BNI (D) Sales ini: <b>{jml_sales_bni} Nasabah</b></small><br>
+                                <small>Cabang/Area: <b>{html.escape(cabang_area)}</b> &nbsp;|&nbsp; Aging/Tanggal: <b>{html.escape(aging_tgl)}</b></small>
                             </div>
                         """, unsafe_allow_html=True)
                     with status_c:
@@ -1169,34 +1269,36 @@ def main():
                         bc1, bc2 = st.columns([1.2, 2.8])
                         with bc1:
                             st.markdown(
-                                f'<a href="{url_bni_one}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:8px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">Kirim 1 Nasabah Saja</button></a>',
+                                f'<a href="{url_bni_one}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:8px 14px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim 1 Nasabah Saja</button></a>',
                                 unsafe_allow_html=True
                             )
                         with bc2:
                             st.markdown(
-                                f'<a href="{url_bni_grp}" target="_blank"><button style="background-color:#0044b3; color:white; border:none; padding:8px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">Rekap Semua ({jml_sales_bni} Nasabah {sales_nama})</button></a>',
+                                f'<a href="{url_bni_grp}" target="_blank"><button style="background-color:#0044b3; color:white; border:none; padding:8px 14px; border-radius:8px; font-weight:700; cursor:pointer;">Rekap Semua ({jml_sales_bni} Nasabah {html.escape(sales_nama)})</button></a>',
                                 unsafe_allow_html=True
                             )
                     else:
                         st.markdown(
-                            f'<a href="{url_bni_one}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer;">Kirim WA Arahan ACC ONE</button></a>',
+                            f'<a href="{url_bni_one}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim WA Arahan ACC ONE</button></a>',
                             unsafe_allow_html=True
                         )
                     st.markdown("---")
 
     elif halaman_aktif == "⚠️ Reject Tracking":
-        st.title("⚡ AUTOTEAM — Reject Tracking")
-        st.markdown("Pusat pemantauan dan pengelolaan penolakan (Rejected / R) penagihan autodebet nasabah.")
-        
-        col_f1, col_f2 = st.columns([2, 1])
-        with col_f1:
-            sales_di_data = sorted([s for s in df_tracking["Sales"].unique() if s not in ["", "-"]])
-            daftar_filter_sales = ["SEMUA SALES"] + list(dict.fromkeys(DAFTAR_SALES_MAKASSAR + sales_di_data))
-            pilih_sales = st.selectbox("Pilih Nama Sales:", daftar_filter_sales)
-        with col_f2:
-            search_box = st.text_input("Cari Nama / No. Kontrak:", placeholder="Ketik nama customer atau NOKON...")
+        render_page_banner(
+            "⚡ AUTOTEAM — Reject Tracking",
+            "Pusat pemantauan dan pengelolaan penolakan (Rejected / R) penagihan autodebet nasabah."
+        )
 
-        st.markdown("---")
+        with st.container(key="panel_filter_reject"):
+            st.markdown("<div class='section-panel-title'>Filter & Pencarian Tanggungan Reject</div><div class='section-panel-sub'>Saring daftar nasabah berstatus Rejected (R) per nama Sales atau kata kunci nama/NOKON.</div>", unsafe_allow_html=True)
+            col_f1, col_f2 = st.columns([2, 1])
+            with col_f1:
+                sales_di_data = sorted([s for s in df_tracking["Sales"].unique() if s not in ["", "-"]])
+                daftar_filter_sales = ["SEMUA SALES"] + list(dict.fromkeys(DAFTAR_SALES_MAKASSAR + sales_di_data))
+                pilih_sales = st.selectbox("Pilih Nama Sales:", daftar_filter_sales)
+            with col_f2:
+                search_box = st.text_input("Cari Nama / No. Kontrak:", placeholder="Ketik nama customer atau NOKON...")
 
         df_view = df_tracking[df_tracking["Status_Code"] == "R"].copy()
         if pilih_sales != "SEMUA SALES":
@@ -1206,11 +1308,20 @@ def main():
             mask_id = df_view["ID"].astype(str).str.contains(search_box, case=False, na=False)
             df_view = df_view[mask_nama | mask_id]
 
+        r_c1, r_c2, r_c3 = st.columns(3)
+        with r_c1:
+            render_metric_card("Total Reject Ditampilkan", len(df_view), "Status Rejected (R)")
+        with r_c2:
+            render_metric_card("Sales Terkait", df_view["Sales"].nunique() if not df_view.empty else 0, "Perlu tindak lanjut")
+        with r_c3:
+            render_metric_card("Bank Dominan Reject", df_view["Bank"].mode().iloc[0] if not df_view.empty else "-", "Berdasarkan filter aktif")
+
+        st.markdown("---")
         st.info("Akses Database Pusat: Untuk mengelola, menambah, atau menghapus data secara langsung, silakan buka Google Sheets utama.")
-        st.markdown(f'<a href="{SHEET_EDIT_URL}" target="_blank"><button style="background-color:#10b981; color:white; border:none; padding:10px 20px; border-radius:6px; font-weight:bold; cursor:pointer;">Buka Google Sheets Database Utama</button></a>', unsafe_allow_html=True)
+        st.markdown(f'<a href="{SHEET_EDIT_URL}" target="_blank"><button style="background-color:#10b981; color:white; border:none; padding:10px 20px; border-radius:8px; font-weight:700; cursor:pointer;">Buka Google Sheets Database Utama</button></a>', unsafe_allow_html=True)
 
         st.markdown(f"### Daftar Tanggungan Rejected ({len(df_view)} Data)")
-        
+
         if len(df_view) == 0:
             st.warning("Tidak ada data rejected yang ditemukan untuk filter tersebut.")
         else:
@@ -1220,14 +1331,14 @@ def main():
                 with st.container():
                     st.markdown(f"""
                         <div class="rekap-box">
-                            <strong style="color:#ffffff; font-size:16px;">Opsi Rekap Sekaligus untuk {pilih_sales} ({len(df_view)} Nasabah)</strong><br>
-                            <small style="color:#9ca3af;">Menggabungkan seluruh {len(df_view)} nasabah reject milik {pilih_sales} ke dalam 1 pesan WA polos bernomor (lengkap Cabang/Area, Aging/Tanggal, Alasan & Solusi).</small>
+                            <strong style="font-size:16px;">Opsi Rekap Sekaligus untuk {html.escape(pilih_sales)} ({len(df_view)} Nasabah)</strong><br>
+                            <small>Menggabungkan seluruh {len(df_view)} nasabah reject milik {html.escape(pilih_sales)} ke dalam 1 pesan WA polos bernomor (lengkap Cabang/Area, Aging/Tanggal, Alasan & Solusi).</small>
                         </div>
                     """, unsafe_allow_html=True)
                     col_r1, col_r2 = st.columns([1.4, 2.6])
                     with col_r1:
                         st.markdown(
-                            f'<a href="{url_rekap_sales}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:10px 18px; border-radius:6px; font-weight:bold; cursor:pointer;">Kirim Rekap Sekaligus ({len(df_view)} Nasabah)</button></a>',
+                            f'<a href="{url_rekap_sales}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:10px 18px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim Rekap Sekaligus ({len(df_view)} Nasabah)</button></a>',
                             unsafe_allow_html=True
                         )
                     with col_r2:
@@ -1252,13 +1363,13 @@ def main():
                 with st.container():
                     st.markdown(f"""
                         <div class="reject-box">
-                            <strong>{clean_text(row.get('Customer', ''))}</strong> ({clean_text(row.get('Bank', ''))} - No. Kontrak: {clean_text(row.get('ID', ''))})<br>
-                            <small>Sales: <b>{sales_nama}</b> &nbsp;|&nbsp; Status: <b>{clean_text(row.get('Status', 'Rejected'))} ({clean_text(row.get('Status_Code', 'R'))})</b> &nbsp;|&nbsp; Total Reject Sales ini: <b>{jml_sales_ini} Nasabah</b></small><br>
-                            <small>Cabang/Area: <b>{cabang_area}</b> &nbsp;|&nbsp; Aging/Tanggal: <b>{aging_tgl}</b></small><br>
-                            <span class="reject-reason">Alasan Reject: {alasan}</span>
+                            <strong>{html.escape(clean_text(row.get('Customer', '')))}</strong> ({html.escape(clean_text(row.get('Bank', '')))} - No. Kontrak: {html.escape(clean_text(row.get('ID', '')))})<br>
+                            <small>Sales: <b>{html.escape(sales_nama)}</b> &nbsp;|&nbsp; Status: <b>{html.escape(clean_text(row.get('Status', 'Rejected')))} ({html.escape(clean_text(row.get('Status_Code', 'R'))))})</b> &nbsp;|&nbsp; Total Reject Sales ini: <b>{jml_sales_ini} Nasabah</b></small><br>
+                            <small>Cabang/Area: <b>{html.escape(cabang_area)}</b> &nbsp;|&nbsp; Aging/Tanggal: <b>{html.escape(aging_tgl)}</b></small><br>
+                            <span class="reject-reason">Alasan Reject: {html.escape(alasan)}</span>
                             <div class="solution-box">
                                 <span>Solusi Perbaikan:</span><br>
-                                {clean_text(row.get('Solusi', ''))}
+                                {html.escape(clean_text(row.get('Solusi', '')))}
                             </div>
                         </div>
                     """, unsafe_allow_html=True)
@@ -1267,27 +1378,30 @@ def main():
                         b_col1, b_col2 = st.columns([1.2, 2.8])
                         with b_col1:
                             st.markdown(
-                                f'<a href="{wa_item_url}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:8px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">Kirim 1 Nasabah Saja</button></a>',
+                                f'<a href="{wa_item_url}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:8px 14px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim 1 Nasabah Saja</button></a>',
                                 unsafe_allow_html=True
                             )
                         with b_col2:
                             st.markdown(
-                                f'<a href="{wa_sales_group_url}" target="_blank"><button style="background-color:#0044b3; color:white; border:none; padding:8px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">Rekap Semua ({jml_sales_ini} Nasabah {sales_nama})</button></a>',
+                                f'<a href="{wa_sales_group_url}" target="_blank"><button style="background-color:#0044b3; color:white; border:none; padding:8px 14px; border-radius:8px; font-weight:700; cursor:pointer;">Rekap Semua ({jml_sales_ini} Nasabah {html.escape(sales_nama)})</button></a>',
                                 unsafe_allow_html=True
                             )
                     else:
                         st.markdown(
-                            f'<a href="{wa_item_url}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:8px 16px; border-radius:6px; font-weight:bold; cursor:pointer;">Kirim WA ke Sales (1 Nasabah)</button></a>',
+                            f'<a href="{wa_item_url}" target="_blank"><button style="background-color:#25d366; color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim WA ke Sales (1 Nasabah)</button></a>',
                             unsafe_allow_html=True
                         )
                     st.markdown("---")
 
     elif halaman_aktif == "📘 Reject Guide":
-        st.header("⚡ AUTOTEAM — Panduan Penanganan Reject & Solusi Sales")
-        st.markdown("Acuan standar operasional lengkap untuk penanganan penolakan autodebet dan tindakan korektif Sales di ACC Cabang Makassar.")
-        
-        search_guide = st.text_input("Cari Kata Kunci Panduan / Solusi:", placeholder="Contoh: tanda tangan, rekening, telepon, brimo, saldo, dormant...")
-        
+        render_page_banner(
+            "⚡ AUTOTEAM — Panduan Penanganan Reject & Solusi Sales",
+            "Acuan standar operasional lengkap untuk penanganan penolakan autodebet dan tindakan korektif Sales di ACC Cabang Makassar."
+        )
+
+        with st.container(key="panel_filter_guide"):
+            search_guide = st.text_input("Cari Kata Kunci Panduan / Solusi:", placeholder="Contoh: tanda tangan, rekening, telepon, brimo, saldo, dormant...")
+
         df_g = pd.DataFrame(REJECT_GUIDE_ITEMS)
         if search_guide:
             mask_g = (
@@ -1296,28 +1410,40 @@ def main():
                 df_g["Tindakan Korektif / Solusi Sales"].str.contains(search_guide, case=False, na=False)
             )
             df_g = df_g[mask_g]
+
+        render_metric_card("Jumlah Panduan Tersedia", len(df_g), "SOP Penanganan Reject & Solusi Sales")
         st.dataframe(df_g, use_container_width=True, hide_index=True)
 
     elif halaman_aktif == "🔧 Settings":
-        st.subheader("🔧 Pengaturan Sistem & Database Google Sheets")
-        st.write("Versi Web: **AUTOTEAM** (Autodebet Team Achievement & Monitoring) v7.8")
+        render_page_banner(
+            "⚡ AUTOTEAM — Pengaturan Sistem & Database",
+            "Informasi koneksi Google Sheets utama, akses pengelolaan data, dan backup rekap Excel."
+        )
+
+        s_c1, s_c2 = st.columns(2)
+        with s_c1:
+            render_metric_card("Versi Aplikasi", "AUTOTEAM v7.9", "Adaptif Light / Dark Mode")
+        with s_c2:
+            render_metric_card("Total Data Tersinkron", total_data, "Live via Google Sheets")
+
+        st.write("Versi Web: **AUTOTEAM** (Autodebet Team Achievement & Monitoring) v7.9")
         if is_live:
             st.success(f"Status: Terhubung Sempurna ke Google Sheets Database Utama — {total_data} Data")
         else:
             st.warning("Status: Menggunakan mode cadangan sementara. Pastikan akses berbagi Google Sheets diset 'Siapa saja yang memiliki link dapat melihat'.")
-        
+
         st.markdown("---")
         st.subheader("Akses Langsung Google Sheets")
         st.markdown("Anda dapat langsung mengelola, menambah, atau menghapus data Sales melalui tautan berikut:")
-        st.markdown(f'<a href="{SHEET_EDIT_URL}" target="_blank"><button style="background-color:#0044b3; color:white; border:none; padding:10px 20px; border-radius:6px; font-weight:bold; cursor:pointer;">Buka Google Sheets Utama</button></a>', unsafe_allow_html=True)
-        
+        st.markdown(f'<a href="{SHEET_EDIT_URL}" target="_blank"><button style="background-color:#0044b3; color:white; border:none; padding:10px 20px; border-radius:8px; font-weight:700; cursor:pointer;">Buka Google Sheets Utama</button></a>', unsafe_allow_html=True)
+
         st.markdown("---")
         st.subheader("Download Backup Data (Excel)")
         output = io.BytesIO()
         with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
             df_tracking.to_excel(writer, sheet_name='Tracking_Backup', index=False)
         excel_data = output.getvalue()
-        
+
         st.download_button(
             label="Download Rekap Data Tracking (.xlsx)",
             data=excel_data,
