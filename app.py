@@ -384,6 +384,10 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# Konfigurasi Google Sheets Utama (Akun Email Baru)
+SHEET_ID = "1_WjXj0lShrzkXDDfJQQdwCZ_2yizmigA562GdtFxXEw"
+SHEET_EDIT_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/edit"
+
 # Daftar Resmi Sales ACC Cabang Makassar
 DAFTAR_SALES_MAKASSAR = [
     "RESKYANTO PUNDA", "NURUL AZIZAH", "NUR RAHMADANI", "FITRIYANTI MUIS",
@@ -660,33 +664,41 @@ def build_wa_bni_rekap_message(df_bni, nama_sales="Sales"):
 # Fungsi Memuat Data dari Google Sheets Publik via CSV
 @st.cache_data(ttl=10)
 def load_data_sheets():
-    sheet_id = "1eGeosnjBbMnAK0I0pbIcGtTBxlOYTN4eUgtz9X5CM2M"
-    url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet=Tracking"
-    try:
-        df = pd.read_csv(url, dtype=str).fillna("")
-        df.columns = [c.strip() for c in df.columns]
+    urls = [
+        f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Tracking",
+        f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&gid=0",
+        f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/export?format=csv&gid=0",
+    ]
+    for url in urls:
+        try:
+            df = pd.read_csv(url, dtype=str).fillna("")
+            df.columns = [c.strip() for c in df.columns]
+            if df.empty or len(df.columns) <= 1:
+                continue
 
-        if "NAMA_CUST" in df.columns:
-            df = df[df["NAMA_CUST"].str.strip() != ""].copy()
-        elif "Customer" in df.columns:
-            df = df[df["Customer"].str.strip() != ""].copy()
+            if "NAMA_CUST" in df.columns:
+                df = df[df["NAMA_CUST"].str.strip() != ""].copy()
+            elif "Customer" in df.columns:
+                df = df[df["Customer"].str.strip() != ""].copy()
 
-        df["ID"] = df["NOKON"] if "NOKON" in df.columns else df.get("ID", "-")
-        df["Customer"] = df["NAMA_CUST"] if "NAMA_CUST" in df.columns else df.get("Customer", "-")
-        df["Bank_Raw"] = df["BANK_AUTODEBET"] if "BANK_AUTODEBET" in df.columns else df.get("Bank", "")
-        df["Bank"] = df["Bank_Raw"].apply(normalize_bank)
-        df["Sales"] = df["NAME_SO"].str.strip() if "NAME_SO" in df.columns else df.get("Sales", "-")
-        df["Status_Code"] = df["STATUS PENDAFTARAN"].str.upper().str.strip() if "STATUS PENDAFTARAN" in df.columns else ""
-        df["Status"] = df["Status_Code"].apply(map_status_label)
-        df["Keaktifan"] = df["Status_Code"].apply(map_keaktifan_label)
-        df["Alasan Reject"] = df["REASON REJECT"].str.strip() if "REASON REJECT" in df.columns else df.get("Alasan Reject", "")
-        df["Solusi"] = df["Alasan Reject"].apply(get_solusi_reject)
-        return df, True
-    except Exception:
-        fallback = pd.DataFrame([
-            {"ID": "REG-001", "Customer": "HENRI", "Bank": "BRI", "Sales": "RESKYANTO PUNDA", "Status_Code": "R", "Status": "Rejected", "Keaktifan": "Aktif", "Alasan Reject": "Phone number is not correct", "Solusi": get_solusi_reject("Phone number is not correct"), "CABANG": "MAKASSAR", "AREA NEW": "Area 5", "Aging": "7"}
-        ])
-        return fallback, False
+            df["ID"] = df["NOKON"] if "NOKON" in df.columns else df.get("ID", "-")
+            df["Customer"] = df["NAMA_CUST"] if "NAMA_CUST" in df.columns else df.get("Customer", "-")
+            df["Bank_Raw"] = df["BANK_AUTODEBET"] if "BANK_AUTODEBET" in df.columns else df.get("Bank", "")
+            df["Bank"] = df["Bank_Raw"].apply(normalize_bank)
+            df["Sales"] = df["NAME_SO"].str.strip() if "NAME_SO" in df.columns else df.get("Sales", "-")
+            df["Status_Code"] = df["STATUS PENDAFTARAN"].str.upper().str.strip() if "STATUS PENDAFTARAN" in df.columns else ""
+            df["Status"] = df["Status_Code"].apply(map_status_label)
+            df["Keaktifan"] = df["Status_Code"].apply(map_keaktifan_label)
+            df["Alasan Reject"] = df["REASON REJECT"].str.strip() if "REASON REJECT" in df.columns else df.get("Alasan Reject", "")
+            df["Solusi"] = df["Alasan Reject"].apply(get_solusi_reject)
+            return df, True
+        except Exception:
+            continue
+
+    fallback = pd.DataFrame([
+        {"ID": "REG-001", "Customer": "HENRI", "Bank": "BRI", "Sales": "RESKYANTO PUNDA", "Status_Code": "R", "Status": "Rejected", "Keaktifan": "Aktif", "Alasan Reject": "Phone number is not correct", "Solusi": get_solusi_reject("Phone number is not correct"), "CABANG": "MAKASSAR", "AREA NEW": "Area 5", "Aging": "7"}
+    ])
+    return fallback, False
 
 df_tracking, is_live = load_data_sheets()
 
@@ -743,14 +755,12 @@ def build_sales_leaderboard(df):
     if lb_df.empty:
         return pd.DataFrame(), pd.DataFrame()
 
-    # Top 5: seluruh Sales yang punya data, % Autodebet tertinggi & Rejected (R) paling sedikit
     top5 = lb_df.sort_values(
         by=["% Autodebet", "Rejected (R)", "Approved (A)", "Total Data"],
         ascending=[False, True, False, False]
     ).head(5).copy()
     top5.insert(0, "Rank", range(1, len(top5) + 1))
 
-    # Bottom 5: Sales dengan Rejected (R) terbanyak
     bottom5 = lb_df.sort_values(
         by=["Rejected (R)", "% Autodebet", "Total Data"],
         ascending=[False, True, False]
@@ -1160,7 +1170,7 @@ def main():
             df_view = df_view[mask_nama | mask_id]
 
         st.info("Akses Database Pusat: Untuk mengelola, menambah, atau menghapus data secara langsung, silakan buka Google Sheets utama.")
-        st.markdown('<a href="https://docs.google.com/spreadsheets/d/1eGeosnjBbMnAK0I0pbIcGtTBxlOYTN4eUgtz9X5CM2M/edit" target="_blank"><button style="background-color:#10b981; color:white; border:none; padding:10px 20px; border-radius:6px; font-weight:bold; cursor:pointer;">Buka Google Sheets Database Utama</button></a>', unsafe_allow_html=True)
+        st.markdown(f'<a href="{SHEET_EDIT_URL}" target="_blank"><button style="background-color:#10b981; color:white; border:none; padding:10px 20px; border-radius:6px; font-weight:bold; cursor:pointer;">Buka Google Sheets Database Utama</button></a>', unsafe_allow_html=True)
 
         st.markdown(f"### Daftar Tanggungan Rejected ({len(df_view)} Data)")
         
@@ -1262,7 +1272,7 @@ def main():
         st.markdown("---")
         st.subheader("Akses Langsung Google Sheets")
         st.markdown("Anda dapat langsung mengelola, menambah, atau menghapus data Sales melalui tautan berikut:")
-        st.markdown('<a href="https://docs.google.com/spreadsheets/d/1eGeosnjBbMnAK0I0pbIcGtTBxlOYTN4eUgtz9X5CM2M/edit" target="_blank"><button style="background-color:#0044b3; color:white; border:none; padding:10px 20px; border-radius:6px; font-weight:bold; cursor:pointer;">Buka Google Sheets Utama</button></a>', unsafe_allow_html=True)
+        st.markdown(f'<a href="{SHEET_EDIT_URL}" target="_blank"><button style="background-color:#0044b3; color:white; border:none; padding:10px 20px; border-radius:6px; font-weight:bold; cursor:pointer;">Buka Google Sheets Utama</button></a>', unsafe_allow_html=True)
         
         st.markdown("---")
         st.subheader("Download Backup Data (Excel)")
