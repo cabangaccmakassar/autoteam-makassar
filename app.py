@@ -85,6 +85,29 @@ st.markdown("""
         font-size: 14px !important;
     }
 
+    /* Menu Cepat HP / Tablet: tampil di layar < 992px, tersembunyi di desktop >= 992px */
+    .mobile-quick-nav-anchor {
+        display: none;
+    }
+    @media (max-width: 991.98px) {
+        .mobile-quick-nav-anchor {
+            display: block;
+        }
+        .mobile-quick-nav-anchor + div[data-testid="stVerticalBlock"] div[data-testid="stButton"] > button {
+            min-height: 46px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 8px 10px;
+            margin-bottom: 4px;
+        }
+    }
+    @media (min-width: 992px) {
+        .mobile-quick-nav-anchor + div[data-testid="stVerticalBlock"] {
+            display: none !important;
+        }
+    }
+
     /* Hero Banner Atas Agar Ramai & Hidup */
     .hero-banner {
         background: linear-gradient(120deg, #002366, #0044b3, #0369a1, #002b7f);
@@ -829,6 +852,39 @@ def render_bottom5_styled_table(bottom5_df):
     return "".join(html_parts)
 
 def main():
+    daftar_menu = [
+        "🎯 Home Dashboard",
+        "📊 Status Customer",
+        "🏛️ BNI Autodebet Tracking",
+        "⚠️ Reject Tracking",
+        "📘 Reject Guide",
+        "🔧 Settings",
+    ]
+
+    if "halaman_aktif" not in st.session_state:
+        st.session_state.halaman_aktif = menu_pilihan
+    if "last_sidebar_menu" not in st.session_state:
+        st.session_state.last_sidebar_menu = menu_pilihan
+
+    if menu_pilihan != st.session_state.last_sidebar_menu:
+        st.session_state.halaman_aktif = menu_pilihan
+        st.session_state.last_sidebar_menu = menu_pilihan
+
+    st.markdown('<div class="mobile-quick-nav-anchor"></div>', unsafe_allow_html=True)
+    with st.container():
+        st.markdown("<span style='color:#bae6fd; font-weight:700; font-size:13px;'>AKSES CEPAT MENU (HP / TABLET)</span>", unsafe_allow_html=True)
+        for row_start in range(0, len(daftar_menu), 3):
+            cols = st.columns(3)
+            for idx_col, nama_menu in enumerate(daftar_menu[row_start:row_start + 3]):
+                with cols[idx_col]:
+                    is_active = (st.session_state.halaman_aktif == nama_menu)
+                    btn_type = "primary" if is_active else "secondary"
+                    if st.button(nama_menu, key=f"btn_nav_{row_start}_{idx_col}", type=btn_type, use_container_width=True):
+                        st.session_state.halaman_aktif = nama_menu
+                        st.rerun()
+
+    halaman_aktif = st.session_state.halaman_aktif
+
     total_data = len(df_tracking)
     df_aktif = df_tracking[df_tracking["Keaktifan"] == "Aktif"] if not df_tracking.empty else pd.DataFrame()
     total_aktif = len(df_aktif)
@@ -836,7 +892,7 @@ def main():
     total_rejected = len(df_tracking[df_tracking["Status_Code"] == "R"]) if not df_tracking.empty else 0
     success_rate_cabang = (total_approved / total_data * 100) if total_data > 0 else 0.0
 
-    if menu_pilihan == "🎯 Home Dashboard":
+    if halaman_aktif == "🎯 Home Dashboard":
         st.markdown("""
             <div class="hero-banner">
                 <div class="hero-title">⚡ AUTOTEAM — Home Dashboard</div>
@@ -921,7 +977,7 @@ def main():
         kolom_tampil = [c for c in ["NOKON", "NAMA_CUST", "CABANG", "NAME_SO", "BANK_AUTODEBET", "STATUS PENDAFTARAN", "Status", "Keaktifan", "REASON REJECT"] if c in df_tracking.columns]
         st.dataframe(df_tracking[kolom_tampil] if kolom_tampil else df_tracking, use_container_width=True, hide_index=True)
 
-    elif menu_pilihan == "📊 Status Customer":
+    elif halaman_aktif == "📊 Status Customer":
         st.title("⚡ AUTOTEAM — Status Customer")
         st.markdown("Pemantauan menyeluruh progress pengajuan seluruh nasabah dan kontribusi performa setiap Sales.")
 
@@ -1033,7 +1089,7 @@ def main():
         else:
             st.warning("Tidak ada data nasabah yang cocok dengan filter yang dipilih.")
 
-    elif menu_pilihan == "🏛️ BNI Autodebet Tracking":
+    elif halaman_aktif == "🏛️ BNI Autodebet Tracking":
         st.title("⚡ AUTOTEAM — BNI Autodebet Tracking")
         st.markdown("Pemantauan nasabah **BNI** berstatus **D (Pengajuan ke Bank)** yang diarahkan untuk pengaktifan **ACC ONE**.")
 
@@ -1147,7 +1203,7 @@ def main():
                         )
                     st.markdown("---")
 
-    elif menu_pilihan == "⚠️ Reject Tracking":
+    elif halaman_aktif == "⚠️ Reject Tracking":
         st.title("⚡ AUTOTEAM — Reject Tracking")
         st.markdown("Pusat pemantauan dan pengelolaan penolakan (Rejected / R) penagihan autodebet nasabah.")
         
@@ -1245,7 +1301,7 @@ def main():
                         )
                     st.markdown("---")
 
-    elif menu_pilihan == "📘 Reject Guide":
+    elif halaman_aktif == "📘 Reject Guide":
         st.header("⚡ AUTOTEAM — Panduan Penanganan Reject & Solusi Sales")
         st.markdown("Acuan standar operasional lengkap untuk penanganan penolakan autodebet dan tindakan korektif Sales di ACC Cabang Makassar.")
         
@@ -1261,11 +1317,11 @@ def main():
             df_g = df_g[mask_g]
         st.dataframe(df_g, use_container_width=True, hide_index=True)
 
-    elif menu_pilihan == "🔧 Settings":
+    elif halaman_aktif == "🔧 Settings":
         st.subheader("🔧 Pengaturan Sistem & Database Google Sheets")
-        st.write("Versi Web: **AUTOTEAM** (Autodebet Team Achievement & Monitoring) v7.6")
+        st.write("Versi Web: **AUTOTEAM** (Autodebet Team Achievement & Monitoring) v7.7")
         if is_live:
-            st.success(f"Status: Terhubung Sempurna ke Google Sheets Database Utama (DB_AutoMonitor_Makassar — {total_data} Data)")
+            st.success(f"Status: Terhubung Sempurna ke Google Sheets Database Utama — {total_data} Data")
         else:
             st.warning("Status: Menggunakan mode cadangan sementara. Pastikan akses berbagi Google Sheets diset 'Siapa saja yang memiliki link dapat melihat'.")
         
