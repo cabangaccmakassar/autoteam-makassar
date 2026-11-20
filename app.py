@@ -18,48 +18,48 @@ st.markdown("""
     :root {
         color-scheme: light dark;
         --bg-panel: light-dark(
-            linear-gradient(145deg, rgba(239, 246, 255, 0.94) 0%, rgba(248, 250, 252, 0.96) 100%),
+            linear-gradient(145deg, rgba(224, 242, 254, 0.95) 0%, rgba(239, 246, 255, 0.96) 100%),
             linear-gradient(145deg, rgba(13, 28, 62, 0.92) 0%, rgba(15, 23, 42, 0.94) 100%)
         );
-        --bg-card-soft: light-dark(#f8fafc, #111c33);
+        --bg-card-soft: light-dark(#eff6ff, #111c33);
         --bg-card-elevated: light-dark(#ffffff, #16233d);
         --bg-input: light-dark(#ffffff, #0f1e3d);
-        --bg-input-hover: light-dark(#f0f7ff, #162b56);
-        --border-subtle: light-dark(rgba(37, 99, 235, 0.22), rgba(56, 189, 248, 0.26));
-        --border-accent: light-dark(#2563eb, #38bdf8);
+        --bg-input-hover: light-dark(#e0f2fe, #162b56);
+        --border-subtle: light-dark(rgba(29, 78, 216, 0.28), rgba(56, 189, 248, 0.28));
+        --border-accent: light-dark(#1d4ed8, #38bdf8);
         --text-primary: light-dark(#0f172a, #f8fafc);
         --text-secondary: light-dark(#334155, #cbd5e1);
-        --text-muted: light-dark(#64748b, #94a3b8);
+        --text-muted: light-dark(#475569, #94a3b8);
         --metric-grad: light-dark(
-            linear-gradient(145deg, #eff6ff 0%, #dbeafe 100%),
+            linear-gradient(155deg, #dbeafe 0%, #bfdbfe 100%),
             linear-gradient(145deg, #0b2454 0%, #0f367a 100%)
         );
-        --metric-border: light-dark(#93c5fd, #2563eb);
-        --metric-label: light-dark(#1e40af, #bfdbfe);
+        --metric-border: light-dark(#60a5fa, #2563eb);
+        --metric-label: light-dark(#1e3a8a, #bfdbfe);
         --metric-value: light-dark(#0f172a, #ffffff);
-        --metric-sub: light-dark(#334155, #bae6fd);
+        --metric-sub: light-dark(#1e40af, #bae6fd);
         --bank-grad: light-dark(
-            linear-gradient(160deg, #f8fafc 0%, #eff6ff 100%),
+            linear-gradient(160deg, #e0f2fe 0%, #dbeafe 55%, #bfdbfe 100%),
             linear-gradient(160deg, #0c224d 0%, #113270 100%)
         );
-        --bank-title: light-dark(#1d4ed8, #93c5fd);
+        --bank-title: light-dark(#1e3a8a, #93c5fd);
         --bank-rate: light-dark(#0f172a, #ffffff);
-        --bank-sub: light-dark(#334155, #e0f2fe);
-        --bank-badge: light-dark(#b45309, #fde047);
+        --bank-sub: light-dark(#1e40af, #e0f2fe);
+        --bank-badge: light-dark(#92400e, #fde047);
         --table-head-grad: light-dark(
             linear-gradient(90deg, #1d4ed8 0%, #0284c7 100%),
             linear-gradient(90deg, #003399 0%, #0369a1 100%)
         );
         --table-row-bg: light-dark(#ffffff, rgba(15, 35, 82, 0.65));
-        --table-row-alt: light-dark(#f8fafc, rgba(20, 44, 98, 0.72));
-        --table-row-hover: light-dark(#e0f2fe, rgba(29, 78, 216, 0.48));
+        --table-row-alt: light-dark(#f1f5f9, rgba(20, 44, 98, 0.72));
+        --table-row-hover: light-dark(#dbeafe, rgba(29, 78, 216, 0.48));
         --solution-bg: light-dark(#ecfdf5, #064e3b);
         --solution-border: light-dark(#059669, #10b981);
         --solution-text: light-dark(#064e3b, #ecfdf5);
         --solution-title: light-dark(#047857, #34d399);
         --reject-reason: light-dark(#dc2626, #f87171);
-        --shadow-soft: light-dark(0 4px 16px rgba(15, 23, 42, 0.06), 0 6px 20px rgba(2, 6, 23, 0.42));
-        --shadow-glow: light-dark(0 6px 20px rgba(37, 99, 235, 0.16), 0 6px 22px rgba(56, 189, 248, 0.25));
+        --shadow-soft: light-dark(0 4px 16px rgba(29, 78, 216, 0.10), 0 6px 20px rgba(2, 6, 23, 0.42));
+        --shadow-glow: light-dark(0 6px 20px rgba(29, 78, 216, 0.22), 0 6px 22px rgba(56, 189, 248, 0.28));
     }
 
     @keyframes floatTrophy {
@@ -128,28 +128,35 @@ st.markdown("""
         font-size: 14px !important;
     }
 
-    /* Menu Cepat HP / Tablet: tampil di layar < 992px, tersembunyi di desktop >= 992px */
-    @media (min-width: 992px) {
+    /* Menu Cepat HP & Tablet (termasuk iPad portrait/landscape): tampil < 1200px, tersembunyi di desktop >= 1200px */
+    @media (min-width: 1200px) {
         .st-key-mobile_quick_nav {
             display: none !important;
         }
     }
-    @media (max-width: 991.98px) {
+    @media (max-width: 1199.98px) {
         .st-key-mobile_quick_nav {
+            background-color: #dbeafe;
             background: var(--bg-panel);
-            border: 1px solid var(--border-subtle);
+            border: 1.5px solid var(--metric-border);
+            border-left: 5px solid var(--border-accent);
             border-radius: 12px;
             padding: 12px 14px;
             margin-bottom: 14px;
             box-shadow: var(--shadow-soft);
         }
         .st-key-mobile_quick_nav div[data-testid="stButton"] > button {
-            min-height: 46px;
+            min-height: 44px;
             border-radius: 10px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 12.5px;
             padding: 8px 10px;
             margin-bottom: 4px;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+        .st-key-mobile_quick_nav div[data-testid="stButton"] > button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
         }
     }
 
@@ -198,6 +205,7 @@ st.markdown("""
     .st-key-panel_filter_bni,
     .st-key-panel_filter_reject,
     .st-key-panel_filter_guide {
+        background-color: #eff6ff;
         background: var(--bg-panel);
         border: 1px solid var(--border-subtle);
         border-left: 5px solid var(--border-accent);
@@ -225,8 +233,9 @@ st.markdown("""
         letter-spacing: 0.2px;
     }
     div[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
+        background-color: #ffffff;
         background: var(--bg-input) !important;
-        border: 1.5px solid var(--border-subtle) !important;
+        border: 1.5px solid var(--metric-border) !important;
         border-radius: 10px !important;
         transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1) !important;
     }
@@ -242,8 +251,9 @@ st.markdown("""
     }
 
     div[data-testid="stTextInput"] div[data-baseweb="input"] {
+        background-color: #ffffff;
         background: var(--bg-input) !important;
-        border: 1.5px solid var(--border-subtle) !important;
+        border: 1.5px solid var(--metric-border) !important;
         border-radius: 10px !important;
         transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1) !important;
     }
@@ -273,13 +283,15 @@ st.markdown("""
         margin: 0 0 12px 0;
     }
 
-    /* Kartu KPI & Metrik Adaptif */
+    /* Kartu KPI & Metrik Adaptif dengan Fallback Warna Biru Jelas */
     .metric-card {
+        background-color: #dbeafe;
         background: var(--metric-grad);
         padding: 18px 16px;
         border-radius: 12px;
         box-shadow: var(--shadow-soft);
-        border: 1px solid var(--metric-border);
+        border: 1.5px solid var(--metric-border);
+        border-top: 4px solid var(--border-accent);
         text-align: center;
         margin-bottom: 10px;
         transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
@@ -305,15 +317,18 @@ st.markdown("""
     .metric-sub {
         color: var(--metric-sub);
         font-size: 12px;
+        font-weight: 500;
     }
 
-    /* Kartu Per Bank Adaptif */
+    /* Kartu Per Bank / Persentase Adaptif dengan Fallback Warna Biru Jelas */
     .bank-card {
+        background-color: #dbeafe;
         background: var(--bank-grad);
         padding: 15px;
         border-radius: 12px;
         box-shadow: var(--shadow-soft);
-        border: 1px solid var(--border-subtle);
+        border: 1.5px solid var(--metric-border);
+        border-top: 4px solid var(--border-accent);
         text-align: center;
         margin-bottom: 8px;
         transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
@@ -327,7 +342,7 @@ st.markdown("""
     .bank-title {
         color: var(--bank-title);
         font-size: 15.5px;
-        font-weight: 700;
+        font-weight: 800;
     }
     .bank-rate {
         margin: 6px 0;
@@ -338,6 +353,7 @@ st.markdown("""
     .bank-sub {
         color: var(--bank-sub);
         font-size: 12px;
+        font-weight: 500;
     }
     .bank-badge {
         color: var(--bank-badge);
@@ -346,6 +362,7 @@ st.markdown("""
 
     /* Sales Leaderboard & Tabel Adaptif */
     .lb-panel {
+        background-color: #eff6ff;
         background: var(--bg-panel);
         border: 1px solid var(--border-subtle);
         border-radius: 14px;
@@ -366,6 +383,7 @@ st.markdown("""
         display: flex;
         align-items: center;
         justify-content: space-between;
+        background-color: #ffffff;
         background: var(--bg-card-elevated);
         border: 1px solid var(--border-subtle);
         border-radius: 10px;
@@ -415,6 +433,7 @@ st.markdown("""
         border: 1px solid var(--border-subtle);
         box-shadow: var(--shadow-soft);
         animation: fadeSlideUp 0.5s ease-out;
+        background-color: #ffffff;
         background: var(--bg-card-elevated);
     }
     .lb-table {
@@ -427,6 +446,7 @@ st.markdown("""
         position: sticky;
         top: 0;
         z-index: 2;
+        background-color: #1d4ed8;
         background: var(--table-head-grad);
         color: #ffffff !important;
         text-align: left;
@@ -464,9 +484,9 @@ st.markdown("""
         white-space: nowrap;
     }
     .pill-blue {
-        background: rgba(37, 99, 235, 0.14);
+        background: rgba(29, 78, 216, 0.14);
         color: var(--bank-title);
-        border: 1px solid rgba(37, 99, 235, 0.35);
+        border: 1px solid rgba(29, 78, 216, 0.35);
     }
     .pill-green {
         background: rgba(16, 185, 129, 0.15);
@@ -497,6 +517,7 @@ st.markdown("""
 
     /* Kartu Reject & BNI Adaptif */
     .reject-box {
+        background-color: #ffffff;
         background: var(--bg-card-elevated);
         padding: 18px 20px;
         border-radius: 12px;
@@ -519,6 +540,7 @@ st.markdown("""
         display: block;
     }
     .solution-box {
+        background-color: #ecfdf5;
         background: var(--solution-bg);
         padding: 13px 15px;
         border-radius: 9px;
@@ -533,6 +555,7 @@ st.markdown("""
     }
 
     .bni-box {
+        background-color: #ffffff;
         background: var(--bg-card-elevated);
         padding: 18px 20px;
         border-radius: 12px;
@@ -574,6 +597,7 @@ st.markdown("""
         margin-top: 6px;
     }
     .rekap-box {
+        background-color: #eff6ff;
         background: var(--bg-panel);
         padding: 16px 18px;
         border-radius: 12px;
@@ -1116,9 +1140,9 @@ def render_bottom5_styled_table(bottom5_df):
     return "".join(html_parts)
 
 def main():
-    # Menu Cepat khusus HP / Tablet (otomatis tersembunyi di desktop >= 992px & sinkron dua arah dengan sidebar)
+    # Menu Cepat khusus HP & Tablet (termasuk iPad portrait/landscape): tampil < 1200px, tersembunyi di desktop >= 1200px
     with st.container(key="mobile_quick_nav"):
-        st.markdown("<span style='font-weight:700; font-size:12.5px; color:var(--bank-title);'>AKSES CEPAT MENU (HP / TABLET)</span>", unsafe_allow_html=True)
+        st.markdown("<span style='font-weight:800; font-size:12.5px; color:var(--bank-title);'>AKSES CEPAT MENU (HP / TABLET)</span>", unsafe_allow_html=True)
         for row_start in range(0, len(DAFTAR_MENU), 3):
             cols = st.columns(3)
             for idx_col, nama_menu in enumerate(DAFTAR_MENU[row_start:row_start + 3]):
@@ -1597,11 +1621,11 @@ def main():
 
         s_c1, s_c2 = st.columns(2)
         with s_c1:
-            render_metric_card("Versi Aplikasi", "AUTOTEAM v8.0", "Adaptif Light / Dark Mode")
+            render_metric_card("Versi Aplikasi", "AUTOTEAM v8.1", "Adaptif Light / Dark Mode")
         with s_c2:
             render_metric_card("Total Data Tersinkron", total_data, "Live via Google Sheets")
 
-        st.write("Versi Web: **AUTOTEAM** (Autodebet Team Achievement & Monitoring) v8.0")
+        st.write("Versi Web: **AUTOTEAM** (Autodebet Team Achievement & Monitoring) v8.1")
         if is_live:
             st.success(f"Status: Terhubung Sempurna ke Google Sheets Database Utama — {total_data} Data")
         else:
