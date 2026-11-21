@@ -470,6 +470,7 @@ STATUS_TIDAK_AKTIF = {"C", "B"}
 STATUS_AKTIF = {"O", "F", "D", "A", "R", "E", "P"}
 
 AP_PAYMENT_WARNING_TEXT = "Mohon dilengkapi berkas yang kurang kemudian serahkan kembali ke AP Payment"
+AP_PAYMENT_WA_CATATAN = "*Catatan‼️ Mohon dilengkapi berkas yang kurang kemudian serahkan kembali ke AP Payment*"
 
 def map_status_label(code):
     c = str(code).upper().strip()
@@ -601,75 +602,65 @@ def extract_aging_tanggal(row):
         bagian.append(f"Golive {dt_golive}")
     return " | ".join(bagian) if bagian else "-"
 
-# Pesan WA Polos (Tanpa Emotikon) - Reject Satuan
+# Template Pesan WA Reject Tracking (Satuan & Tanda Seru !!)
+def build_wa_reject_template(row, include_ap_note=False):
+    sales = clean_text(row.get("Sales", ""), "Kak")
+    cust = clean_text(row.get("Customer", ""), "-")
+    nokon = clean_text(row.get("ID", ""), "-")
+    cabang_area = extract_cabang_area(row)
+    bank = clean_text(row.get("Bank", ""), "-")
+    aging_tgl = extract_aging_tanggal(row)
+    alasan = clean_text(row.get("Alasan Reject", ""), "Alasan belum tercantum")
+    solusi = clean_text(row.get("Solusi", ""), "-")
+
+    lines = [
+        f"Halo Kak {sales}, mohon bantuannya follow up reject autodebet customer berikut:",
+        "",
+        f"- Customer: {cust} ({nokon})",
+        f"- Cabang/Area: {cabang_area}",
+        f"- Bank: {bank}",
+        f"- Aging/Tanggal: {aging_tgl}",
+        f"- Alasan Reject: {alasan}",
+        f"- Solusi: {solusi}",
+    ]
+    if include_ap_note:
+        lines.extend(["", AP_PAYMENT_WA_CATATAN])
+    return "\n".join(lines)
+
 def build_wa_item_message(row):
-    sales = clean_text(row.get("Sales", ""), "Kak")
-    cust = clean_text(row.get("Customer", ""), "-")
-    nokon = clean_text(row.get("ID", ""), "-")
-    bank = clean_text(row.get("Bank", ""), "-")
-    cabang_area = extract_cabang_area(row)
-    aging_tgl = extract_aging_tanggal(row)
-    alasan = clean_text(row.get("Alasan Reject", ""), "Alasan belum tercantum")
-    solusi = clean_text(row.get("Solusi", ""), "-")
-    return "\n".join([
-        f"Halo Kak {sales}, mohon bantuannya follow up reject autodebet customer berikut:",
-        "",
-        f"- Customer: {cust} ({nokon})",
-        f"- Cabang/Area: {cabang_area}",
-        f"- Bank: {bank}",
-        f"- Aging/Tanggal: {aging_tgl}",
-        f"- Alasan Reject: {alasan}",
-        f"- Solusi: {solusi}",
-    ])
+    return build_wa_reject_template(row, include_ap_note=False)
 
-# Pesan WA Polos (Tanpa Emotikon) - Klik Tanda Seru (!!) AP Payment per Item
 def build_wa_ap_payment_message(row):
-    sales = clean_text(row.get("Sales", ""), "Kak")
-    cust = clean_text(row.get("Customer", ""), "-")
-    nokon = clean_text(row.get("ID", ""), "-")
-    bank = clean_text(row.get("Bank", ""), "-")
-    cabang_area = extract_cabang_area(row)
-    aging_tgl = extract_aging_tanggal(row)
-    alasan = clean_text(row.get("Alasan Reject", ""), "Alasan belum tercantum")
-    solusi = clean_text(row.get("Solusi", ""), "-")
-    return "\n".join([
-        f"Halo Kak {sales}, mohon bantuannya follow up reject autodebet customer berikut:",
-        "",
-        f"- Customer: {cust} ({nokon})",
-        f"- Cabang/Area: {cabang_area}",
-        f"- Bank: {bank}",
-        f"- Aging/Tanggal: {aging_tgl}",
-        f"- Alasan Reject: {alasan}",
-        f"- Solusi: {solusi}",
-        f"- Catatan AP Payment: {AP_PAYMENT_WARNING_TEXT}",
-    ])
+    return build_wa_reject_template(row, include_ap_note=True)
 
-# Pesan WA Polos (Tanpa Emotikon) - Reject Rekap per Sales
+# Template Pesan WA Reject Tracking (Rekap per Sales)
 def build_wa_rekap_message(df_rekap, nama_sales="Sales"):
     if df_rekap.empty:
         return ""
     sapaan = f"Halo Kak {nama_sales}," if nama_sales and nama_sales != "SEMUA SALES" else "Halo Tim Sales,"
-    lines = [sapaan, "Berikut daftar customer reject yang perlu segera di follow up:", ""]
+    lines = [sapaan, "Mohon bantuannya follow up reject autodebet customer berikut:", ""]
     for idx, (_, row) in enumerate(df_rekap.iterrows(), start=1):
         cust = clean_text(row.get("Customer", ""), "-")
         nokon = clean_text(row.get("ID", ""), "-")
-        bank = clean_text(row.get("Bank", ""), "-")
         cabang_area = extract_cabang_area(row)
+        bank = clean_text(row.get("Bank", ""), "-")
         aging_tgl = extract_aging_tanggal(row)
         alasan = clean_text(row.get("Alasan Reject", ""), "Alasan belum tercantum")
         solusi = clean_text(row.get("Solusi", ""), "-")
         sales_item = clean_text(row.get("Sales", ""), "-")
-        baris_sales = f"\n   Sales: {sales_item}" if nama_sales == "SEMUA SALES" else ""
+        baris_sales = f"\n  Sales: {sales_item}" if nama_sales == "SEMUA SALES" else ""
         lines.append(
-            f"{idx}. *{cust}* ({nokon}){baris_sales}\n"
-            f"   Cabang/Area: {cabang_area}\n"
-            f"   Bank: {bank}\n"
-            f"   Aging/Tanggal: {aging_tgl}\n"
-            f"   Alasan: {alasan}\n"
-            f"   Solusi: {solusi}\n"
+            f"{idx}. {cust} ({nokon}){baris_sales}\n"
+            f"- Customer: {cust} ({nokon})\n"
+            f"- Cabang/Area: {cabang_area}\n"
+            f"- Bank: {bank}\n"
+            f"- Aging/Tanggal: {aging_tgl}\n"
+            f"- Alasan Reject: {alasan}\n"
+            f"- Solusi: {solusi}\n"
         )
     return "\n".join(lines).strip()
 
+# BNI Autodebet Tracking (Tidak Diubah)
 def build_wa_bni_item_message(row):
     sales = clean_text(row.get("Sales", ""), "Kak")
     cust = clean_text(row.get("Customer", ""), "-")
@@ -741,7 +732,7 @@ def load_data_sheets():
             continue
 
     fallback = pd.DataFrame([
-        {"ID": "REG-001", "Customer": "HENRI", "Bank": "BRI", "Sales": "RESKYANTO PUNDA", "Status_Code": "R", "Status": "Rejected", "Keaktifan": "Aktif", "Alasan Reject": "Phone number is not correct", "Solusi": get_solusi_reject("Phone number is not correct"), "CABANG": "MAKASSAR", "AREA NEW": "Area 5", "Aging": "7"}
+        {"ID": "1600801003449078", "Customer": "HENRI", "Bank": "BRI", "Sales": "RESKYANTO PUNDA", "Status_Code": "R", "Status": "Rejected", "Keaktifan": "Aktif", "Alasan Reject": "Phone number is not correct", "Solusi": get_solusi_reject("Phone number is not correct"), "CABANG": "MAKASSAR", "AREA NEW": "Area 5", "Aging": "7", "DT_GOLIVE": "10/11/2026"}
     ])
     return fallback, False
 
@@ -1322,7 +1313,7 @@ def main():
                 url_rekap_sales = f"https://wa.me/?text={urllib.parse.quote(pesan_rekap_sales)}"
                 st.markdown(
                     f'<div class="rekap-box"><strong style="font-size:16px;">Opsi Rekap Sekaligus untuk {html.escape(pilih_sales)} ({len(df_view)} Nasabah)</strong><br>'
-                    f'<small>Menggabungkan seluruh {len(df_view)} nasabah reject milik {html.escape(pilih_sales)} ke dalam 1 pesan WA polos bernomor.</small></div>',
+                    f'<small>Menggabungkan seluruh {len(df_view)} nasabah reject milik {html.escape(pilih_sales)} ke dalam 1 pesan WA bernomor.</small></div>',
                     unsafe_allow_html=True
                 )
                 col_r1, col_r2 = st.columns([1.4, 2.6])
@@ -1383,7 +1374,7 @@ def main():
     elif halaman_aktif == "🔧 Settings":
         render_page_banner("⚡ AUTOTEAM — Pengaturan Sistem & Database", "Informasi koneksi Google Sheets utama, akses pengelolaan data, dan backup rekap Excel.")
         s_c1, s_c2 = st.columns(2)
-        with s_c1: render_metric_card("Versi Aplikasi", "AUTOTEAM v8.6", "Adaptif Light / Dark Mode")
+        with s_c1: render_metric_card("Versi Aplikasi", "AUTOTEAM v8.7", "Adaptif Light / Dark Mode")
         with s_c2: render_metric_card("Total Data Tersinkron", total_data, "Live via Google Sheets")
 
         if st.button("🔄 Refresh Data dari Google Sheets Sekarang"):
