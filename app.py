@@ -361,19 +361,34 @@ st.markdown("""
         font-size: 13.5px;
         font-weight: 700;
     }
+    a.ap-bang-link {
+        text-decoration: none !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
     .ap-bang-icon {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         background: rgba(220, 38, 38, 0.16);
         color: var(--ap-bang-color);
-        border: 1px solid rgba(220, 38, 38, 0.45);
+        border: 1.5px solid rgba(220, 38, 38, 0.55);
         border-radius: 7px;
-        padding: 2px 8px;
+        padding: 3px 9px;
         font-weight: 900;
         font-size: 13.5px;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: transform 0.16s ease, background-color 0.16s ease, box-shadow 0.16s ease;
         animation: warnPulse 2.2s infinite ease-in-out;
-        flex-shrink: 0;
+    }
+    a.ap-bang-link:hover .ap-bang-icon {
+        background: #dc2626;
+        color: #ffffff;
+        transform: scale(1.1);
+        box-shadow: 0 3px 10px rgba(220, 38, 38, 0.35);
     }
 
     .accone-note-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
@@ -453,6 +468,8 @@ KAMUS_STATUS = {
 }
 STATUS_TIDAK_AKTIF = {"C", "B"}
 STATUS_AKTIF = {"O", "F", "D", "A", "R", "E", "P"}
+
+AP_PAYMENT_WARNING_TEXT = "Mohon dilengkapi berkas yang kurang kemudian serahkan kembali ke AP Payment"
 
 def map_status_label(code):
     c = str(code).upper().strip()
@@ -584,6 +601,7 @@ def extract_aging_tanggal(row):
         bagian.append(f"Golive {dt_golive}")
     return " | ".join(bagian) if bagian else "-"
 
+# Pesan WA Polos (Tanpa Emotikon) - Reject Satuan
 def build_wa_item_message(row):
     sales = clean_text(row.get("Sales", ""), "Kak")
     cust = clean_text(row.get("Customer", ""), "-")
@@ -604,6 +622,29 @@ def build_wa_item_message(row):
         f"- Solusi: {solusi}",
     ])
 
+# Pesan WA Polos (Tanpa Emotikon) - Klik Tanda Seru (!!) AP Payment per Item
+def build_wa_ap_payment_message(row):
+    sales = clean_text(row.get("Sales", ""), "Kak")
+    cust = clean_text(row.get("Customer", ""), "-")
+    nokon = clean_text(row.get("ID", ""), "-")
+    bank = clean_text(row.get("Bank", ""), "-")
+    cabang_area = extract_cabang_area(row)
+    aging_tgl = extract_aging_tanggal(row)
+    alasan = clean_text(row.get("Alasan Reject", ""), "Alasan belum tercantum")
+    solusi = clean_text(row.get("Solusi", ""), "-")
+    return "\n".join([
+        f"Halo Kak {sales}, mohon bantuannya follow up reject autodebet customer berikut:",
+        "",
+        f"- Customer: {cust} ({nokon})",
+        f"- Cabang/Area: {cabang_area}",
+        f"- Bank: {bank}",
+        f"- Aging/Tanggal: {aging_tgl}",
+        f"- Alasan Reject: {alasan}",
+        f"- Solusi: {solusi}",
+        f"- Catatan AP Payment: {AP_PAYMENT_WARNING_TEXT}",
+    ])
+
+# Pesan WA Polos (Tanpa Emotikon) - Reject Rekap per Sales
 def build_wa_rekap_message(df_rekap, nama_sales="Sales"):
     if df_rekap.empty:
         return ""
@@ -895,6 +936,8 @@ def render_reject_card_item(idx, row, df_view, is_contacted):
     item_key = f"{id_teks}_{cust_teks}_{idx}"
 
     wa_item_url = f"https://wa.me/?text={urllib.parse.quote(build_wa_item_message(row))}"
+    wa_ap_url = f"https://wa.me/?text={urllib.parse.quote(build_wa_ap_payment_message(row))}"
+
     df_sales_ini = df_view[df_view["Sales"] == row.get("Sales", "")]
     jml_sales_ini = len(df_sales_ini)
     wa_sales_group_url = f"https://wa.me/?text={urllib.parse.quote(build_wa_rekap_message(df_sales_ini, sales_nama))}"
@@ -903,10 +946,12 @@ def render_reject_card_item(idx, row, df_view, is_contacted):
     warn_html = ""
     if not is_contacted:
         warn_html = (
-            '<div class="ap-payment-alert">'
-            '<span class="ap-bang-icon">!!</span>'
-            '<span>Mohon dilengkapi berkas yang kurang kemudian serahkan kembali ke AP Payment</span>'
-            '</div>'
+            f'<div class="ap-payment-alert">'
+            f'<a class="ap-bang-link" href="{wa_ap_url}" target="_blank" title="Klik tanda seru untuk kirim pesan WA beserta catatan AP Payment">'
+            f'<span class="ap-bang-icon">!!</span>'
+            f'</a>'
+            f'<span>{html.escape(AP_PAYMENT_WARNING_TEXT)}</span>'
+            f'</div>'
         )
 
     card_html = (
@@ -1291,7 +1336,7 @@ def main():
             st.markdown(
                 f'<div class="reject-group-banner reject-group-pending"><div>'
                 f'<strong style="font-size:16px; color:var(--text-primary);">⏳ List Customer Reject — Belum Dihubungi ({len(belum_dihubungi_items)} Data)</strong><br>'
-                f'<small style="color:var(--text-secondary);">Memuat peringatan kelengkapan berkas & penyerahan kembali ke AP Payment.</small></div>'
+                f'<small style="color:var(--text-secondary);">Klik tanda seru (!!) untuk kirim pesan WA beserta catatan AP Payment sesuai data nasabah.</small></div>'
                 f'<span class="rej-pill">{len(belum_dihubungi_items)} Belum Dihubungi</span></div>',
                 unsafe_allow_html=True
             )
@@ -1338,7 +1383,7 @@ def main():
     elif halaman_aktif == "🔧 Settings":
         render_page_banner("⚡ AUTOTEAM — Pengaturan Sistem & Database", "Informasi koneksi Google Sheets utama, akses pengelolaan data, dan backup rekap Excel.")
         s_c1, s_c2 = st.columns(2)
-        with s_c1: render_metric_card("Versi Aplikasi", "AUTOTEAM v8.5", "Adaptif Light / Dark Mode")
+        with s_c1: render_metric_card("Versi Aplikasi", "AUTOTEAM v8.6", "Adaptif Light / Dark Mode")
         with s_c2: render_metric_card("Total Data Tersinkron", total_data, "Live via Google Sheets")
 
         if st.button("🔄 Refresh Data dari Google Sheets Sekarang"):
