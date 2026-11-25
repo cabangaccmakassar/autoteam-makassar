@@ -441,6 +441,16 @@ st.markdown("""
         color: var(--text-primary);
         box-shadow: var(--shadow-soft);
     }
+    .recap-all-box {
+        background: var(--bg-panel);
+        padding: 16px 18px;
+        border-radius: 12px;
+        border: 1px solid var(--border-subtle);
+        border-left: 5px solid #0284c7;
+        margin-bottom: 14px;
+        color: var(--text-primary);
+        box-shadow: var(--shadow-soft);
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -660,6 +670,35 @@ def build_wa_rekap_message(df_rekap, nama_sales="Sales"):
         )
     return "\n".join(lines).strip()
 
+# Fitur Baru: Recap All Seluruh Data Reject (Semua Sales Digabung dalam 1 Pesan)
+def build_wa_recap_all_reject_message(df_reject_all):
+    if df_reject_all.empty:
+        return ""
+    lines = [
+        "Halo Tim Sales,",
+        f"Berikut recap all data reject autodebet seluruh sales ({len(df_reject_all)} nasabah) untuk segera difollow up:",
+        ""
+    ]
+    for idx, (_, row) in enumerate(df_reject_all.iterrows(), start=1):
+        sales_item = clean_text(row.get("Sales", ""), "-")
+        cust = clean_text(row.get("Customer", ""), "-")
+        nokon = clean_text(row.get("ID", ""), "-")
+        cabang_area = extract_cabang_area(row)
+        bank = clean_text(row.get("Bank", ""), "-")
+        aging_tgl = extract_aging_tanggal(row)
+        alasan = clean_text(row.get("Alasan Reject", ""), "Alasan belum tercantum")
+        solusi = clean_text(row.get("Solusi", ""), "-")
+        lines.append(
+            f"{idx}. Sales: {sales_item}\n"
+            f"- Customer: {cust} ({nokon})\n"
+            f"- Cabang/Area: {cabang_area}\n"
+            f"- Bank: {bank}\n"
+            f"- Aging/Tanggal: {aging_tgl}\n"
+            f"- Alasan Reject: {alasan}\n"
+            f"- Solusi: {solusi}\n"
+        )
+    return "\n".join(lines).strip()
+
 # BNI Autodebet Tracking (Tidak Diubah)
 def build_wa_bni_item_message(row):
     sales = clean_text(row.get("Sales", ""), "Kak")
@@ -692,6 +731,31 @@ def build_wa_bni_rekap_message(df_bni, nama_sales="Sales"):
         baris_sales = f"\n   Sales: {sales_item}" if nama_sales == "SEMUA SALES" else ""
         lines.append(
             f"{idx}. *{cust}* ({nokon}){baris_sales}\n"
+            f"   Cabang/Area: {cabang_area}\n"
+            f"   Bank: BNI | Status: D (Pengajuan ke Bank)\n"
+            f"   Aging/Tanggal: {aging_tgl}\n"
+            f"   Arahan: Pengaktifan ACC ONE oleh nasabah dengan arahan Sales.\n"
+        )
+    return "\n".join(lines).strip()
+
+# Fitur Baru: Recap All Khusus BNI Status D (Terpisah dari Reject & Bank Lain)
+def build_wa_recap_all_bni_message(df_bni_all):
+    if df_bni_all.empty:
+        return ""
+    lines = [
+        "Halo Tim Sales,",
+        f"Berikut recap all khusus nasabah BNI status D (Pengajuan ke Bank) seluruh sales ({len(df_bni_all)} nasabah) yang wajib diarahkan untuk pengaktifan ACC ONE:",
+        ""
+    ]
+    for idx, (_, row) in enumerate(df_bni_all.iterrows(), start=1):
+        sales_item = clean_text(row.get("Sales", ""), "-")
+        cust = clean_text(row.get("Customer", ""), "-")
+        nokon = clean_text(row.get("ID", ""), "-")
+        cabang_area = extract_cabang_area(row)
+        aging_tgl = extract_aging_tanggal(row)
+        lines.append(
+            f"{idx}. *{cust}* ({nokon})\n"
+            f"   Sales: {sales_item}\n"
             f"   Cabang/Area: {cabang_area}\n"
             f"   Bank: BNI | Status: D (Pengajuan ke Bank)\n"
             f"   Aging/Tanggal: {aging_tgl}\n"
@@ -1148,7 +1212,9 @@ def main():
         tab_mon_bni, tab_guide_accone = st.tabs(["📋 Monitoring BNI Status D", "📌 Panduan Reject ACC ONE"])
 
         with tab_mon_bni:
-            df_bni_d = df_tracking[(df_tracking["Bank"] == "BNI") & (df_tracking["Status_Code"] == "D")].copy()
+            df_bni_d_all = df_tracking[(df_tracking["Bank"] == "BNI") & (df_tracking["Status_Code"] == "D")].copy()
+            df_bni_d = df_bni_d_all.copy()
+
             with st.container(key="panel_filter_bni"):
                 st.markdown(
                     "<div class='section-panel-title'><span>🎛️ Filter Nasabah BNI Status D</span><span class='filter-chip-badge'>🏛️ BNI ACC ONE Filter</span></div>"
@@ -1157,7 +1223,7 @@ def main():
                 )
                 f_b1, f_b2 = st.columns([2, 1.5])
                 with f_b1:
-                    sales_bni_list = sorted([s for s in df_bni_d["Sales"].unique() if s not in ["", "-"]])
+                    sales_bni_list = sorted([s for s in df_bni_d_all["Sales"].unique() if s not in ["", "-"]])
                     opsi_sales_bni = ["SEMUA SALES"] + list(dict.fromkeys([s for s in DAFTAR_SALES_MAKASSAR if s in sales_bni_list] + sales_bni_list))
                     pilih_sales_bni = st.selectbox("Pilih Nama Sales (BNI Status D):", opsi_sales_bni, key="bni_sales_select")
                 with f_b2:
@@ -1181,6 +1247,25 @@ def main():
             with b_k3: render_metric_card("Sudah Dihubungi (ACC ONE)", sudah_hubungi, "Tercatat pada sesi ini")
 
             st.markdown("---")
+            if not df_bni_d_all.empty:
+                pesan_recap_all_bni = build_wa_recap_all_bni_message(df_bni_d_all)
+                url_recap_all_bni = f"https://wa.me/?text={urllib.parse.quote(pesan_recap_all_bni)}"
+                st.markdown(
+                    f'<div class="recap-all-box"><strong style="font-size:16px;">Recap All Khusus BNI Status D — Seluruh Sales ({len(df_bni_d_all)} Nasabah)</strong><br>'
+                    f'<small>Khusus nasabah BNI berstatus D (Pengajuan ke Bank) saja agar tidak tercampur dengan data reject atau bank lain.</small></div>',
+                    unsafe_allow_html=True
+                )
+                col_ba1, col_ba2 = st.columns([1.5, 2.5])
+                with col_ba1:
+                    st.markdown(
+                        f'<a href="{url_recap_all_bni}" target="_blank"><button style="background-color:#0284c7; color:white; border:none; padding:10px 18px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim Recap All BNI ({len(df_bni_d_all)} Nasabah)</button></a>',
+                        unsafe_allow_html=True
+                    )
+                with col_ba2:
+                    with st.expander("Lihat / Salin Teks Recap All Khusus BNI Status D"):
+                        st.text_area("Teks Recap All BNI Status D", value=pesan_recap_all_bni, height=200, label_visibility="collapsed")
+                st.markdown("---")
+
             if df_bni_d.empty:
                 st.info("Tidak ada nasabah BNI berstatus D (Pengajuan ke Bank) untuk filter saat ini.")
             else:
@@ -1266,6 +1351,8 @@ def main():
 
     elif halaman_aktif == "⚠️ Reject Tracking":
         render_page_banner("⚡ AUTOTEAM — Reject Tracking", "Pusat pemantauan dan pengelolaan penolakan (Rejected / R) penagihan autodebet nasabah.")
+        df_reject_all = df_tracking[df_tracking["Status_Code"] == "R"].copy()
+
         with st.container(key="panel_filter_reject"):
             st.markdown(
                 "<div class='section-panel-title'><span>🎛️ Filter & Pencarian Tanggungan Reject</span><span class='filter-chip-badge'>⚠️ Follow Up & AP Payment</span></div>"
@@ -1280,7 +1367,7 @@ def main():
             with col_f2:
                 search_box = st.text_input("Cari Nama / No. Kontrak:", placeholder="Ketik nama customer atau NOKON...", key="rej_search_input")
 
-        df_view = df_tracking[df_tracking["Status_Code"] == "R"].copy()
+        df_view = df_reject_all.copy()
         if pilih_sales != "SEMUA SALES":
             df_view = df_view[df_view["Sales"].str.upper() == pilih_sales.upper()]
         if search_box:
@@ -1306,6 +1393,25 @@ def main():
         st.markdown("---")
         st.info("Akses Database Pusat: Untuk mengelola, menambah, atau menghapus data secara langsung, silakan buka Google Sheets utama.")
         st.markdown(f'<a href="{SHEET_EDIT_URL}" target="_blank"><button style="background-color:#10b981; color:white; border:none; padding:10px 20px; border-radius:8px; font-weight:700; cursor:pointer;">Buka Google Sheets Database Utama</button></a>', unsafe_allow_html=True)
+
+        if len(df_reject_all) > 0:
+            pesan_recap_all_rej = build_wa_recap_all_reject_message(df_reject_all)
+            url_recap_all_rej = f"https://wa.me/?text={urllib.parse.quote(pesan_recap_all_rej)}"
+            st.markdown(
+                f'<div class="recap-all-box"><strong style="font-size:16px;">Recap All Reject — Seluruh Data Sales Digabung ({len(df_reject_all)} Nasabah)</strong><br>'
+                f'<small>Menggabungkan seluruh data reject semua sales ke dalam 1 pesan WA sekaligus untuk dikirim ke grup sales.</small></div>',
+                unsafe_allow_html=True
+            )
+            col_ra1, col_ra2 = st.columns([1.5, 2.5])
+            with col_ra1:
+                st.markdown(
+                    f'<a href="{url_recap_all_rej}" target="_blank"><button style="background-color:#0284c7; color:white; border:none; padding:10px 18px; border-radius:8px; font-weight:700; cursor:pointer;">Kirim Recap All Reject ({len(df_reject_all)} Nasabah)</button></a>',
+                    unsafe_allow_html=True
+                )
+            with col_ra2:
+                with st.expander("Lihat / Salin Teks Recap All Reject (Semua Sales)"):
+                    st.text_area("Teks Recap All Reject", value=pesan_recap_all_rej, height=220, label_visibility="collapsed")
+            st.markdown("---")
 
         if len(df_view) > 0:
             if pilih_sales != "SEMUA SALES" and len(df_view) > 1:
@@ -1374,7 +1480,7 @@ def main():
     elif halaman_aktif == "🔧 Settings":
         render_page_banner("⚡ AUTOTEAM — Pengaturan Sistem & Database", "Informasi koneksi Google Sheets utama, akses pengelolaan data, dan backup rekap Excel.")
         s_c1, s_c2 = st.columns(2)
-        with s_c1: render_metric_card("Versi Aplikasi", "AUTOTEAM v8.7", "Adaptif Light / Dark Mode")
+        with s_c1: render_metric_card("Versi Aplikasi", "AUTOTEAM v8.8", "Adaptif Light / Dark Mode")
         with s_c2: render_metric_card("Total Data Tersinkron", total_data, "Live via Google Sheets")
 
         if st.button("🔄 Refresh Data dari Google Sheets Sekarang"):
