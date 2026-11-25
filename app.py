@@ -3,6 +3,7 @@ import pandas as pd
 import io
 import html
 import urllib.parse
+import requests
 
 st.set_page_config(
     page_title="AUTOTEAM - Autodebet Team Achievement & Monitoring",
@@ -456,6 +457,7 @@ st.markdown("""
 
 SHEET_ID = "1_WjXj0lShrzkXDDfJQQdwCZ_2yizmigA562GdtFxXEw"
 SHEET_EDIT_URL = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/edit"
+APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNVO9zOFqwpjLjbUE9eFynaUJv_fhI4T3trybDFKVolInPxZXV_KzqAZ6--ZGHuvY/exec"
 
 DAFTAR_SALES_MAKASSAR = [
     "RESKYANTO PUNDA", "NURUL AZIZAH", "NUR RAHMADANI", "FITRIYANTI MUIS",
@@ -612,7 +614,6 @@ def extract_aging_tanggal(row):
         bagian.append(f"Golive {dt_golive}")
     return " | ".join(bagian) if bagian else "-"
 
-# Template Pesan WA Reject Tracking (Satuan & Tanda Seru !!)
 def build_wa_reject_template(row, include_ap_note=False):
     sales = clean_text(row.get("Sales", ""), "Kak")
     cust = clean_text(row.get("Customer", ""), "-")
@@ -643,7 +644,6 @@ def build_wa_item_message(row):
 def build_wa_ap_payment_message(row):
     return build_wa_reject_template(row, include_ap_note=True)
 
-# Template Pesan WA Reject Tracking (Rekap per Sales)
 def build_wa_rekap_message(df_rekap, nama_sales="Sales"):
     if df_rekap.empty:
         return ""
@@ -670,7 +670,6 @@ def build_wa_rekap_message(df_rekap, nama_sales="Sales"):
         )
     return "\n".join(lines).strip()
 
-# Fitur Baru: Recap All Seluruh Data Reject (Semua Sales Digabung dalam 1 Pesan)
 def build_wa_recap_all_reject_message(df_reject_all):
     if df_reject_all.empty:
         return ""
@@ -699,7 +698,6 @@ def build_wa_recap_all_reject_message(df_reject_all):
         )
     return "\n".join(lines).strip()
 
-# BNI Autodebet Tracking (Tidak Diubah)
 def build_wa_bni_item_message(row):
     sales = clean_text(row.get("Sales", ""), "Kak")
     cust = clean_text(row.get("Customer", ""), "-")
@@ -738,7 +736,6 @@ def build_wa_bni_rekap_message(df_bni, nama_sales="Sales"):
         )
     return "\n".join(lines).strip()
 
-# Fitur Baru: Recap All Khusus BNI Status D (Terpisah dari Reject & Bank Lain)
 def build_wa_recap_all_bni_message(df_bni_all):
     if df_bni_all.empty:
         return ""
@@ -763,7 +760,31 @@ def build_wa_recap_all_bni_message(df_bni_all):
         )
     return "\n".join(lines).strip()
 
-@st.cache_data(ttl=120)
+def sync_status_hubung_to_sheet(nokon, checked):
+    n_clean = str(nokon).strip()
+    if not n_clean or n_clean == "-":
+        return False, "No. kontrak kosong."
+    if not APPS_SCRIPT_URL.strip():
+        return False, "APPS_SCRIPT_URL belum diisi."
+    try:
+        resp = requests.post(
+            APPS_SCRIPT_URL.strip(),
+            json={"nokon": n_clean, "status": "YA" if checked else ""},
+            timeout=15
+        )
+        if resp.status_code == 200:
+            payload = resp.json() if resp.text else {}
+            if payload.get("ok"):
+                return True, ""
+            return False, payload.get("error") or "NOKON tidak ditemukan di Google Sheets."
+        return False, f"HTTP {resp.status_code}"
+    except Exception as exc:
+        return False, str(exc)
+
+def is_hubungi_checked_val(val):
+    return str(val).strip().upper() in {"YA", "Y", "TRUE", "1", "SUDAH", "SUDAH DIHUBUNGI", "DONE"}
+
+@st.cache_data(ttl=60)
 def load_data_sheets():
     urls = [
         f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Tracking",
@@ -791,21 +812,39 @@ def load_data_sheets():
             df["Keaktifan"] = df["Status_Code"].apply(map_keaktifan_label)
             df["Alasan Reject"] = df["REASON REJECT"].str.strip() if "REASON REJECT" in df.columns else df.get("Alasan Reject", "")
             df["Solusi"] = df["Alasan Reject"].apply(get_solusi_reject)
+            if "STATUS_HUBUNG" in df.columns:
+                df["STATUS_HUBUNG"] = df["STATUS_HUBUNG"].astype(str).str.strip()
+            elif "STATUS_HUBUNGI" in df.columns:
+                df["STATUS_HUBUNG"] = df["STATUS_HUBUNGI"].astype(str).str.strip()
+            else:
+                df["STATUS_HUBUNG"] = ""
             return df, True
         except Exception:
             continue
 
     fallback = pd.DataFrame([
-        {"ID": "1600801003449078", "Customer": "HENRI", "Bank": "BRI", "Sales": "RESKYANTO PUNDA", "Status_Code": "R", "Status": "Rejected", "Keaktifan": "Aktif", "Alasan Reject": "Phone number is not correct", "Solusi": get_solusi_reject("Phone number is not correct"), "CABANG": "MAKASSAR", "AREA NEW": "Area 5", "Aging": "7", "DT_GOLIVE": "10/11/2026"}
+        {"ID": "1600801003449078", "Customer": "HENRI", "Bank": "BRI", "Sales": "RESKYANTO PUNDA", "Status_Code": "R", "Status": "Rejected", "Keaktifan": "Aktif", "Alasan Reject": "Phone number is not correct", "Solusi": get_solusi_reject("Phone number is not correct"), "CABANG": "MAKASSAR", "AREA NEW": "Area 5", "Aging": "7", "DT_GOLIVE": "10/11/2026", "STATUS_HUBUNG": ""}
     ])
     return fallback, False
 
 df_tracking, is_live = load_data_sheets()
 
-if "bni_contacted_keys" not in st.session_state:
-    st.session_state.bni_contacted_keys = set()
-if "reject_contacted_keys" not in st.session_state:
-    st.session_state.reject_contacted_keys = set()
+def build_item_key(row, idx):
+    nokon_clean = clean_text(row.get("ID", ""), "").replace(" ", "")
+    if nokon_clean:
+        return nokon_clean
+    return f"{clean_text(row.get('Customer', ''))}_{idx}"
+
+def sync_contacted_from_sheet(df):
+    sheet_checked = {
+        build_item_key(r, idx)
+        for idx, r in df.iterrows()
+        if is_hubungi_checked_val(r.get("STATUS_HUBUNG", ""))
+    }
+    st.session_state.reject_contacted_keys = set(sheet_checked)
+    st.session_state.bni_contacted_keys = set(sheet_checked)
+
+sync_contacted_from_sheet(df_tracking)
 
 DAFTAR_MENU = [
     "🎯 Home Dashboard",
@@ -831,17 +870,27 @@ if "sidebar_nav" not in st.session_state:
 elif st.session_state["sidebar_nav"] != st.session_state["active_menu"]:
     st.session_state["sidebar_nav"] = st.session_state["active_menu"]
 
-def toggle_reject_contacted(item_key, widget_key):
-    if st.session_state.get(widget_key):
+def toggle_reject_contacted(item_key, nokon_val, widget_key):
+    checked = bool(st.session_state.get(widget_key))
+    if checked:
         st.session_state.reject_contacted_keys.add(item_key)
     else:
         st.session_state.reject_contacted_keys.discard(item_key)
+    ok, msg = sync_status_hubung_to_sheet(nokon_val, checked)
+    st.session_state["last_sync_status"] = (ok, msg)
+    if ok:
+        load_data_sheets.clear()
 
-def toggle_bni_contacted(item_key, widget_key):
-    if st.session_state.get(widget_key):
+def toggle_bni_contacted(item_key, nokon_val, widget_key):
+    checked = bool(st.session_state.get(widget_key))
+    if checked:
         st.session_state.bni_contacted_keys.add(item_key)
     else:
         st.session_state.bni_contacted_keys.discard(item_key)
+    ok, msg = sync_status_hubung_to_sheet(nokon_val, checked)
+    st.session_state["last_sync_status"] = (ok, msg)
+    if ok:
+        load_data_sheets.clear()
 
 st.sidebar.markdown(
     '<div style="padding: 6px 2px 2px 2px;">'
@@ -988,7 +1037,7 @@ def render_reject_card_item(idx, row, df_view, is_contacted):
     id_teks = clean_text(row.get("ID", ""))
     status_teks = clean_text(row.get("Status", "Rejected"))
     code_teks = clean_text(row.get("Status_Code", "R"))
-    item_key = f"{id_teks}_{cust_teks}_{idx}"
+    item_key = build_item_key(row, idx)
 
     wa_item_url = f"https://wa.me/?text={urllib.parse.quote(build_wa_item_message(row))}"
     wa_ap_url = f"https://wa.me/?text={urllib.parse.quote(build_wa_ap_payment_message(row))}"
@@ -1031,7 +1080,7 @@ def render_reject_card_item(idx, row, df_view, is_contacted):
                 value=is_contacted,
                 key=w_key,
                 on_change=toggle_reject_contacted,
-                args=(item_key, w_key)
+                args=(item_key, id_teks, w_key)
             )
             if is_contacted:
                 st.markdown('<div class="ceklis-badge">✓ Sudah Dihubungi</div>', unsafe_allow_html=True)
@@ -1125,10 +1174,10 @@ def main():
 
         st.markdown("---")
         st.subheader("Master Data Nasabah & Status Tracking (Live from Google Sheets)")
-        kolom_tampil = [c for c in ["NOKON", "NAMA_CUST", "CABANG", "NAME_SO", "BANK_AUTODEBET", "STATUS PENDAFTARAN", "Status", "Keaktifan", "REASON REJECT"] if c in df_tracking.columns]
+        kolom_tampil = [c for c in ["NOKON", "NAMA_CUST", "CABANG", "NAME_SO", "BANK_AUTODEBET", "STATUS PENDAFTARAN", "Status", "Keaktifan", "REASON REJECT", "STATUS_HUBUNG"] if c in df_tracking.columns]
         render_styled_html_table(
             df_tracking[kolom_tampil] if kolom_tampil else df_tracking,
-            col_labels={"NOKON": "No. Kontrak", "NAMA_CUST": "Nama Customer", "CABANG": "Cabang", "NAME_SO": "Sales", "BANK_AUTODEBET": "Bank", "STATUS PENDAFTARAN": "Kode", "REASON REJECT": "Alasan Reject"},
+            col_labels={"NOKON": "No. Kontrak", "NAMA_CUST": "Nama Customer", "CABANG": "Cabang", "NAME_SO": "Sales", "BANK_AUTODEBET": "Bank", "STATUS PENDAFTARAN": "Kode", "REASON REJECT": "Alasan Reject", "STATUS_HUBUNG": "Status Hubung"},
             max_rows=200
         )
 
@@ -1239,12 +1288,17 @@ def main():
 
             sudah_hubungi = sum(
                 1 for idx, r in df_bni_d.iterrows()
-                if f"{clean_text(r.get('ID', ''))}_{clean_text(r.get('Customer', ''))}_{idx}" in st.session_state.bni_contacted_keys
+                if build_item_key(r, idx) in st.session_state.bni_contacted_keys
             )
             b_k1, b_k2, b_k3 = st.columns(3)
             with b_k1: render_metric_card("Nasabah BNI Status D", len(df_bni_d), "Pengajuan ke Bank")
             with b_k2: render_metric_card("Jumlah Sales Terkait", df_bni_d["Sales"].nunique() if not df_bni_d.empty else 0, "Tim lapangan aktif")
-            with b_k3: render_metric_card("Sudah Dihubungi (ACC ONE)", sudah_hubungi, "Tercatat pada sesi ini")
+            with b_k3: render_metric_card("Sudah Dihubungi (ACC ONE)", sudah_hubungi, "Tersimpan di STATUS_HUBUNG")
+
+            if "last_sync_status" in st.session_state:
+                ok_s, msg_s = st.session_state["last_sync_status"]
+                if not ok_s and msg_s:
+                    st.caption(f"⚠️ {msg_s}")
 
             st.markdown("---")
             if not df_bni_d_all.empty:
@@ -1287,9 +1341,10 @@ def main():
 
                 for idx, row in df_bni_d.iterrows():
                     sales_nama = clean_text(row.get("Sales", ""), "-")
+                    nokon_val = clean_text(row.get("ID", ""), "-")
                     cabang_area = extract_cabang_area(row)
                     aging_tgl = extract_aging_tanggal(row)
-                    item_key = f"{clean_text(row.get('ID', ''))}_{clean_text(row.get('Customer', ''))}_{idx}"
+                    item_key = build_item_key(row, idx)
                     is_checked = item_key in st.session_state.bni_contacted_keys
                     df_sales_bni = df_bni_d[df_bni_d["Sales"] == row.get("Sales", "")]
                     jml_sales_bni = len(df_sales_bni)
@@ -1300,14 +1355,14 @@ def main():
                         card_c, status_c = st.columns([5.2, 1.3])
                         with card_c:
                             st.markdown(
-                                f'<div class="bni-box"><strong>{html.escape(clean_text(row.get("Customer", "")))}</strong> (No. Kontrak: {html.escape(clean_text(row.get("ID", "")))})<br>'
+                                f'<div class="bni-box"><strong>{html.escape(clean_text(row.get("Customer", "")))}</strong> (No. Kontrak: {html.escape(nokon_val)})<br>'
                                 f'<small>Sales: <b>{html.escape(sales_nama)}</b> &nbsp;|&nbsp; Bank: <b>BNI</b> &nbsp;|&nbsp; Status: <b>D — Pengajuan ke Bank</b> &nbsp;|&nbsp; Total BNI (D) Sales ini: <b>{jml_sales_bni} Nasabah</b></small><br>'
                                 f'<small>Cabang/Area: <b>{html.escape(cabang_area)}</b> &nbsp;|&nbsp; Aging/Tanggal: <b>{html.escape(aging_tgl)}</b></small></div>',
                                 unsafe_allow_html=True
                             )
                         with status_c:
                             w_b_key = f"chk_bni_{item_key}"
-                            st.checkbox("Sudah dihubungi (ACC ONE)", value=is_checked, key=w_b_key, on_change=toggle_bni_contacted, args=(item_key, w_b_key))
+                            st.checkbox("Sudah dihubungi (ACC ONE)", value=is_checked, key=w_b_key, on_change=toggle_bni_contacted, args=(item_key, nokon_val, w_b_key))
                             if is_checked:
                                 st.markdown('<div class="ceklis-badge">✓ Sudah Dihubungi</div>', unsafe_allow_html=True)
                             else:
@@ -1378,7 +1433,7 @@ def main():
 
         belum_dihubungi_items, sudah_dihubungi_items = [], []
         for idx, row in df_view.iterrows():
-            item_key = f"{clean_text(row.get('ID', ''))}_{clean_text(row.get('Customer', ''))}_{idx}"
+            item_key = build_item_key(row, idx)
             if item_key in st.session_state.reject_contacted_keys:
                 sudah_dihubungi_items.append((idx, row))
             else:
@@ -1387,8 +1442,13 @@ def main():
         r_c1, r_c2, r_c3, r_c4 = st.columns(4)
         with r_c1: render_metric_card("Total Reject Ditampilkan", len(df_view), "Status Rejected (R)")
         with r_c2: render_metric_card("Belum Dihubungi", len(belum_dihubungi_items), "Wajib follow up & AP Payment")
-        with r_c3: render_metric_card("Sudah Dihubungi", len(sudah_dihubungi_items), "Tercatat sudah difollow up")
+        with r_c3: render_metric_card("Sudah Dihubungi", len(sudah_dihubungi_items), "Tersimpan di STATUS_HUBUNG")
         with r_c4: render_metric_card("Bank Dominan Reject", df_view["Bank"].mode().iloc[0] if not df_view.empty else "-", "Berdasarkan filter aktif")
+
+        if "last_sync_status" in st.session_state:
+            ok_s, msg_s = st.session_state["last_sync_status"]
+            if not ok_s and msg_s:
+                st.caption(f"⚠️ {msg_s}")
 
         st.markdown("---")
         st.info("Akses Database Pusat: Untuk mengelola, menambah, atau menghapus data secara langsung, silakan buka Google Sheets utama.")
@@ -1480,7 +1540,7 @@ def main():
     elif halaman_aktif == "🔧 Settings":
         render_page_banner("⚡ AUTOTEAM — Pengaturan Sistem & Database", "Informasi koneksi Google Sheets utama, akses pengelolaan data, dan backup rekap Excel.")
         s_c1, s_c2 = st.columns(2)
-        with s_c1: render_metric_card("Versi Aplikasi", "AUTOTEAM v8.8", "Adaptif Light / Dark Mode")
+        with s_c1: render_metric_card("Versi Aplikasi", "AUTOTEAM v8.9", "Adaptif Light / Dark Mode")
         with s_c2: render_metric_card("Total Data Tersinkron", total_data, "Live via Google Sheets")
 
         if st.button("🔄 Refresh Data dari Google Sheets Sekarang"):
